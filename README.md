@@ -2,23 +2,35 @@
 
 **Made by Adam David Phillips.**
 
-An engine dynamometer simulator. A see-through 3D engine you can start, rev, shift and (if you push it too hard) blow up, all in your web browser.
+An engine dynamometer test cell in your web browser. A see-through 3D engine you can start, rev, shift and load against a 2,500 lb inertia drum, with real dyno gauges, glowing exhaust, tailpipe flames, and a cold-to-hot test cell. Push it too hard and it blows up.
 
 ## ▶️ Play it
 
 **[Play Engine Dyno 3D](https://hardwaremack-prog.github.io/Engine-Dyno-3D/)**
 
-Works on desktop and phone. No install needed. Turn your sound on.
+Works on desktop and phone. No install needed. Turn your sound on. Tap **Full screen** (or press **F**) for the big view.
 
 ## Screenshots
 
-| Idle | Running |
+| Whole engine on the dyno | Turbo close-up |
 |---|---|
-| ![Idle](screenshots/01-idle.png) | ![Running](screenshots/02-running.png) |
+| ![Whole engine](screenshots/01-whole-engine.png) | ![Turbo](screenshots/02-turbo-closeup.png) |
 
-| Valve close-up (V8, 1/10 speed) | Blown engine |
+| Tailpipe flames (raw fuel dump) | 2,500 lb inertia drum |
 |---|---|
-| ![Valve close-up](screenshots/03-v8-valves.png) | ![Blown engine](screenshots/04-blown.png) |
+| ![Flames](screenshots/03-tailpipe-flames.png) | ![Inertia drum](screenshots/04-inertia-wheel.png) |
+
+| Crank and piston oilers | CVT transmission |
+|---|---|
+| ![Oilers](screenshots/06-oilers.png) | ![CVT](screenshots/07-cvt.png) |
+
+| V16 diesel in a −60°F cell | Full screen |
+|---|---|
+| ![V16 diesel](screenshots/08-v16-diesel.png) | ![Full screen](screenshots/09-full-screen.png) |
+
+**Test cell instruments**
+
+![Gauges](screenshots/05-gauges.png)
 
 ## Engines
 
@@ -29,23 +41,36 @@ Works on desktop and phone. No install needed. Turn your sound on.
 | Three-rotor Wankel (turbo) | 2.0 L | 420 hp | 9,000 rpm |
 | Turbo boxer-four | 2.5 L | 330 hp | 6,700 rpm |
 | V12 | 6.5 L | 725 hp | 9,000 rpm |
+| V16 twin-turbo diesel (glow plugs) | 65 L | 3,000 hp | 2,100 rpm |
 
 ## What it does
 
-- Full 3D cutaway: pistons, rods, crank, cams, valves, spark plugs, turbos, intercooler, flywheel, starter and a 5-speed gearbox
-- Real firing orders, rev limiter, turbo spool and lag, blow-off valve
-- Engine sound made live from the rpm
-- H-pattern shifter and throttle pedal on screen, plus "hold to rev" or the space bar
-- Live readouts: rpm, hp, lb-ft, boost and mph
-- Slow motion (1/10 and 1/100 speed), valve close-up, starter close-up and engine-start replay
-- Oil level: run it dry and it seizes, overfill it and the plugs foul
-- Hold full throttle too long and the engine blows up (rebuild button included)
+- **Full 3D cutaway:** pistons, rods, crank, cams, valves, spark or glow plugs, flywheel, starter and gearbox
+- **Realistic turbos:** snail-shell turbine and compressor housings, spinning compressor and turbine wheels, center housing with oil lines, wastegate actuator and pod filter. The turbine housing glows red-hot under load.
+- **Glowing exhaust:** headers, downpipes and tailpipes heat up from dull red to orange, with hot exhaust gas flowing through them
+- **Tailpipe flames:** pops and flames on the rev limiter, on lift-off at high rpm, on misfires, and when there's raw fuel in the intake. Black smoke when it runs rich.
+- **Raw fuel dump:** hold the button (or **G**) to spray raw fuel into the intake. A little makes it flare, a lot floods it and fouls the plugs. On the diesel it can cause a **runaway** that over-revs and destroys the engine.
+- **2,500 lb inertia drum:** connected through the transmission. The clutch slips and then locks up. Drum speed (mph) and drum power are measured like a real inertia dyno.
+- **Transmissions:** 5-speed manual (shifter, or **S** / **Shift+S**) or a **CVT** with moving pulleys and belt that holds the engine at peak power
+- **Test cell temperature from −60°F to 130°F:** cold means thick oil, slow cranking, high oil pressure and denser air (more power). Hot means less power and overheating at full load.
+- **V16 diesel with glow plugs:** in a cold cell it won't fire until you heat the glow plugs (**P**). It blows white smoke while cold and black smoke when the turbos lag.
+- **Lubrication you can see:** oil pump and pickup, main oil gallery, main bearing feeds, and piston-cooling oil jets spraying under each piston. They follow the live oil pressure.
+- **Dyno instruments:** engine speed, torque, power, boost, air-fuel ratio, exhaust temperature, oil pressure, oil temperature, coolant temperature, intake air temperature, fuel flow, drum speed, drum power and test-cell temperature, plus the SAE J1349 correction factor
+- **Ways to break it:** too long at full throttle, running out of oil, overheating, over-revving or a diesel runaway. There's a rebuild button.
+- Engine sound made live from the rpm, plus slow motion (1/10 and 1/100 speed) and camera presets
 
 ## Controls
 
-- **Drag** to orbit, **pinch or scroll** to zoom
-- **Start engine**, then drag the **Throttle** pedal (tap **Lock** to hold it)
-- Drag the **shifter** knob into a gear
+| Control | What it does |
+|---|---|
+| Drag / pinch / scroll | Orbit and zoom |
+| **Start engine** | Crank and start |
+| Throttle pedal (tap **Lock** to hold it) | Throttle |
+| Space | Hold to rev |
+| S / Shift+S | Shift up or down (CVT: Drive or Neutral) |
+| G | Hold to dump raw fuel into the intake |
+| P | Glow plugs (diesel) |
+| F | Full screen |
 
 ## Run it yourself
 
