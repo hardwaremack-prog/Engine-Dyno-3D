@@ -1,6 +1,8 @@
 # Engine Dyno 3D
 
-Adam's engine dynamometer simulator. A see-through 3D engine you can start, rev, shift and (if you push it too hard) blow up, all in your web browser.
+**Made by Adam David Phillips.**
+
+An engine dynamometer simulator. A see-through 3D engine you can start, rev, shift and (if you push it too hard) blow up, all in your web browser.
 
 ## ▶️ Play it
 
@@ -48,3 +50,7 @@ Works on desktop and phone. No install needed. Turn your sound on.
 ## Run it yourself
 
 It's one file: open `index.html` in any modern browser. It loads three.js from a CDN, so it needs internet the first time.
+
+## Credits
+
+Created by **Adam David Phillips**.
