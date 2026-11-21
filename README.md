@@ -8,7 +8,7 @@ An engine dynamometer test cell in your web browser. A see-through 3D engine you
 
 **[Play Engine Dyno 3D](https://hardwaremack-prog.github.io/Engine-Dyno-3D/)**
 
-Works on desktop and phone. No install needed. Turn your sound on. Tap **Full screen** (or press **F**) for the big view.
+Works on desktop and phone. No install needed. Turn your sound on. Tap **Full screen** (or press **F**) for the big view. Full screen keeps every control, gauge and the key guide in a side panel (bottom panel on phones), and **H** hides it.
 
 ## Screenshots
 
@@ -24,9 +24,13 @@ Works on desktop and phone. No install needed. Turn your sound on. Tap **Full sc
 |---|---|
 | ![Oilers](screenshots/06-oilers.png) | ![CVT](screenshots/07-cvt.png) |
 
-| V16 diesel in a −60°F cell | Full screen |
+| V16 diesel in a −60°F cell | Full screen on a phone |
 |---|---|
-| ![V16 diesel](screenshots/08-v16-diesel.png) | ![Full screen](screenshots/09-full-screen.png) |
+| ![V16 diesel](screenshots/08-v16-diesel.png) | ![Full screen on a phone](screenshots/11-full-screen-phone.png) |
+
+**Full screen with every control and key**
+
+![Full screen with controls](screenshots/10-full-screen-controls.png)
 
 **Test cell instruments**
 
@@ -49,6 +53,7 @@ Works on desktop and phone. No install needed. Turn your sound on. Tap **Full sc
 - **Realistic turbos:** snail-shell turbine and compressor housings, spinning compressor and turbine wheels, center housing with oil lines, wastegate actuator and pod filter. The turbine housing glows red-hot under load.
 - **Glowing exhaust:** headers, downpipes and tailpipes heat up from dull red to orange, with hot exhaust gas flowing through them
 - **Tailpipe flames:** pops and flames on the rev limiter, on lift-off at high rpm, on misfires, and when there's raw fuel in the intake. Black smoke when it runs rich.
+- **NOS:** hold the NOS button (or **N**) above 60% throttle for a nitrous shot. There's a blue bottle with a feed line and a fogging nozzle on the intake. Bottle pressure follows the cell temperature (weak when cold, strong when hot). It adds big power but doubles engine strain, so hold it too long and it melts a piston. Refill with **R**.
 - **Raw fuel dump:** hold the button (or **G**) to spray raw fuel into the intake. A little makes it flare, a lot floods it and fouls the plugs. On the diesel it can cause a **runaway** that over-revs and destroys the engine.
 - **2,500 lb inertia drum:** connected through the transmission. The clutch slips and then locks up. Drum speed (mph) and drum power are measured like a real inertia dyno.
 - **Transmissions:** 5-speed manual (shifter, or **S** / **Shift+S**) or a **CVT** with moving pulleys and belt that holds the engine at peak power
@@ -61,16 +66,29 @@ Works on desktop and phone. No install needed. Turn your sound on. Tap **Full sc
 
 ## Controls
 
-| Control | What it does |
+Drag to orbit, pinch or scroll to zoom. Everything also has an on-screen button.
+
+| Key | What it does |
 |---|---|
-| Drag / pinch / scroll | Orbit and zoom |
-| **Start engine** | Crank and start |
-| Throttle pedal (tap **Lock** to hold it) | Throttle |
+| E | Start / stop engine (rebuild after a blow-up) |
+| ↑ / ↓ | Throttle up / down |
 | Space | Hold to rev |
-| S / Shift+S | Shift up or down (CVT: Drive or Neutral) |
+| L | Lock the throttle pedal |
+| S / Shift+S | Shift up / down (CVT: S toggles Drive) |
+| 1–5, 0 | Pick a gear, or neutral |
+| T | Switch between manual and CVT |
+| D | CVT Drive |
+| N | Hold for NOS |
+| R | Refill the NOS bottle |
 | G | Hold to dump raw fuel into the intake |
 | P | Glow plugs (diesel) |
+| [ / ] | Test cell temperature −/+ 10°F |
+| O | Oil: fill / drain |
+| V | Next camera view |
+| M | Slow motion (real time, 1/10, 1/100) |
 | F | Full screen |
+| H | Hide / show the controls panel in full screen |
+| Esc | Exit full screen |
 
 ## Run it yourself
 

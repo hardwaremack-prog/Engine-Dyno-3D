@@ -55,24 +55,44 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--pw);outline-off
 #pfill{position:absolute;bottom:0;left:0;right:0;height:0;background:var(--pw)}
 #ped span{position:absolute;left:0;right:0;bottom:6px;text-align:center;font:700 14px 'Barlow Condensed',sans-serif;color:var(--ink)}
 #gearTag{position:absolute;left:150px;bottom:12px;font:700 40px/1 'Barlow Condensed',Impact,sans-serif;color:var(--ink);opacity:.8}
-#fsb{right:10px;top:10px;padding:8px 12px;font-size:17px}
+#shifter{left:10px;bottom:10px}#pbox{right:10px;bottom:10px}#fsb{right:10px;top:10px;padding:8px 12px;font-size:17px}
 #hud{left:50%;top:10px;transform:translateX(-50%);display:none;font:700 20px/1.2 'Barlow Condensed',Impact,sans-serif;background:color-mix(in srgb,var(--panel) 85%,transparent);padding:6px 12px;border-radius:4px;text-align:center;white-space:nowrap}
-#stage.fs{position:fixed;inset:0;z-index:50;background:var(--bg)}#stage.fs #c{height:100vh;height:100dvh;min-height:0;border-radius:0}#stage.fs #hud{display:block}
+#fsPanel,#pnl{display:none}
+#stage.fs{position:fixed;inset:0;z-index:50;background:var(--bg);display:grid;grid-template-columns:minmax(0,1fr) 360px;grid-template-rows:minmax(0,1fr);height:100vh;height:100dvh}
+#stage.fs #c{height:100%;min-height:0;border-radius:0}#stage.fs #hud{display:block;left:calc((100% - 360px)/2);top:104px}
+#stage.fs #fsPanel{display:block;overflow-y:auto;padding:10px 12px 40px;background:var(--bg);border-left:1px solid var(--line)}
+#stage.fs #pnl{display:block;right:370px;top:58px;padding:8px 12px;font-size:17px}#stage.fs #fsb,#stage.fs #pbox{right:370px}
+#stage.fs.nop{grid-template-columns:minmax(0,1fr) 0}#stage.fs.nop #fsPanel{display:none}#stage.fs.nop #fsb,#stage.fs.nop #pbox,#stage.fs.nop #pnl{right:10px}#stage.fs.nop #hud{left:50%}
+#fsPanel .ctl{margin-top:10px}#fsPanel #gauges{grid-template-columns:repeat(3,1fr)}
+@media (max-width:700px){#stage.fs{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) 44dvh}#stage.fs #fsPanel{border-left:0;border-top:1px solid var(--line)}
+ #stage.fs #fsb,#stage.fs #pbox,#stage.fs #pnl{right:10px}#stage.fs #pbox,#stage.fs #shifter{bottom:calc(44dvh + 10px)!important}#stage.fs #gearTag{bottom:calc(44dvh + 12px)}#stage.fs #hud{left:50%;top:auto;bottom:calc(44dvh + 160px);font-size:15px;white-space:normal;width:90%}
+ #stage.fs.nop{grid-template-rows:minmax(0,1fr) 0}#stage.fs.nop #pbox,#stage.fs.nop #shifter{bottom:10px!important}#stage.fs.nop #gearTag{bottom:12px}#stage.fs.nop #hud{bottom:160px}}
+#keys{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:4px 12px;margin:10px 0 4px;font-size:14px;color:var(--mute)}
+#keys div{display:flex;gap:6px;align-items:baseline}kbd{font:700 13px/1 'Barlow Condensed',sans-serif;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-bottom-width:2px;border-radius:3px;padding:2px 5px;white-space:nowrap}
+.btn.nos{background:var(--panel);color:var(--ink);border:2px solid #2f6bff}.btn.nos.on{background:#2f6bff;color:#fff}
 @media (max-width:560px){.read{grid-template-columns:repeat(3,1fr)}}
 </style>
 </head>
 <body>
 <main>
   <h1>Engine dyno</h1>
-  <p>Made by Adam David Phillips. Drag to orbit, pinch or scroll to zoom. Keys: <b>Space</b> rev, <b>S</b> shift up (<b>Shift+S</b> down; with the CVT, <b>S</b> toggles Drive), <b>F</b> full screen, <b>G</b> dump raw gas, <b>P</b> glow plugs.</p>
+  <p>Made by Adam David Phillips. Drag to orbit, pinch or scroll to zoom. Everything can be run from the keyboard:</p>
+  <div id="keys" aria-label="Keyboard controls">
+    <div><kbd>E</kbd>Start / stop / rebuild</div><div><kbd>↑</kbd><kbd>↓</kbd>Throttle up / down</div><div><kbd>Space</kbd>Hold to rev</div><div><kbd>L</kbd>Lock throttle pedal</div>
+    <div><kbd>S</kbd><kbd>Shift+S</kbd>Shift up / down</div><div><kbd>1</kbd>–<kbd>5</kbd><kbd>0</kbd>Pick gear / neutral</div><div><kbd>T</kbd>Manual or CVT</div><div><kbd>D</kbd>CVT drive</div>
+    <div><kbd>N</kbd>Hold for NOS</div><div><kbd>R</kbd>Refill NOS bottle</div><div><kbd>G</kbd>Hold to dump raw fuel</div><div><kbd>P</kbd>Glow plugs (diesel)</div>
+    <div><kbd>[</kbd><kbd>]</kbd>Cell temp −/+ 10°F</div><div><kbd>O</kbd>Oil: full / drain</div><div><kbd>V</kbd>Next camera view</div><div><kbd>M</kbd>Slow motion</div>
+    <div><kbd>F</kbd>Full screen</div><div><kbd>H</kbd>Hide controls (full screen)</div><div><kbd>Esc</kbd>Exit full screen</div>
+  </div>
   <section id="list" role="radiogroup" aria-label="Engine"></section>
   <div id="stage"><canvas id="c" aria-label="3D engine"></canvas>
     <button class="btn ov" id="start" style="left:10px;top:10px">Start engine</button>
     <button class="btn alt glow ov" id="glow" style="left:10px;top:62px;padding:8px 12px;font-size:17px" hidden>Glow plugs</button>
-    <div class="ov" id="shifter" style="left:10px;bottom:10px"><svg viewBox="0 0 132 132"><path d="M26 26V106M66 26V106M106 26V66M26 66H106" stroke="currentColor" stroke-width="3" fill="none" opacity=".45"/><g font-size="13" fill="currentColor" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="700"><text x="26" y="16">1</text><text x="26" y="124">2</text><text x="66" y="16">3</text><text x="66" y="124">4</text><text x="106" y="16">5</text><text x="66" y="86">N</text></g><g id="knob" transform="translate(66 66)"><circle r="13" fill="var(--pw)"/></g></svg></div>
+    <div class="ov" id="shifter"><svg viewBox="0 0 132 132"><path d="M26 26V106M66 26V106M106 26V66M26 66H106" stroke="currentColor" stroke-width="3" fill="none" opacity=".45"/><g font-size="13" fill="currentColor" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="700"><text x="26" y="16">1</text><text x="26" y="124">2</text><text x="66" y="16">3</text><text x="66" y="124">4</text><text x="106" y="16">5</text><text x="66" y="86">N</text></g><g id="knob" transform="translate(66 66)"><circle r="13" fill="var(--pw)"/></g></svg></div>
     <div class="ov" id="gearTag">N</div>
-    <button class="btn alt ov" id="fsb">Full screen</button><div class="ov" id="hud"></div>
-    <div class="ov" id="pbox" style="right:10px;bottom:10px"><button class="btn alt" id="plock" style="padding:6px 10px;font-size:16px">Lock</button><div id="ped"><i id="pfill"></i><span>Throttle</span></div></div>
+    <button class="btn alt ov" id="fsb">Full screen</button><button class="btn alt ov" id="pnl">Hide controls</button><div class="ov" id="hud"></div>
+    <aside id="fsPanel" aria-label="Controls"></aside>
+    <div class="ov" id="pbox"><button class="btn alt" id="plock" style="padding:6px 10px;font-size:16px">Lock</button><div id="ped"><i id="pfill"></i><span>Throttle</span></div></div>
   </div>
   <div class="read">
     <div><output id="rRpm">0</output><small>rpm</small></div>
@@ -82,14 +102,15 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--pw);outline-off
     <div><output id="rMph">0</output><small>drum mph</small></div>
     <div><output id="rEgt">0</output><small>EGT °F</small></div>
   </div>
-  <div class="strain"><div><i id="sBar"></i></div><span id="sTxt"></span> <span id="msg"></span></div>
+  <div class="strain" id="strainBox"><div><i id="sBar"></i></div><span id="sTxt"></span> <span id="msg"></span></div>
   <div class="strain"><span id="rpmTxt"></span></div>
-  <h2>Test cell instruments</h2>
+  <h2 id="gH">Test cell instruments</h2>
   <div id="gauges"></div>
   <div id="sae"></div>
   <section class="ctl">
     <button class="btn alt" id="rev" style="grid-column:1/-1">Hold to rev (or press space)</button>
     <button class="btn gas" id="gas" style="grid-column:1/-1">Hold to dump raw fuel in the intake (or press G)</button>
+    <div class="row c2"><button class="btn nos" id="nos">Hold for NOS (N)</button><button class="btn alt" id="nosR">Refill NOS bottle (R)</button></div>
     <label>Transmission</label>
     <div class="row c2"><button class="btn alt sel" data-tx="m">5-speed manual</button><button class="btn alt" data-tx="cvt">CVT automatic</button></div>
     <div class="row c2"><button class="btn alt" id="sdn">Shift down (Shift+S)</button><button class="btn alt" id="sup">Shift up (S)</button></div>
@@ -124,7 +145,7 @@ for(const e of E){e.k=1;let m=0,t=0;const bo=r=>e.boost?e.boost*sst(e.spool[0],e
 const NI=[11,15,19,22,26],NO=[33,29,25,22,18],GR=NO.map((n,i)=>n/NI[i]),M=.0375,JW=8;
 let cur=E[0],running=false,starting=0,rpm=0,thr=0,prevThr=0,boost=0,cut=false,revHeld=false,va=0,vis=0,gear=0,oil=100,LIM=45,SLO=1,TRPM=0;
 let dead=false,strain=0,shk=0,flash=0,hpNow=0,tqNow=0,foul=[],fs=[],avgF=0,mf=false,ts=0,proj=null,PR=[];
-let tx='m',cvtD=false,cvtR=2.5,Gc=0,fuel=0,gasHeld=false,egt=0,af=0,popQ=0,wRpm=0,wa=0,lk=false,whp=0,lastGear=0,cellT=70,coolT=70,oilT=70,iat=70,op=0,glowT=0,glowH=0,msg='',msgT=0,tflash=0,afr=0,ffl=0,dens=1,CF=1,smokeW=0;
+let nosHeld=false,nosOn=false,nosLvl=1,nosP=745,nosMsg=0,tx='m',cvtD=false,cvtR=2.5,Gc=0,fuel=0,gasHeld=false,egt=0,af=0,popQ=0,wRpm=0,wa=0,lk=false,whp=0,lastGear=0,cellT=70,coolT=70,oilT=70,iat=70,op=0,glowT=0,glowH=0,msg='',msgT=0,tflash=0,afr=0,ffl=0,dens=1,CF=1,smokeW=0;
 
 /* ---------- audio ---------- */
 let AC,o1,o2,filt,gain,wh,whg,sw,swg,noise;
@@ -202,6 +223,11 @@ function step(dt){
   dens=Math.sqrt(537/(460+iat));CF=1.18*Math.sqrt((460+cellT)/537)-.18;
   const visc=1+Math.max(0,(170-oilT)/140)*1.3,coldF=1+Math.max(0,(140-oilT)/220);
   const opT=(rpm<30||oil<4)?0:Math.min(100,(10+60*Math.sqrt(rpm/e.red))*visc)*Math.min(1,oil/45);op+=(opT-op)*Math.min(1,dt*4);
+  /* nitrous */
+  nosP=nosLvl>0?Math.min(1300,745*Math.exp(.0129*(cellT-70))):0;const nEff=Math.min(1.25,Math.max(.25,nosP/900));
+  nosOn=nosHeld&&running&&!dead&&nosLvl>0&&thr>.6;if(nosOn)nosLvl=Math.max(0,nosLvl-dt/20);
+  if(nosHeld&&!nosOn&&nosMsg<=0){nosMsg=3;say(nosLvl<=0?'The NOS bottle is empty. Refill it (R).':!running?'Start the engine first.':'NOS only arms above 60% throttle.',3)}nosMsg-=dt;if(!nosHeld)nosMsg=0;
+  if(nosOn)iat-=40*nEff;
   /* turbo */
   const bt=running&&e.boost?e.boost*thr*sst(e.spool[0],e.spool[1],rpm):0;
   boost+=(bt-boost)*(1-Math.exp(-dt/(bt>boost?e.lag:.25)));
@@ -215,7 +241,7 @@ function step(dt){
     if(starting<=0){if(e.diesel&&glowH<needGlow()-.001)say('The diesel will not fire: too cold. Hold the glow plugs (P) longer, then try again.',5);else running=true}}
   else{
     if(running){if(rpm>=e.red)cut=true;else if(rpm<e.red-(e.diesel?60:250))cut=false;
-      T0=cut||mf?0:tq(e,rpm,boost)*thr*(1-.7*avgF)*dens+(e.diesel?0:e.k*.3*Math.min(fuel,.6)*(1-flood));
+      T0=cut||mf?0:tq(e,rpm,boost)*thr*(1-.7*avgF)*dens+(e.diesel?0:e.k*.3*Math.min(fuel,.6)*(1-flood))+(nosOn?e.k*.6*nEff:0);
       T=T0+Math.min(e.k*.5,Math.max(0,(e.idle-rpm)*e.k*.004))*(1-.5*avgF)}
     else{cut=false;T=-fric*.6}
     if(e.diesel&&rpm>150&&fuel>0){const R=e.k*1.15*Math.min(fuel,1.2);T+=R;T0+=R}
@@ -234,7 +260,7 @@ function step(dt){
   hpNow=T0*rpm/5252;tqNow=T0;
   vis=(vis+rpm*6*dt*SLO)%e.cycle;va=(va+rpm*6*dt*SLO)%720;wa=(wa+wRpm*6*dt*SLO)%360;
   /* exhaust temperature and afterfire */
-  const eT=running||rpm>300&&fuel>0?(e.diesel?.15+.6*load+.25*Math.min(1,fuel):.18+.5*thr*(.35+.65*rpm/e.red)+.2*bf+(cut?.25:0)+.3*Math.min(1,fuel)+(mf?.2:0)):0;
+  const eT=running||rpm>300&&fuel>0?(e.diesel?.15+.6*load+.25*Math.min(1,fuel):.18+.5*thr*(.35+.65*rpm/e.red)+.2*bf+(cut?.25:0)+.3*Math.min(1,fuel)+(mf?.2:0)+(nosOn?.3:0)):0;
   egt+=(eT-egt)*Math.min(1,dt*(eT>egt?.9:.3));
   let a=0;
   if(running&&!dead){if(cut&&!e.diesel)a+=.7;if(mf)a+=.6;if(thr<.15)a+=Math.max(0,rpm/e.red-.45)*1.4;a+=Math.max(0,fuel-.12)*.9;if(e.diesel)a*=.4}
@@ -243,8 +269,8 @@ function step(dt){
   if(af>.15&&Math.random()<af*dt*9){popQ++;pop(af>.8)}
   smokeW=e.diesel&&running?Math.max(0,(110-coolT)/170):0;
   afr=!running?0:e.diesel?Math.max(14,60-38*thr-14*Math.min(fuel,1)):Math.max(7,14.7-2.4*thr-5*fuel);
-  ffl=running?Math.max(0,hpNow)*(e.diesel?.35:.5)+e.hp*.012+fuel*e.hp*.15:0;
-  if(running&&!dead){const hot=coolT>245;if(thr>.8||oil<4||hot)strain+=dt*(hot?1.3:1);else strain=Math.max(0,strain-dt*1.5);if(strain>=LIM)blow(oil<4?'Seized: no oil.':hot?'Overheated and blew a head gasket.':'Blown up from too long at full throttle.')}
+  ffl=running?Math.max(0,hpNow)*(e.diesel?.35:.5)*(nosOn?.8:1)+e.hp*.012+fuel*e.hp*.15:0;
+  if(running&&!dead){const hot=coolT>245;if(thr>.8||oil<4||hot)strain+=dt*(hot?1.3:1)*(nosOn?2.2:1);else strain=Math.max(0,strain-dt*1.5);if(strain>=LIM)blow(nosOn?'Too much NOS! It melted a piston.':oil<4?'Seized: no oil.':hot?'Overheated and blew a head gasket.':'Blown up from too long at full throttle.')}
   else if(!dead)strain=Math.max(0,strain-dt*1.5);
   shk=dead?shk*Math.exp(-dt*3):(strain>LIM*.6?(strain/LIM-.6)*5:0);flash=Math.max(0,flash-dt*2.5);
 }
@@ -287,7 +313,7 @@ function wheelLabel(){const c=document.createElement('canvas');c.width=c.height=
   x.fillStyle='#ffd23a';x.font='bold 56px sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText('2,500 LB',0,-178);x.fillStyle='#e8edf0';x.font='bold 36px sans-serif';x.fillText('INERTIA DRUM',0,180);
   x.fillStyle='#ff2d6f';x.fillRect(-12,-235,24,52);const t=new THREE.CanvasTexture(c);return new THREE.MeshStandardMaterial({map:t,transparent:true,metalness:.3,roughness:.5,depthWrite:false})}
 let G=new THREE.Group(),P=[],RT=[],TB=[],GI=[],GO=[],CP=[],BF,HM,oilM,fw,pn,osh,sh2,bn,W,sa=0,ssp=0,hit=0;
-let CV,HOTP,HOTH,ALU,OILM,DOTM,FLOW=[],TAIL=[],JETS=[],BRG=[],INJ,JET,home={x:1,d:15},TC={},OC=V3(0,0,0),WC=V3(0,0,0);
+let NZ,NJ,NOSL,CV,HOTP,HOTH,ALU,OILM,DOTM,FLOW=[],TAIL=[],JETS=[],BRG=[],INJ,JET,home={x:1,d:15},TC={},OC=V3(0,0,0),WC=V3(0,0,0);
 function buildTurbo(T,s){
   const g=new THREE.Group();g.position.copy(T);G.add(g);
   g.add(volute(.2,.3,.07,.18,Math.PI/2,HOTH));
@@ -371,6 +397,16 @@ function build3D(){
   const ib=mk(new THREE.BoxGeometry(.12,.1,.14),0x111111);ib.position.set(INJ.x,INJ.y+.36,INJ.z);G.add(ib);
   poly(G,[V3(INJ.x,INJ.y+.4,INJ.z),V3(INJ.x,INJ.y+.6,INJ.z),V3(INJ.x-.6,INJ.y+.6,INJ.z)],.025,MS(0xc62828));
   JET=new THREE.Mesh(new THREE.ConeGeometry(.14,.5,16,1,true),new THREE.MeshBasicMaterial({color:0xffc23a,transparent:true,opacity:.55,blending:THREE.AdditiveBlending,depthWrite:false,side:THREE.DoubleSide}));JET.position.set(INJ.x,INJ.y-.2,INJ.z);JET.visible=false;G.add(JET);
+  /* NOS bottle, line and nozzle */
+  {const bxN=-len/2-1.3,bz=e.tu?-2.9:-2.3,BL=MS(0x1f4fd1,{metalness:.5,roughness:.35});NZ=V3(tbx-.15,im[0]+.3,im[1]);
+    const bt=new THREE.Mesh(new THREE.CylinderGeometry(.32,.32,1.5,32),BL);bt.position.set(bxN,-2.6,bz);G.add(bt);
+    const dome=new THREE.Mesh(new THREE.SphereGeometry(.32,24,12,0,6.2832,0,Math.PI/2),BL);dome.position.set(bxN,-1.85,bz);G.add(dome);
+    const c=document.createElement('canvas');c.width=256;c.height=128;const x=c.getContext('2d');x.fillStyle='#fff';x.font='bold 84px sans-serif';x.textAlign='center';x.fillText('NOS',128,96);
+    const lb=new THREE.Mesh(new THREE.CylinderGeometry(.325,.325,.5,32,1,true,-.9,1.8),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(c),transparent:true}));lb.position.set(bxN,-2.5,bz);lb.rotation.y=Math.PI/2+Math.PI;G.add(lb);
+    seg(G,V3(bxN,-1.55,bz),V3(bxN,-1.4,bz),.07,MS(0xc0c0c0));NOSL=MS(0x2f6bff,{metalness:.6,roughness:.3});
+    poly(G,[V3(bxN,-1.4,bz),V3(bxN,NZ.y+.35,bz),V3(NZ.x,NZ.y+.35,bz),V3(NZ.x,NZ.y+.35,NZ.z),V3(NZ.x,NZ.y,NZ.z)],.035,NOSL);
+    const sol=mk(new THREE.BoxGeometry(.16,.2,.16),0x111111);sol.position.set(NZ.x,NZ.y+.35,NZ.z);G.add(sol);
+    NJ=new THREE.Mesh(new THREE.ConeGeometry(.2,.55,16,1,true),new THREE.MeshBasicMaterial({color:0xd8ecff,transparent:true,opacity:.6,blending:THREE.AdditiveBlending,depthWrite:false,side:THREE.DoubleSide}));NJ.position.set(NZ.x,NZ.y-.22,NZ.z);NJ.visible=false;G.add(NJ)}
   /* turbos */
   for(let t=0;t<e.tu;t++){const sg=t?1:-1,my=e.flat||e.rot?0:.9,mz=e.flat?2.1:e.rot?1.5:e.b.length>1?1.75:1.3;TB.push(buildTurbo(V3(-len/2-.7,my,sg*mz),sg))}
   /* exhaust: runners, logs, downpipes, tailpipes */
@@ -490,6 +526,8 @@ function update3D(dt){
   if(TAIL[0]){tl.position.copy(TAIL[0].p).addScaledVector(TAIL[0].d,.8);tl.intensity=af*1.6*(.6+.8*Math.random())+tflash*6+x*.5}else tl.intensity=0;
   /* raw fuel spray */
   JET.visible=gasHeld;if(gasHeld){JET.scale.set(1+rnd(.3),1+rnd(.2),1+rnd(.3));if(Math.random()<dt*70)emit('g',INJ.clone().add(V3(rnd(.06),-.08,rnd(.06))),V3(rnd(.8)+.6+rpm/3000,-1.6,rnd(.8)),.5,.03+Math.random()*.03,0xffc23a)}
+  /* NOS */
+  NJ.visible=nosOn;NOSL.emissive.setRGB(0,.15*(nosOn?1:0),nosOn?.6:0);if(nosOn){NJ.scale.set(1+rnd(.3),1+rnd(.2),1+rnd(.3));if(Math.random()<dt*40)emit('s',NZ.clone().add(V3(rnd(.2),-.1,rnd(.2))),V3(rnd(1),-.4,rnd(1)),.6,.12,0xe6f2ff)}
   /* oilers */
   const oq=Math.min(1,op/70);JETS.forEach(j=>{j.m.material.opacity=op>6&&!dead?(.25+.5*oq)*(.85+Math.random()*.3):0;j.m.scale.set(1+rnd(.25),1,1+rnd(.25));
     if(op>6&&!dead&&Math.random()<dt*6*oq)emit('g',j.tgt.clone(),V3(rnd(1),-1.2,rnd(1)),.45,.025+Math.random()*.02,0xd9a21b)});
@@ -520,7 +558,7 @@ function update3D(dt){
   const c=(cellT+60)/190;hemi.color.setRGB(.85+.15*c,.9+.05*(1-Math.abs(c-.5)),1-.25*c);
 }
 function frame3D(){
-  const w=cvs.clientWidth,h=cvs.clientHeight;if(cvs.width!==Math.round(w*ren.getPixelRatio())){ren.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()}
+  const w=cvs.clientWidth,h=cvs.clientHeight;if(cvs.width!==Math.round(w*ren.getPixelRatio())||cvs.height!==Math.round(h*ren.getPixelRatio())){ren.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()}
   cam.position.set(tgt.x+dist*Math.cos(pit)*Math.sin(yaw),tgt.y+dist*Math.sin(pit),tgt.z+dist*Math.cos(pit)*Math.cos(yaw));
   if(shk>.2)cam.position.add(new THREE.Vector3((Math.random()-.5)*shk*.03,(Math.random()-.5)*shk*.03,0));
   cam.lookAt(tgt);ren.render(scene,cam);
@@ -541,6 +579,7 @@ const GAU=[
  ['Fuel flow','lb/hr',()=>0,e=>Math.ceil(e.hp*.7/50)*50,()=>ffl],
  ['Drum speed','mph',()=>0,()=>160,()=>wRpm*.01065],
  ['Drum power','hp',()=>0,e=>Math.ceil(e.hp*1.3/100)*100,()=>whp],
+ ['NOS bottle','psi',()=>0,()=>1400,()=>nosP,()=>1150,null,500],
  ['Test cell','°F',()=>-60,()=>130,()=>cellT,()=>110,null,-20]
 ];
 const gcv=GAU.map(g=>{const c=document.createElement('canvas');c.width=c.height=240;c.setAttribute('role','img');$('#gauges').appendChild(c);return c});
@@ -598,28 +637,47 @@ $('#glow').onclick=()=>{glowT=6;say('Glow plugs heating…',2)};
 $('#sup').onclick=()=>tx==='cvt'?shiftTo(1):shiftTo(gear+1);$('#sdn').onclick=()=>tx==='cvt'?shiftTo(-1):shiftTo(gear-1);
 document.querySelectorAll('[data-tx]').forEach(b=>b.onclick=()=>{tx=b.dataset.tx;document.querySelectorAll('[data-tx]').forEach(x=>x.classList.toggle('sel',x===b));gear=0;cvtD=false;cvtR=2.5;setK(...GP[0]);$('#shifter').style.display=tx==='cvt'?'none':'';
   $('#sup').textContent=tx==='cvt'?'Drive (S)':'Shift up (S)';$('#sdn').textContent=tx==='cvt'?'Neutral (Shift+S)':'Shift down (Shift+S)'});
-const stg=$('#stage');function fsToggle(){const on=!stg.classList.contains('fs');stg.classList.toggle('fs',on);$('#fsb').textContent=on?'Exit full screen':'Full screen';
+const stg=$('#stage'),PANEL=['#strainBox','#keys','.ctl','#gH','#gauges','#sae'].map(q=>$(q)),HOMES=PANEL.map(el=>[el.parentNode,el.nextSibling]);
+function fsToggle(){const on=!stg.classList.contains('fs');stg.classList.toggle('fs',on);
+  if(on)PANEL.forEach(el=>$('#fsPanel').appendChild(el));else for(let i=PANEL.length-1;i>=0;i--)HOMES[i][0].insertBefore(PANEL[i],HOMES[i][1]);$('#fsb').textContent=on?'Exit full screen':'Full screen';
   try{if(on&&stg.requestFullscreen)stg.requestFullscreen().catch(()=>{});else if(!on&&document.fullscreenElement)document.exitFullscreen()}catch(_){}}
-$('#fsb').onclick=fsToggle;document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement&&stg.classList.contains('fs')){stg.classList.remove('fs');$('#fsb').textContent='Full screen'}});
+$('#fsb').onclick=fsToggle;$('#pnl').onclick=()=>{const h=stg.classList.toggle('nop');$('#pnl').textContent=h?'Show controls':'Hide controls'};document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement&&stg.classList.contains('fs'))fsToggle()});
 const hold=(el,on)=>{el.addEventListener('pointerdown',e=>{on(true);el.setPointerCapture(e.pointerId)});['pointerup','pointercancel','lostpointercapture'].forEach(t=>el.addEventListener(t,()=>on(false)))};
-hold($('#rev'),v=>revHeld=v);hold($('#gas'),v=>gasHeld=v);
-addEventListener('keydown',e=>{const tag=e.target.tagName;
-  if(e.code==='Space'&&tag!=='BUTTON'){revHeld=true;e.preventDefault()}
-  if(e.code==='KeyS'&&!e.repeat){shiftTo(gear+(e.shiftKey?-1:1));e.preventDefault()}
-  if(e.code==='KeyG'){gasHeld=true}
-  if(e.code==='KeyF'&&!e.repeat)fsToggle();
-  if(e.code==='KeyP'&&!e.repeat&&cur.diesel)$('#glow').click()});
-addEventListener('keyup',e=>{if(e.code==='Space')revHeld=false;if(e.code==='KeyG')gasHeld=false});
+hold($('#rev'),v=>revHeld=v);hold($('#gas'),v=>gasHeld=v);hold($('#nos'),v=>nosHeld=v);$('#nosR').onclick=()=>{nosLvl=1;say('NOS bottle refilled.',2)};
+function setPedal(v,lock){pedal=Math.min(1,Math.max(0,v));pfill.style.height=pedal*100+'%';if(lock!==undefined){pLock=lock;$('#plock').classList.toggle('sel',pLock)}}
+const CAMS=['zf','zt','zx','zo','zw','zc','zs'];let camI=0;
+addEventListener('keydown',e=>{const tag=e.target.tagName,k=e.code;if(e.ctrlKey||e.metaKey||e.altKey)return;
+  if(k==='Space'&&tag!=='BUTTON'){revHeld=true;e.preventDefault();return}
+  if(k==='KeyG'){gasHeld=true;return}if(k==='KeyN'){nosHeld=true;return}
+  if(k==='ArrowUp'||k==='ArrowDown'){if(tag==='INPUT')return;e.preventDefault();setPedal(pedal+(k==='ArrowUp'?.1:-.1),k==='ArrowUp'||pedal>.15);return}
+  if(k==='BracketLeft'||k==='BracketRight'){const c=$('#cell');c.value=Math.min(130,Math.max(-60,+c.value+(k==='BracketRight'?10:-10)));c.dispatchEvent(new Event('input'));return}
+  if(e.repeat)return;
+  const d=/^Digit([0-5])$/.exec(k);if(d){if(tx==='m')shiftTo(+d[1]);else if(d[1]==='0')cvtD=false;return}
+  switch(k){
+    case 'KeyS':shiftTo(tx==='cvt'?(e.shiftKey?-1:0):gear+(e.shiftKey?-1:1));e.preventDefault();break;
+    case 'KeyE':sbtn.click();break;
+    case 'KeyL':$('#plock').click();break;
+    case 'KeyT':document.querySelector('[data-tx="'+(tx==='m'?'cvt':'m')+'"]').click();break;
+    case 'KeyD':if(tx==='cvt')cvtD=true;break;
+    case 'KeyR':$('#nosR').click();break;
+    case 'KeyP':if(cur.diesel)$('#glow').click();break;
+    case 'KeyO':$('#oil').value=+$('#oil').value<50?100:0;break;
+    case 'KeyV':camI=(camI+1)%CAMS.length;$('#'+CAMS[camI]).click();break;
+    case 'KeyM':{const b=[...document.querySelectorAll('[data-s]')],i=b.findIndex(x=>x.classList.contains('sel'));b[(i+1)%b.length].click();break}
+    case 'KeyF':fsToggle();break;
+    case 'KeyH':if(stg.classList.contains('fs'))$('#pnl').click();break;
+    case 'Escape':if(stg.classList.contains('fs'))fsToggle();break}});
+addEventListener('keyup',e=>{if(e.code==='Space')revHeld=false;if(e.code==='KeyG')gasHeld=false;if(e.code==='KeyN')nosHeld=false});
 function ui(){
   const e=cur,f=n=>Math.round(n).toLocaleString();
   $('#rpmTxt').textContent='Crank '+f(rpm)+' rpm ('+Math.round(rpm/60)+' rev/s)'+(e.rot?'':', camshafts '+f(rpm/2)+' rpm')+(e.tu?', turbos '+f(TRPM)+' rpm':'')+(tx==='cvt'?'. CVT '+(cvtD?'Drive, ratio '+cvtR.toFixed(2)+':1':'Neutral'):'. Gear '+(gear||'N'))+(Gc?(lk?' (clutch locked)':' (clutch slipping)'):'')+'. Inertia drum '+f(wRpm)+' rpm.'+(SLO<1?' Animation slowed to '+SLO+'x.':'');
   $('#rRpm').textContent=f(rpm);$('#rHp').textContent=f(hpNow);$('#rTq').textContent=f(tqNow);
   $('#rBo').textContent=e.boost?boost.toFixed(1):'–';$('#rMph').textContent=Math.round(wRpm*.01065);$('#rEgt').textContent=f(egt>.01?cellT+egt*1500:cellT);
   const gl=tx==='cvt'?(cvtD?'D':'N'):(gear||'N');$('#gearTag').textContent=gl;$('#gearTag').style.left=tx==='cvt'?'14px':'150px';
-  if(stg.classList.contains('fs'))$('#hud').textContent=f(rpm)+' rpm · '+f(hpNow)+' hp · '+f(tqNow)+' lb-ft'+(e.boost?' · '+boost.toFixed(1)+' psi':'')+' · '+Math.round(wRpm*.01065)+' mph · '+(tx==='cvt'?gl+' '+cvtR.toFixed(2)+':1':'gear '+gl)+' · EGT '+f(egt>.01?cellT+egt*1500:cellT)+'°F';
+  if(stg.classList.contains('fs'))$('#hud').textContent=f(rpm)+' rpm · '+f(hpNow)+' hp · '+f(tqNow)+' lb-ft'+(e.boost?' · '+boost.toFixed(1)+' psi':'')+' · '+Math.round(wRpm*.01065)+' mph · '+(tx==='cvt'?gl+' '+cvtR.toFixed(2)+':1':'gear '+gl)+' · EGT '+f(egt>.01?cellT+egt*1500:cellT)+'°F'+(nosOn?' · NOS ON':'');
   sbtn.textContent=dead?'Rebuild engine':(running||starting>0?'Stop engine':'Start engine');sbtn.classList.toggle('on',running||starting>0);
   $('#glow').classList.toggle('on',glowT>0);$('#glow').textContent=e.diesel?'Glow plugs '+Math.round(glowH*100)+'%'+(needGlow()>0?' (need '+Math.round(needGlow()*100)+'%)':''):'';
-  $('#gas').classList.toggle('on',gasHeld);
+  $('#gas').classList.toggle('on',gasHeld);$('#nos').classList.toggle('on',nosOn);$('#nos').textContent='Hold for NOS (N) · '+Math.round(nosLvl*100)+'%';
   $('#oilv').textContent=oil+'%'+(oil<10?' (empty)':oil>110?' (overfilled)':oil>=90?' (full)':' (low)');
   $('#cellv').textContent=cellT+'°F'+(cellT<=0?' (arctic: slow cranking, thick oil'+(e.diesel?', needs glow plugs':'')+')':cellT>=105?' (hot: less power, runs hot)':'');
   $('#sBar').style.width=Math.min(100,strain/LIM*100)+'%';
