@@ -28,6 +28,10 @@ Works on desktop and phone. No install needed. Turn your sound on. Tap **Full sc
 |---|---|
 | ![V16 diesel](screenshots/08-v16-diesel.png) | ![Full screen on a phone](screenshots/11-full-screen-phone.png) |
 
+| F1 V6 turbo hybrid with ERS |
+|---|
+| ![F1 V6 hybrid](screenshots/12-f1-v6-hybrid.png) |
+
 **Full screen with every control and key**
 
 ![Full screen with controls](screenshots/10-full-screen-controls.png)
@@ -46,6 +50,7 @@ Works on desktop and phone. No install needed. Turn your sound on. Tap **Full sc
 | Turbo boxer-four | 2.5 L | 330 hp | 6,700 rpm |
 | V12 | 6.5 L | 725 hp | 9,000 rpm |
 | V16 twin-turbo diesel (glow plugs) | 65 L | 3,000 hp | 2,100 rpm |
+| F1 V6 turbo hybrid (ERS) | 1.6 L | 840 hp + 160 hp electric | 15,000 rpm |
 
 ## What it does
 
@@ -53,14 +58,15 @@ Works on desktop and phone. No install needed. Turn your sound on. Tap **Full sc
 - **Realistic turbos:** snail-shell turbine and compressor housings, spinning compressor and turbine wheels, center housing with oil lines, wastegate actuator and pod filter. The turbine housing glows red-hot under load.
 - **Glowing exhaust:** headers, downpipes and tailpipes heat up from dull red to orange, with hot exhaust gas flowing through them
 - **Tailpipe flames:** pops and flames on the rev limiter, on lift-off at high rpm, on misfires, and when there's raw fuel in the intake. Black smoke when it runs rich.
+- **F1 V6 turbo hybrid:** 1.6 L, 15,000 rpm, 4,000 rpm idle and about 1,000 hp combined. The green MGU-K motor adds about 160 hp of electric boost above 85% throttle and recharges the ERS battery when you lift off. The battery on the floor shows its charge, and there's an ERS battery gauge.
 - **NOS:** hold the NOS button (or **N**) above 60% throttle for a nitrous shot. There's a blue bottle with a feed line and a fogging nozzle on the intake. Bottle pressure follows the cell temperature (weak when cold, strong when hot). It adds big power but doubles engine strain, so hold it too long and it melts a piston. Refill with **R**.
 - **Raw fuel dump:** hold the button (or **G**) to spray raw fuel into the intake. A little makes it flare, a lot floods it and fouls the plugs. On the diesel it can cause a **runaway** that over-revs and destroys the engine.
 - **2,500 lb inertia drum:** connected through the transmission. The clutch slips and then locks up. Drum speed (mph) and drum power are measured like a real inertia dyno.
-- **Transmissions:** 5-speed manual (shifter, or **S** / **Shift+S**) or a **CVT** with moving pulleys and belt that holds the engine at peak power
+- **Transmissions:** 5-speed manual (shifter, or **S** / **Shift+S**) or a **CVT** with moving pulleys and belt. It goes straight into Drive, slips at launch like a torque converter so the engine jumps to peak-power rpm, then sweeps the ratio from 3.2:1 down to 0.45:1 as the drum speeds up
 - **Test cell temperature from −60°F to 130°F:** cold means thick oil, slow cranking, high oil pressure and denser air (more power). Hot means less power and overheating at full load.
 - **V16 diesel with glow plugs:** in a cold cell it won't fire until you heat the glow plugs (**P**). It blows white smoke while cold and black smoke when the turbos lag.
 - **Lubrication you can see:** oil pump and pickup, main oil gallery, main bearing feeds, and piston-cooling oil jets spraying under each piston. They follow the live oil pressure.
-- **Dyno instruments:** engine speed, torque, power, boost, air-fuel ratio, exhaust temperature, oil pressure, oil temperature, coolant temperature, intake air temperature, fuel flow, drum speed, drum power and test-cell temperature, plus the SAE J1349 correction factor
+- **Dyno instruments:** engine speed, torque, power, boost, air-fuel ratio, exhaust temperature, oil pressure, oil temperature, coolant temperature, intake air temperature, fuel flow, drum speed, drum power, ERS battery, NOS bottle pressure and test-cell temperature, plus the SAE J1349 correction factor
 - **Ways to break it:** too long at full throttle, running out of oil, overheating, over-revving or a diesel runaway. There's a rebuild button.
 - Engine sound made live from the rpm, plus slow motion (1/10 and 1/100 speed) and camera presets
 
