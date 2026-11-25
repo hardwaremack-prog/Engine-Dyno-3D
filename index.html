@@ -51,9 +51,6 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--pw);outline-off
 #shifter{width:132px;height:132px;color:var(--ink);background:color-mix(in srgb,var(--panel) 82%,transparent);border-radius:6px;touch-action:none;cursor:grab}
 #shifter svg{width:100%;height:100%;display:block}
 #pbox{display:grid;gap:6px;justify-items:end}
-#ped{position:relative;width:64px;height:140px;background:color-mix(in srgb,var(--panel) 82%,transparent);border:2px solid var(--ink);border-radius:6px;overflow:hidden;touch-action:none;cursor:ns-resize}
-#pfill{position:absolute;bottom:0;left:0;right:0;height:0;background:var(--pw)}
-#ped span{position:absolute;left:0;right:0;bottom:6px;text-align:center;font:700 14px 'Barlow Condensed',sans-serif;color:var(--ink)}
 #gearTag{position:absolute;left:150px;bottom:12px;font:700 40px/1 'Barlow Condensed',Impact,sans-serif;color:var(--ink);opacity:.8}
 #shifter{left:10px;bottom:10px}#pbox{right:10px;bottom:10px}#fsb{right:10px;top:10px;padding:8px 12px;font-size:17px}
 #hud{left:50%;top:10px;transform:translateX(-50%);display:none;font:700 20px/1.2 'Barlow Condensed',Impact,sans-serif;background:color-mix(in srgb,var(--panel) 85%,transparent);padding:6px 12px;border-radius:4px;text-align:center;white-space:nowrap}
@@ -67,6 +64,10 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--pw);outline-off
 @media (max-width:700px){#stage.fs{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) 44dvh}#stage.fs #fsPanel{border-left:0;border-top:1px solid var(--line)}
  #stage.fs #fsb,#stage.fs #pbox,#stage.fs #pnl{right:10px}#stage.fs #pbox,#stage.fs #shifter{bottom:calc(44dvh + 10px)!important}#stage.fs #gearTag{bottom:calc(44dvh + 12px)}#stage.fs #hud{left:50%;top:auto;bottom:calc(44dvh + 160px);font-size:15px;white-space:normal;width:90%}
  #stage.fs.nop{grid-template-rows:minmax(0,1fr) 0}#stage.fs.nop #pbox,#stage.fs.nop #shifter{bottom:10px!important}#stage.fs.nop #gearTag{bottom:12px}#stage.fs.nop #hud{bottom:160px}}
+#ign{width:104px;height:104px;cursor:pointer;touch-action:none;user-select:none;-webkit-user-select:none}#ign svg{width:100%;height:100%;display:block}
+#lamps{display:flex;gap:4px}#lamps i{font:700 12px/1 'Barlow Condensed',sans-serif;font-style:normal;padding:3px 5px;border-radius:3px;background:#2a2f35;color:#5f6870}#lamps i.r{background:#e53935;color:#fff}#lamps i.a{background:#ffb300;color:#111}
+#lev{position:relative;width:118px;height:160px;background:color-mix(in srgb,var(--panel) 82%,transparent);border:2px solid var(--ink);border-radius:6px;touch-action:none;cursor:grab}#lev svg{width:100%;height:100%;display:block}
+#levV{position:absolute;left:0;right:0;bottom:4px;text-align:center;font:700 15px 'Barlow Condensed',sans-serif}
 #keys{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:4px 12px;margin:10px 0 4px;font-size:14px;color:var(--mute)}
 #keys div{display:flex;gap:6px;align-items:baseline}kbd{font:700 13px/1 'Barlow Condensed',sans-serif;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-bottom-width:2px;border-radius:3px;padding:2px 5px;white-space:nowrap}
 .btn.nos{background:var(--panel);color:var(--ink);border:2px solid #2f6bff}.btn.nos.on{background:#2f6bff;color:#fff}
@@ -78,21 +79,29 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--pw);outline-off
   <h1>Engine dyno</h1>
   <p>Made by Adam David Phillips. Drag to orbit, pinch or scroll to zoom. Everything can be run from the keyboard:</p>
   <div id="keys" aria-label="Keyboard controls">
-    <div><kbd>E</kbd>Start / stop / rebuild</div><div><kbd>↑</kbd><kbd>↓</kbd>Throttle up / down</div><div><kbd>Space</kbd>Hold to rev</div><div><kbd>L</kbd>Lock throttle pedal</div>
-    <div><kbd>S</kbd><kbd>Shift+S</kbd>Shift up / down</div><div><kbd>1</kbd>–<kbd>5</kbd><kbd>0</kbd>Pick gear / neutral</div><div><kbd>T</kbd>Manual or CVT</div><div><kbd>D</kbd>CVT drive</div>
+    <div><kbd>K</kbd>Hold ignition key to START</div><div><kbd>E</kbd>Auto start / stop / rebuild</div><div><kbd>↑</kbd><kbd>↓</kbd>Throttle lever up / down</div><div><kbd>L</kbd>Throttle lever to idle</div><div><kbd>Space</kbd>Hold to rev</div>
+    <div><kbd>S</kbd><kbd>Shift+S</kbd>Shift up / down</div><div><kbd>1</kbd>–<kbd>5</kbd><kbd>0</kbd>Pick gear / neutral</div><div><kbd>T</kbd>Manual / CVT / 10-speed auto</div><div><kbd>D</kbd>Drive (CVT or auto)</div><div><kbd>B</kbd>Drum or hydraulic pump load</div><div><kbd>−</kbd><kbd>=</kbd>Pump load valve −/+ 10%</div>
     <div><kbd>N</kbd>Hold for NOS</div><div><kbd>R</kbd>Refill NOS bottle</div><div><kbd>G</kbd>Hold to dump raw fuel</div><div><kbd>P</kbd>Glow plugs (diesel)</div>
     <div><kbd>[</kbd><kbd>]</kbd>Cell temp −/+ 10°F</div><div><kbd>O</kbd>Oil: full / drain</div><div><kbd>V</kbd>Next camera view</div><div><kbd>M</kbd>Slow motion</div>
     <div><kbd>F</kbd>Full screen</div><div><kbd>H</kbd>Hide controls (full screen)</div><div><kbd>Esc</kbd>Exit full screen</div>
   </div>
   <section id="list" role="radiogroup" aria-label="Engine"></section>
   <div id="stage"><canvas id="c" aria-label="3D engine"></canvas>
-    <button class="btn ov" id="start" style="left:10px;top:10px">Start engine</button>
-    <button class="btn alt glow ov" id="glow" style="left:10px;top:62px;padding:8px 12px;font-size:17px" hidden>Glow plugs</button>
+    <div class="ov" id="ign" style="left:10px;top:10px" role="button" aria-label="Ignition key. Tap OFF to stop, hold the key to START (or hold K)"><svg viewBox="0 0 110 110">
+      <circle cx="55" cy="55" r="52" fill="var(--panel)" stroke="var(--ink)" stroke-width="3"/><circle cx="55" cy="58" r="30" fill="#9aa3ab" stroke="#555" stroke-width="2"/>
+      <g font-family="Barlow Condensed,sans-serif" font-weight="700" font-size="12" fill="var(--ink)" text-anchor="middle"><text x="22" y="30">OFF</text><text x="55" y="15">ON</text><text x="89" y="30" fill="var(--red)">START</text></g>
+      <g id="keyG" transform="rotate(-50 55 58)"><rect x="50" y="34" width="10" height="48" rx="2" fill="#333"/><path d="M41 22h28a6 6 0 0 1 6 6v18a6 6 0 0 1-6 6H41a6 6 0 0 1-6-6V28a6 6 0 0 1 6-6z" fill="#e0b13a" stroke="#7a5d10" stroke-width="2"/><circle cx="55" cy="31" r="4" fill="#7a5d10"/></g></svg></div>
+    <div class="ov" id="lamps" style="left:10px;top:120px"><i id="lOil">OIL</i><i id="lBat">BATT</i><i id="lTemp">TEMP</i><i id="lGlow">WAIT</i></div>
+    <button class="btn ov" id="start" style="left:10px;top:146px;padding:8px 12px;font-size:16px">Auto start (E)</button>
+    <button class="btn alt glow ov" id="glow" style="left:10px;top:188px;padding:8px 12px;font-size:16px" hidden>Glow plugs</button>
     <div class="ov" id="shifter"><svg viewBox="0 0 132 132"><path d="M26 26V106M66 26V106M106 26V66M26 66H106" stroke="currentColor" stroke-width="3" fill="none" opacity=".45"/><g font-size="13" fill="currentColor" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="700"><text x="26" y="16">1</text><text x="26" y="124">2</text><text x="66" y="16">3</text><text x="66" y="124">4</text><text x="106" y="16">5</text><text x="66" y="86">N</text></g><g id="knob" transform="translate(66 66)"><circle r="13" fill="var(--pw)"/></g></svg></div>
     <div class="ov" id="gearTag">N</div>
     <button class="btn alt ov" id="fsb">Full screen</button><button class="btn alt ov" id="pnl">Hide controls</button><div class="ov" id="hud"></div>
     <aside id="fsPanel" aria-label="Controls"></aside>
-    <div class="ov" id="pbox"><button class="btn alt" id="plock" style="padding:6px 10px;font-size:16px">Lock</button><div id="ped"><i id="pfill"></i><span>Throttle</span></div></div>
+    <div class="ov" id="pbox"><button class="btn alt" id="plock" style="padding:6px 10px;font-size:16px">Idle (L)</button><div id="lev" role="slider" aria-label="Throttle lever" aria-valuemin="0" aria-valuemax="100"><svg viewBox="0 0 140 190">
+      <path d="M7 98 A152 152 0 0 1 133 98" fill="none" stroke="var(--line)" stroke-width="10" stroke-linecap="round"/><path id="levArc" d="" fill="none" stroke="var(--pw)" stroke-width="10" stroke-linecap="round"/>
+      <g font-family="Barlow Condensed,sans-serif" font-weight="700" font-size="13" fill="var(--mute)"><text x="4" y="122">IDLE</text><text x="104" y="122">FULL</text></g>
+      <rect x="45" y="168" width="50" height="16" rx="3" fill="var(--ink)"/><line id="levArm" x1="70" y1="176" x2="70" y2="40" stroke="var(--ink)" stroke-width="8" stroke-linecap="round"/><circle id="levKnob" cx="70" cy="40" r="15" fill="var(--pw)" stroke="var(--ink)" stroke-width="2"/></svg><span id="levV">0%</span></div></div>
   </div>
   <div class="read">
     <div><output id="rRpm">0</output><small>rpm</small></div>
@@ -112,10 +121,13 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--pw);outline-off
     <button class="btn gas" id="gas" style="grid-column:1/-1">Hold to dump raw fuel in the intake (or press G)</button>
     <div class="row c2"><button class="btn nos" id="nos">Hold for NOS (N)</button><button class="btn alt" id="nosR">Refill NOS bottle (R)</button></div>
     <label>Transmission</label>
-    <div class="row c2"><button class="btn alt sel" data-tx="m">5-speed manual</button><button class="btn alt" data-tx="cvt">CVT automatic</button></div>
+    <div class="row c3"><button class="btn alt sel" data-tx="m">5-speed manual</button><button class="btn alt" data-tx="cvt">CVT automatic</button><button class="btn alt" data-tx="at">10-speed automatic</button></div>
     <div class="row c2"><button class="btn alt" id="sdn">Shift down (Shift+S)</button><button class="btn alt" id="sup">Shift up (S)</button></div>
+    <label>Dyno load</label>
+    <div class="row c2"><button class="btn alt sel" data-ld="drum">2,500 lb inertia drum</button><button class="btn alt" data-ld="hydro">Hydraulic pump</button></div>
+    <label id="lvLab" hidden>Pump load valve: <output id="lvv"></output> <input type="range" id="lv" min="0" max="100" value="40"></label>
     <label>Camera</label>
-    <div class="row c2"><button class="btn alt" id="zf">Whole engine</button><button class="btn alt" id="zr">Replay engine start</button><button class="btn alt" id="zc">Valve close-up</button><button class="btn alt" id="zs">Starter close-up</button><button class="btn alt" id="zt">Turbo close-up</button><button class="btn alt" id="zx">Tailpipe flames</button><button class="btn alt" id="zo">Crank and piston oilers</button><button class="btn alt" id="zw">2,500 lb inertia wheel</button></div>
+    <div class="row c2"><button class="btn alt" id="zf">Whole engine</button><button class="btn alt" id="zr">Replay engine start</button><button class="btn alt" id="zc">Valve close-up</button><button class="btn alt" id="zs">Starter close-up</button><button class="btn alt" id="zt">Turbo close-up</button><button class="btn alt" id="zx">Tailpipe flames</button><button class="btn alt" id="zo">Crank and piston oilers</button><button class="btn alt" id="zw">Dyno load (drum or pump)</button></div>
     <label>Animation speed (real time follows the true rpm)</label>
     <div class="row c3"><button class="btn alt sel" data-s="1">Real time</button><button class="btn alt" data-s=".1">1/10 speed</button><button class="btn alt" data-s=".01">1/100 speed</button></div>
     <label>Test cell temperature: <output id="cellv"></output> <input type="range" id="cell" min="-60" max="130" value="70"></label>
@@ -143,10 +155,10 @@ const E=[
 [[1.9,1.05],[1.5,0],[1.6,1.4],[1,0],[1.95,0],[1.95,0],[1.5,0]].forEach((m,i)=>E[i].im=m);E[1].v4=1;E[5].v4=1;E[6].v4=1;
 const tq=(e,r,b)=>e.k*Math.max(.4,1-((r-e.tqPk)/e.width)**2)*(1+.9*b/14.7);
 for(const e of E){e.k=1;let m=0,t=0;const bo=r=>e.boost?e.boost*sst(e.spool[0],e.spool[1],r):0;for(let r=Math.min(1000,e.idle);r<=e.red;r+=50){const pw=tq(e,r,bo(r))*r/5252;if(pw>m){m=pw;e.pr=r}t=Math.max(t,tq(e,r,bo(r)))}e.k=e.hp/m;e.tm=t*e.k}
-const NI=[11,15,19,22,26],NO=[33,29,25,22,18],GR=NO.map((n,i)=>n/NI[i]),M=.0375,JW=8;
+const AR=[4.70,2.99,2.15,1.80,1.52,1.28,1.00,0.85,0.69,0.64],NI=[11,15,19,22,26],NO=[33,29,25,22,18],GR=NO.map((n,i)=>n/NI[i]),M=.0375,JW=8;
 let cur=E[0],running=false,starting=0,rpm=0,thr=0,prevThr=0,boost=0,cut=false,revHeld=false,va=0,vis=0,gear=0,oil=100,LIM=45,SLO=1,TRPM=0;
 let dead=false,strain=0,shk=0,flash=0,hpNow=0,tqNow=0,foul=[],fs=[],avgF=0,mf=false,ts=0,proj=null,PR=[];
-let ersSOC=1,ersMode=0,ersHp=0,nosHeld=false,nosOn=false,nosLvl=1,nosP=745,nosMsg=0,tx='m',cvtD=false,cvtR=2.5,Gc=0,fuel=0,gasHeld=false,egt=0,af=0,popQ=0,wRpm=0,wa=0,lk=false,whp=0,lastGear=0,cellT=70,coolT=70,oilT=70,iat=70,op=0,glowT=0,glowH=0,msg='',msgT=0,tflash=0,afr=0,ffl=0,dens=1,CF=1,smokeW=0;
+let ld='drum',loadV=.4,hydP=0,hydQ=0,hydT=70,atD=false,atG=0,atT=0,shCut=0,keyPos=0,keyHeld=false,crankT=0,crankNeed=1.8,ersSOC=1,ersMode=0,ersHp=0,nosHeld=false,nosOn=false,nosLvl=1,nosP=745,nosMsg=0,tx='m',cvtD=false,cvtR=2.5,Gc=0,fuel=0,gasHeld=false,egt=0,af=0,popQ=0,wRpm=0,wa=0,lk=false,whp=0,lastGear=0,cellT=70,coolT=70,oilT=70,iat=70,op=0,glowT=0,glowH=0,msg='',msgT=0,tflash=0,afr=0,ffl=0,dens=1,CF=1,smokeW=0;
 
 /* ---------- audio ---------- */
 let AC,o1,o2,filt,gain,wh,whg,sw,swg,noise;
@@ -234,12 +246,18 @@ function step(dt){
   boost+=(bt-boost)*(1-Math.exp(-dt/(bt>boost?e.lag:.25)));
   if(e.boost&&prevThr>.4&&thr<.4&&tg<.15&&boost>6&&running&&!e.diesel)puff(2500,.22,.45);
   const fric=e.k*(.12+.3*rpm/e.red)*(1-.5*thr)*coldF,K=9*e.rev;let T=0,T0=0;
+  let atS=0;if(tx==='at'&&atD){atT-=dt;const up=e.idle+(e.pr*.97-e.idle)*(.28+.72*Math.min(1,thr)),lo=e.idle*1.2;atS=lo+(e.pr*.72-lo)*Math.min(1,thr*1.1);
+    if(atT<=0){if(atG<9&&lk&&rpm>up){atG++;atT=.5;shCut=.15}else if(atG>0&&wRpm*AR[atG-1]<up*.82&&rpm<up*.62&&(thr>.3||rpm<e.idle*1.3)){atG--;atT=.5}}}
+  if(tx==='at'&&!atD)atG=0;shCut=Math.max(0,shCut-dt);
   let cvtT=0;if(tx==='cvt'&&cvtD){const lo=e.idle*1.25,tr=cvtT=thr<.05?lo:lo+(e.pr*.97-lo)*Math.min(1,thr*1.15),want=Math.min(3.2,Math.max(.45,tr/Math.max(60,wRpm)));cvtR+=Math.max(-2.2*dt,Math.min(2.2*dt,want-cvtR))}
-  Gc=tx==='cvt'?(cvtD?cvtR:0):(gear?GR[gear-1]:0);const gk=tx+(tx==='cvt'?cvtD:gear);
+  Gc=tx==='cvt'?(cvtD?cvtR:0):tx==='at'?(atD?AR[atG]:0):(gear?GR[gear-1]:0);const gk=tx+(tx==='cvt'?cvtD:tx==='at'?(atD?atG:'n'):gear);
   if(gk!==lastGear){lastGear=gk;lk=false}
-  const wdrag=e.k*(.012+4e-9*wRpm*wRpm);let coupled=false;whp=0;
-  if(starting>0){starting-=dt;const cr=280*(.5+.5*sst(-60,50,cellT))*(e.diesel?.75:1);rpm+=(cr-rpm)*Math.min(1,dt*5);
-    if(starting<=0){if(e.diesel&&glowH<needGlow()-.001)say('The diesel will not fire: too cold. Hold the glow plugs (P) longer, then try again.',5);else running=true}}
+  let wdrag;if(ld==='hydro'){const q=wRpm/e.red,o=.03+(1-loadV)*.9;hydP=Math.min(5000,520*(q/o)**2);wdrag=e.tm*5*hydP/5000+e.k*.01;hydQ=wRpm*e.tm*5/306*.02}else{wdrag=e.k*(.012+4e-9*wRpm*wRpm);hydP=0;hydQ=0}
+  const JWe=ld==='hydro'?1:JW;let coupled=false;whp=0;
+  if(keyHeld&&keyPos===2&&!running&&!dead){if(starting<=0){crankT=0;crankNeed=1.2+(cellT<30?(30-cellT)/30:0)}starting=1}
+  if(keyPos===1&&e.diesel&&!running&&!dead)glowT=Math.max(glowT,.2);
+  if(starting>0){if(!keyHeld)starting-=dt;crankT+=dt;const cr=280*(.5+.5*sst(-60,50,cellT))*(e.diesel?.75:1);rpm+=(cr-rpm)*Math.min(1,dt*5);
+    if(keyHeld?crankT>=crankNeed:starting<=0){starting=0;crankT=0;if(e.diesel&&glowH<needGlow()-.001)say('The diesel will not fire: too cold. Leave the key at ON to heat the glow plugs (or press P), then crank again.',5);else running=true}}
   else{
     if(running){if(rpm>=e.red)cut=true;else if(rpm<e.red-(e.diesel?60:250))cut=false;
       T0=cut||mf?0:tq(e,rpm,boost)*thr*(1-.7*avgF)*dens+(e.diesel?0:e.k*.3*Math.min(fuel,.6)*(1-flood))+(nosOn?e.k*.6*nEff:0);
@@ -248,8 +266,9 @@ function step(dt){
         else if(thr<.25&&rpm>e.idle*1.4&&ersSOC<1){ersMode=-1;T-=e.k*.1;ersSOC=Math.min(1,ersSOC+dt/18)}}}
     else{cut=false;T=-fric*.6;ersMode=0;ersHp=0}
     if(e.diesel&&rpm>150&&fuel>0){const R=e.k*1.15*Math.min(fuel,1.2);T+=R;T0+=R}
-    const Tm=Gc&&!dead?e.k*2.4*(tx==='cvt'?sst(Math.max(e.idle*1.02,cvtT*.88),cvtT*1.03,rpm):sst(e.idle*1.05,e.idle*2.2,rpm)):0;
-    if(Tm>0){coupled=true;const G=Gc,Jr=JW/(G*G),Wd=wdrag/G,Tn=T-fric;
+    if(shCut>0&&running){const c=T0*.6;T-=c;T0-=c}
+    const Tm=Gc&&!dead?e.k*2.4*(tx==='cvt'?sst(Math.max(e.idle*1.02,cvtT*.88),cvtT*1.03,rpm):tx==='at'?(atG>=2?sst(e.idle*1.05,e.idle*1.6,rpm):sst(Math.max(e.idle*1.02,atS*.85),atS*1.03,rpm)):sst(e.idle*1.05,e.idle*2.2,rpm)):0;
+    if(Tm>0){coupled=true;const G=Gc,Jr=JWe/(G*G),Wd=wdrag/G,Tn=T-fric;
       if(lk){const Tc=(Tn*Jr+Wd)/(1+Jr);if(Math.abs(Tc)>Tm||Math.abs(rpm-wRpm*G)>40)lk=false;else{rpm+=(Tn-Wd)/(1+Jr)*K*dt;wRpm=Math.max(0,rpm/G);whp=Math.max(0,Tc*rpm/5252)}}
       if(!lk){const s=rpm-wRpm*G,Tc=Tm*Math.sign(s);rpm+=(Tn-Tc)*K*dt;let we=wRpm*G+(Tc-Wd)*K/Jr*dt;const s2=rpm-we;
         if(Math.sign(s2)!==Math.sign(s)||Math.abs(s2)<15){const m=(rpm+Jr*we)/(1+Jr);rpm=we=m;lk=true}
@@ -257,7 +276,9 @@ function step(dt){
       rpm=Math.max(0,rpm)}
     else{rpm=Math.max(0,rpm+(T-fric)*K*dt);lk=false}
   }
-  if(!coupled)wRpm=Math.max(0,wRpm-wdrag*K/JW*dt);
+  if(!coupled)wRpm=Math.max(0,wRpm-wdrag*K/JWe*dt);
+  if(ld==='hydro')whp=Math.max(0,(wdrag-e.k*.01)*wRpm/5252);
+  hydT+=((cellT+(ld==='hydro'?whp*.15:0))-hydT)*Math.min(1,dt*.05);
   if(dead)rpm*=Math.exp(-dt*5);
   if(!dead&&rpm>e.red*1.3)blow(e.diesel?'Diesel runaway! It over-revved on the fuel in the intake and came apart.':'Over-rev! The valves floated and the engine came apart.');
   hpNow=T0*rpm/5252;tqNow=T0;
@@ -316,7 +337,7 @@ function wheelLabel(){const c=document.createElement('canvas');c.width=c.height=
   x.fillStyle='#ffd23a';x.font='bold 56px sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText('2,500 LB',0,-178);x.fillStyle='#e8edf0';x.font='bold 36px sans-serif';x.fillText('INERTIA DRUM',0,180);
   x.fillStyle='#ff2d6f';x.fillRect(-12,-235,24,52);const t=new THREE.CanvasTexture(c);return new THREE.MeshStandardMaterial({map:t,transparent:true,metalness:.3,roughness:.5,depthWrite:false})}
 let G=new THREE.Group(),P=[],RT=[],TB=[],GI=[],GO=[],CP=[],BF,HM,oilM,fw,pn,osh,sh2,bn,W,sa=0,ssp=0,hit=0;
-let ERSM,ERSG,ERSB,ERSF,NZ,NJ,NOSL,CV,HOTP,HOTH,ALU,OILM,DOTM,FLOW=[],TAIL=[],JETS=[],BRG=[],INJ,JET,home={x:1,d:15},TC={},OC=V3(0,0,0),WC=V3(0,0,0);
+let DRG,HY,HDM,ATG,ERSM,ERSG,ERSB,ERSF,NZ,NJ,NOSL,CV,HOTP,HOTH,ALU,OILM,DOTM,FLOW=[],TAIL=[],JETS=[],BRG=[],INJ,JET,home={x:1,d:15},TC={},OC=V3(0,0,0),WC=V3(0,0,0);
 function buildTurbo(T,s){
   const g=new THREE.Group();g.position.copy(T);G.add(g);
   g.add(volute(.2,.3,.07,.18,Math.PI/2,HOTH));
@@ -459,15 +480,47 @@ function build3D(){
   osh=mk(new THREE.CylinderGeometry(.22,.22,.9,16),0x8b9299);osh.rotation.z=Math.PI/2;osh.position.set(gx0+2.3,-D,0);
   const yk=mk(new THREE.BoxGeometry(.2,.7,.1),0xff2d6f);osh.add(yk);G.add(osh);
   /* 2,500 lb inertia drum */
-  const wx=gx0+3.35;WC.set(wx,-D,0);W=new THREE.Group();W.position.copy(WC);G.add(W);
+  const wx=gx0+3.35;WC.set(wx,-D,0);DRG=new THREE.Group();G.add(DRG);W=new THREE.Group();W.position.copy(WC);DRG.add(W);
   const ST=MS(0x59636d,{metalness:.85,roughness:.35}),DK=MS(0x1b1f24,{metalness:.4,roughness:.7});
   xcyl(W,0,0,0,1.5,.5,ST);xcyl(W,0,0,0,1.6,.62,MS(0x3d454d,{metalness:.9,roughness:.3,side:THREE.DoubleSide}),true);xcyl(W,0,0,0,.38,.9,ST);
   for(let k=0;k<6;k++){const a=k*Math.PI/3;xcyl(W,0,.95*Math.cos(a),.95*Math.sin(a),.2,.52,DK)}
   const mrk=mk(new THREE.BoxGeometry(.64,.1,.22),0xff2d6f);mrk.position.y=1.62;W.add(mrk);
   const LM=wheelLabel();[-1,1].forEach(sd=>{const f=new THREE.Mesh(new THREE.CircleGeometry(1.48,64),LM);f.position.x=sd*.26;f.rotation.y=sd*Math.PI/2;W.add(f)});
   seg(G,V3(gx0+2.3,-D,0),V3(wx+1.05,-D,0),.13,MS(0xb8c0c8,{metalness:.9,roughness:.2}));
-  [-.8,.8].forEach(o=>{const pd=mk(new THREE.BoxGeometry(.35,3.4-D,.8),0x2e5d8a);pd.position.set(wx+o,(-3.4-D)/2,0);G.add(pd);xcyl(G,wx+o,-D,0,.3,.38,MS(0x2e5d8a))});
-  const bp=mk(new THREE.BoxGeometry(2.6,.12,1.6),0x3a4048);bp.position.set(wx,-3.34,0);G.add(bp);
+  [-.8,.8].forEach(o=>{const pd=mk(new THREE.BoxGeometry(.35,3.4-D,.8),0x2e5d8a);pd.position.set(wx+o,(-3.4-D)/2,0);DRG.add(pd);xcyl(DRG,wx+o,-D,0,.3,.38,MS(0x2e5d8a))});
+  const bp=mk(new THREE.BoxGeometry(2.6,.12,1.6),0x3a4048);bp.position.set(wx,-3.34,0);DRG.add(bp);
+  /* hydraulic pump absorber: pump, load valve, oil cooler, reservoir, hoses */
+  {HY={g:new THREE.Group(),flow:[]};G.add(HY.g);const px=wx+.1,py=-D,RD=MS(0x8b1e1e,{metalness:.6,roughness:.4});
+    const body=new THREE.Mesh(new THREE.BoxGeometry(1,1.05,1.05),RD);body.position.set(px+.2,py,0);HY.g.add(body);xcyl(HY.g,px-.35,py,0,.42,.12,RD);
+    for(let i=0;i<4;i++){const f=mk(new THREE.BoxGeometry(.06,1.07,1.07),0x5a1414);f.position.set(px-.1+i*.22,py,0);HY.g.add(f)}
+    HY.cp=new THREE.Group();HY.cp.position.set(px-.6,py,0);HY.g.add(HY.cp);xcyl(HY.cp,0,0,0,.22,.2,MS(0x222222));const ym=mk(new THREE.BoxGeometry(.22,.5,.08),0xffd23a);HY.cp.add(ym);
+    const base=mk(new THREE.BoxGeometry(1.4,.12,1.4),0x3a4048);base.position.set(px+.2,-3.34,0);HY.g.add(base);
+    const ph=3.4-D-.52,pd=mk(new THREE.BoxGeometry(.8,ph,.8),0x5a2020);pd.position.set(px+.2,-3.4+ph/2,0);HY.g.add(pd);
+    const VP=V3(px+.2,.7,1.5),vb=mk(new THREE.BoxGeometry(.45,.45,.45),0x707780);vb.position.copy(VP);HY.g.add(vb);
+    seg(HY.g,V3(VP.x,VP.y+.22,VP.z),V3(VP.x,VP.y+.45,VP.z),.03,MS(0x999999));HY.hw=new THREE.Mesh(new THREE.TorusGeometry(.28,.04,8,24),MS(0xd32f2f));HY.hw.position.set(VP.x,VP.y+.45,VP.z);HY.hw.rotation.x=Math.PI/2;HY.g.add(HY.hw);
+    const sp=mk(new THREE.BoxGeometry(.04,.04,.5),0xd32f2f);HY.hw.add(sp);
+    const C0=V3(px+1.9,-.6,2.1),co=mk(new THREE.BoxGeometry(.35,1.7,1.5),0x30363c);co.position.copy(C0);HY.g.add(co);const cf=mk(new THREE.BoxGeometry(.36,1.7,1.5),0x99aaaa,{wireframe:true});cf.position.copy(C0);HY.g.add(cf);
+    HY.fan=new THREE.Group();HY.fan.position.set(C0.x+.3,C0.y,C0.z);HY.g.add(HY.fan);for(let i=0;i<5;i++){const q=new THREE.Group();q.rotation.x=i/5*6.2832;const b=mk(new THREE.BoxGeometry(.03,.6,.2),0x222222);b.position.y=.33;b.rotation.y=.4;q.add(b);HY.fan.add(q)}
+    const RP=V3(px+1.9,-2.55,-1.4),rs=new THREE.Mesh(new THREE.CylinderGeometry(.5,.5,1.5,32),MS(0x5d6670,{transparent:true,opacity:.45,depthWrite:false}));rs.position.copy(RP);HY.g.add(rs);
+    const fl=new THREE.Mesh(new THREE.CylinderGeometry(.46,.46,1,32),MS(0xd9a21b,{metalness:0,roughness:.5}));fl.position.set(RP.x,RP.y-.2,RP.z);fl.scale.y=1;HY.g.add(fl);
+    HY.PM=MS(0xb71c1c,{roughness:.6});const RM=MS(0x1e4fb7,{roughness:.6});
+    const hot=[V3(px+.2,py+.52,0),V3(px+.2,.7,0),V3(VP.x,.7,VP.z-.22),V3(VP.x,.7,VP.z),V3(C0.x,.7,VP.z),V3(C0.x,.7,C0.z),V3(C0.x,C0.y+.85,C0.z)];
+    const cool=[V3(C0.x,C0.y-.85,C0.z),V3(C0.x,-1.6,C0.z),V3(RP.x,-1.6,RP.z),V3(RP.x,RP.y+.75,RP.z)];
+    const suc=[V3(RP.x-.5,-3.05,RP.z),V3(px+.2,-3.05,RP.z),V3(px+.2,py,RP.z),V3(px+.2,py,-.52)];
+    poly(HY.g,hot,.075,HY.PM);poly(HY.g,cool,.075,RM);poly(HY.g,suc,.09,RM);
+    HDM=new THREE.MeshBasicMaterial({color:0xffcc33});
+    [hot,cool,suc].forEach(pts=>{const cum=[0];for(let i=1;i<pts.length;i++)cum.push(cum[i-1]+pts[i].distanceTo(pts[i-1]));const dots=[];for(let k=0;k<14;k++){const m=new THREE.Mesh(new THREE.SphereGeometry(.09,8,6),HDM);HY.g.add(m);dots.push(m)}HY.flow.push({pts,cum,len:cum[cum.length-1],dots,ph:Math.random()})})}
+  /* 10-speed automatic: torque converter, four planetary gearsets with clutch packs, transfer gears */
+  {ATG={g:new THREE.Group(),sets:[]};G.add(ATG.g);
+    ATG.tc=new THREE.Mesh(new THREE.TorusGeometry(.62,.26,16,40),MS(0xc9a23a,{metalness:.8,roughness:.3,transparent:true,opacity:.5,depthWrite:false}));ATG.tc.rotation.y=Math.PI/2;ATG.tc.position.set(gx0-.12,0,0);ATG.g.add(ATG.tc);
+    ATG.fins=new THREE.Group();ATG.fins.position.set(gx0-.12,0,0);for(let i=0;i<16;i++){const q=new THREE.Group();q.rotation.x=i/16*6.2832;const b=mk(new THREE.BoxGeometry(.05,.42,.12),0xe2c26a);b.position.y=.62;q.add(b);ATG.fins.add(q)}ATG.g.add(ATG.fins);
+    const cols=[0x4a6fa5,0x7a9a8a,0xa0527a,0x6a5acd];
+    for(let k=0;k<4;k++){const st=new THREE.Group();st.position.x=gx0+.32+k*.36;ATG.g.add(st);
+      const ring=new THREE.Mesh(new THREE.TorusGeometry(.55,.07,8,40),MS(cols[k]));ring.rotation.y=Math.PI/2;st.add(ring);
+      const sun=gear3(.15,10,.2,0xdddddd);st.add(sun);const car=new THREE.Group();st.add(car);const pl=[];
+      for(let j=0;j<3;j++){const g=gear3(.16,10,.18,cols[k]),a=j*2.094;g.position.set(0,.33*Math.cos(a),.33*Math.sin(a));car.add(g);pl.push(g)}
+      const cl=xcyl(st,.16,0,0,.5,.05,MS(0x333333));ATG.sets.push({sun,car,pl,ring,cl})}
+    const d1=gear3(.74,36,.2,0x9aa3ab),d2=gear3(.74,36,.2,0x9aa3ab);d1.position.set(gx0+1.8,0,0);d2.position.set(gx0+1.8,-D,0);ATG.g.add(d1,d2);ATG.dg=[d1,d2]}
   /* camera */
   const front=-len/2-3.2,back=wx+1.4;home={x:(front+back)/2+.9,d:3+(back-front)*1.02};tgt.set(home.x,-.6,0);dist=home.d;
   TC=TB.find(t=>t.z>0)||TB[0]||null;
@@ -484,7 +537,7 @@ cvs.addEventListener('pointermove',e=>{const o=pts.get(e.pointerId);if(!o)return
 cvs.addEventListener('wheel',e=>{e.preventDefault();dist=Math.min(60,Math.max(1.2,dist*(1+e.deltaY*.001)))},{passive:false});
 
 function emit(k,pos,v,m,s,col){const add=k==='f'||k==='b',ms=new THREE.Mesh(new THREE.IcosahedronGeometry(1,0),new THREE.MeshBasicMaterial({color:col,transparent:true,blending:add?THREE.AdditiveBlending:THREE.NormalBlending,depthWrite:!add}));ms.position.copy(pos);ms.scale.setScalar(s);scene.add(ms);PR.push({ms,v,l:0,m,s,k})}
-const NS=800,SPp=new Float32Array(NS*6),SPc=new Float32Array(NS*6),SV=new Float32Array(NS*3),SL=new Float32Array(NS);let sn=0;
+const NS=800,SPp=new Float32Array(NS*6).fill(-9999),SPc=new Float32Array(NS*6),SV=new Float32Array(NS*3),SL=new Float32Array(NS);let sn=0;
 const sgeo=new THREE.BufferGeometry();sgeo.setAttribute('position',new THREE.BufferAttribute(SPp,3));sgeo.setAttribute('color',new THREE.BufferAttribute(SPc,3));
 const slines=new THREE.LineSegments(sgeo,new THREE.LineBasicMaterial({vertexColors:true,transparent:true,blending:THREE.AdditiveBlending,depthWrite:false}));slines.frustumCulled=false;scene.add(slines);
 function spark(x,y,z,n,sp){for(let k=0;k<n;k++){const i=sn++%NS,a=Math.random()*6.283,b=Math.random()*2-1,r=Math.sqrt(1-b*b),s=sp*(.4+Math.random());
@@ -493,7 +546,7 @@ function spark(x,y,z,n,sp){for(let k=0;k<n;k++){const i=sn++%NS,a=Math.random()*
 function sparks(dt){for(let i=0;i<NS;i++){const o=i*6;
   if(SL[i]>0){SL[i]-=dt;SV[i*3+1]-=9*dt;for(let c=0;c<3;c++){SPp[o+c]+=SV[i*3+c]*dt;SPp[o+3+c]=SPp[o+c]-SV[i*3+c]*.06}
     const t=Math.max(0,Math.min(1,SL[i]*2.2));SPc[o]=t;SPc[o+1]=t*(.5+.5*t);SPc[o+2]=t*t*.5;SPc[o+3]=t*.7;SPc[o+4]=t*.25;SPc[o+5]=0}
-  else if(SPc[o]!==0)SPc.fill(0,o,o+6)}
+  else if(SPp[o+1]!==-9999){SPc.fill(0,o,o+6);SPp.fill(-9999,o,o+6)}}
   sgeo.attributes.position.needsUpdate=true;sgeo.attributes.color.needsUpdate=true}
 const setHot=(m,x)=>m.emissive.setRGB(Math.min(1,x*1.5),Math.pow(x,2)*.55,Math.pow(x,4)*.3);
 const rnd=s=>(Math.random()-.5)*s;
@@ -518,7 +571,7 @@ function update3D(dt){
   const x=Math.max(0,(egt-.22)/.78);setHot(HOTP,x*.9);setHot(HOTH,Math.min(1,x*1.1+heat*.3));
   fw.rotation.x=va*R2;BF.rotation.y=thr*1.3;const bf2=e.boost?boost/e.boost:0;CP.forEach(m=>m.material.emissive.setRGB(0,.25*bf2,.5*bf2));
   /* exhaust gas flow */
-  DOTM.opacity=rpm>30?.25+.65*x:0;DOTM.color.setRGB(1,.3+.5*x,.08+.3*x*x);
+  DOTM.opacity=rpm>30?.25+.65*x:0;FLOW.forEach(f=>f.dots.forEach(m=>m.visible=rpm>30));DOTM.color.setRGB(1,.3+.5*x,.08+.3*x*x);
   FLOW.forEach(f=>{f.ph=(f.ph+dt*SLO*(rpm>30?.5+rpm/(e.diesel?220:700):0)/f.len)%1;f.dots.forEach((m,k)=>{let d=((f.ph+k/f.dots.length)%1)*f.len,i=1;while(i<f.cum.length-1&&f.cum[i]<d)i++;
     const u=(d-f.cum[i-1])/Math.max(1e-6,f.cum[i]-f.cum[i-1]);m.position.copy(f.pts[i-1]).lerp(f.pts[i],u)})});
   /* tailpipe glow, flames, pops, smoke */
@@ -550,7 +603,14 @@ function update3D(dt){
   for(let k=0;k<5;k++){GI[k].rotation.x=va*R2;GO[k].rotation.x=-va*R2/GR[k];
     const s=gear===k+1?0x661133:0;GI[k].material.emissive.setHex(s);GO[k].material.emissive.setHex(s)}
   osh.rotation.x=-wa*R2;W.rotation.x=-wa*R2;
-  {const cv=tx==='cvt';CV.g.visible=cv;GI.concat(GO).forEach(m=>m.visible=!cv);if(cv){const S=1.15,ri=S/(1+cvtR),ro=S-ri;CV.si.forEach(m=>{m.scale.set(ri+.06,1,ri+.06);m.rotation.x=va*R2});CV.so.forEach(m=>{m.scale.set(ro+.06,1,ro+.06);m.rotation.x=-wa*R2});
+  {const at=tx==='at';ATG.g.visible=at;if(at){ATG.fins.rotation.x=va*R2;const sl=Gc&&!lk&&running;ATG.tc.material.emissive.setRGB(sl?.6*thr+.1:0,sl?.25*thr:0,0);
+    const pat=[[1,0,0,1],[0,1,0,1],[1,1,0,0],[0,1,1,0],[1,0,1,0],[0,0,1,1],[1,1,1,0],[1,0,1,1],[0,1,1,1],[1,1,0,1]][atG];
+    ATG.sets.forEach((q,k)=>{q.sun.rotation.x=va*R2;q.car.rotation.x=-wa*R2*(1+k*.3);q.pl.forEach(g=>g.rotation.x=-va*R2*1.6);const on=atD&&pat[k];q.cl.material.emissive.setRGB(on?.7:0,on?.15:0,on?.35:0)});
+    ATG.dg[0].rotation.x=wa*R2;ATG.dg[1].rotation.x=-wa*R2}}
+  {const hy=ld==='hydro';HY.g.visible=hy;DRG.visible=!hy;if(hy){HY.cp.rotation.x=-wa*R2;HY.fan.rotation.x+=dt*SLO*(hydT>cellT+15?30:4);HY.hw.rotation.z=loadV*12;HY.PM.emissive.setRGB(.55*hydP/5000,0,0);
+    const t=Math.min(1,Math.max(0,(hydT-60)/180));HDM.color.setRGB(.95,.85-.45*t,.25-.2*t);const sp=Math.min(14,wRpm/cur.red*9);
+    HY.flow.forEach(f=>{f.ph=(f.ph+dt*SLO*sp/f.len)%1;f.dots.forEach((m,k)=>{m.visible=sp>.05;let d=((f.ph+k/f.dots.length)%1)*f.len,i=1;while(i<f.cum.length-1&&f.cum[i]<d)i++;const u=(d-f.cum[i-1])/Math.max(1e-6,f.cum[i]-f.cum[i-1]);m.position.copy(f.pts[i-1]).lerp(f.pts[i],u)})})}}
+  {const cv=tx==='cvt';CV.g.visible=cv;GI.concat(GO).forEach(m=>m.visible=tx==='m');if(cv){const S=1.15,ri=S/(1+cvtR),ro=S-ri;CV.si.forEach(m=>{m.scale.set(ri+.06,1,ri+.06);m.rotation.x=va*R2});CV.so.forEach(m=>{m.scale.set(ro+.06,1,ro+.06);m.rotation.x=-wa*R2});
     CV.ti.scale.set(ri,ri,1);CV.to.scale.set(ro,ro,1);[[CV.b1,1],[CV.b2,-1]].forEach(([b,z])=>{const a=V3(0,0,z*ri),c=V3(0,-CV.D,z*ro),d=c.clone().sub(a);b.position.copy(a).add(c).multiplyScalar(.5);b.scale.y=d.length();b.quaternion.setFromUnitVectors(UP,d.normalize())})}}
   const h=.4*Math.min(1.4,oil/100)+.001;oilM.scale.y=h;oilM.position.y=-1.08+h/2;
   if(proj){proj.v.y-=18*dt;proj.m.position.addScaledVector(proj.v,dt);proj.m.rotation.x+=proj.w*dt;
@@ -587,8 +647,11 @@ const GAU=[
  ['Coolant temp','°F',()=>-60,()=>280,()=>coolT,()=>240],
  ['Intake air','°F',()=>-60,()=>250,()=>iat,()=>180],
  ['Fuel flow','lb/hr',()=>0,e=>Math.ceil(e.hp*.7/50)*50,()=>ffl],
- ['Drum speed','mph',()=>0,()=>160,()=>wRpm*.01065],
- ['Drum power','hp',()=>0,e=>Math.ceil(e.hp*1.3/100)*100,()=>whp],
+ ['Load speed','mph',()=>0,()=>160,()=>wRpm*.01065],
+ ['Hydraulic pressure','psi',()=>0,()=>5000,()=>hydP,()=>4500],
+ ['Hydraulic flow','gpm',()=>0,e=>Math.ceil(e.tm*5/306*.02*e.red*1.1/50)*50,()=>hydQ],
+ ['Hydraulic oil','°F',()=>-60,()=>300,()=>hydT,()=>230],
+ ['Absorbed power','hp',()=>0,e=>Math.ceil(e.hp*1.3/100)*100,()=>whp],
  ['ERS battery','%',()=>0,()=>100,()=>cur.ers?ersSOC*100:0,null,v=>cur.ers?Math.round(v)+'':'n/a',15],
  ['NOS bottle','psi',()=>0,()=>1400,()=>nosP,()=>1150,null,500],
  ['Test cell','°F',()=>-60,()=>130,()=>cellT,()=>110,null,-20]
@@ -612,23 +675,35 @@ let gt=0;function gauges(dt){gt-=dt;if(gt>0)return;gt=.1;GAU.forEach((g,i)=>draw
 
 /* ---------- ui ---------- */
 const sbtn=$('#start'),GB=[];
-function rebuild(){ersSOC=1;dead=false;strain=0;shk=0;flash=0;rpm=0;boost=0;running=false;starting=0;wRpm=0;fuel=0;egt=0;lk=false;coolT=oilT=cellT;op=0;build3D()}
+function rebuild(){ersSOC=1;keyPos=0;keyHeld=false;atG=0;hydT=cellT;dead=false;strain=0;shk=0;flash=0;rpm=0;boost=0;running=false;starting=0;wRpm=0;fuel=0;egt=0;lk=false;coolT=oilT=cellT;op=0;build3D()}
 function list(){$('#list').innerHTML='';E.forEach(e=>{const b=document.createElement('button');b.setAttribute('role','radio');b.setAttribute('aria-checked',e===cur);
   b.innerHTML='<b>'+e.name+'</b><span>'+e.sp+'</span>';b.onclick=()=>{cur=e;rpm=Math.min(rpm,e.red);cut=false;rebuild();setWave();list()};$('#list').appendChild(b)})}
 const GP={1:[26,26],2:[26,106],3:[66,26],4:[66,106],5:[106,26],0:[66,66]},kn=$('#knob'),shf=$('#shifter');let shd=false;
 const setK=(x,y)=>kn.setAttribute('transform','translate('+x+' '+y+')');
-function shiftTo(g){if(tx==='cvt'){cvtD=g>0?true:g<0?false:!cvtD;return}gear=(g+6)%6;setK(...GP[gear])}
+function shiftTo(g){if(tx==='cvt'){cvtD=g>0?true:g<0?false:!cvtD;return}if(tx==='at'){atD=g>0?true:g<0?false:!atD;if(!atD)atG=0;return}gear=(g+6)%6;setK(...GP[gear])}
 function gate(x,y){x=Math.min(106,Math.max(26,x));y=Math.min(106,Math.max(26,y));if(Math.abs(y-66)<16)return[x,66];const c=[26,66,106].reduce((a,b)=>Math.abs(b-x)<Math.abs(a-x)?b:a);return[c,c===106?Math.min(66,y):y]}
 function shMove(e){const r=shf.getBoundingClientRect(),[x,y]=gate((e.clientX-r.left)/r.width*132,(e.clientY-r.top)/r.height*132);setK(x,y);gear=0;for(let g=1;g<=5;g++)if(Math.hypot(x-GP[g][0],y-GP[g][1])<14)gear=g}
 shf.addEventListener('pointerdown',e=>{shf.setPointerCapture(e.pointerId);shd=true;shMove(e)});
 shf.addEventListener('pointermove',e=>{if(shd)shMove(e)});
 ['pointerup','pointercancel'].forEach(t=>shf.addEventListener(t,()=>{shd=false;setK(...GP[gear])}));
-let pedal=0,pLock=false,pdr=false;const ped=$('#ped'),pfill=$('#pfill');
-function pset(e){const r=ped.getBoundingClientRect();pedal=Math.min(1,Math.max(0,1-(e.clientY-r.top)/r.height));pfill.style.height=pedal*100+'%'}
-ped.addEventListener('pointerdown',e=>{ped.setPointerCapture(e.pointerId);pdr=true;pset(e)});
-ped.addEventListener('pointermove',e=>{if(pdr)pset(e)});
-['pointerup','pointercancel'].forEach(t=>ped.addEventListener(t,()=>{pdr=false;if(!pLock){pedal=0;pfill.style.height='0'}}));
-$('#plock').onclick=function(){pLock=!pLock;this.classList.toggle('sel',pLock);if(!pLock&&!pdr){pedal=0;pfill.style.height='0'}};
+let pedal=0,pLock=false,pdr=false;const lev=$('#lev'),LA=25*R2,LP=[70,176],LL=136;
+function drawLever(){const a=-LA+2*LA*pedal,x=LP[0]+LL*Math.sin(a),y=LP[1]-LL*Math.cos(a);$('#levArm').setAttribute('x2',x);$('#levArm').setAttribute('y2',y);$('#levKnob').setAttribute('cx',x);$('#levKnob').setAttribute('cy',y);
+  const r=152,c=[70,174],p0=[c[0]-r*Math.sin(LA),c[1]-r*Math.cos(LA)],p1=[c[0]+r*Math.sin(a),c[1]-r*Math.cos(a)];$('#levArc').setAttribute('d',pedal>.005?'M'+p0[0]+' '+p0[1]+' A'+r+' '+r+' 0 0 1 '+p1[0]+' '+p1[1]:'');
+  $('#levV').textContent=Math.round(pedal*100)+'%';lev.setAttribute('aria-valuenow',Math.round(pedal*100))}
+function pset(e){const r=lev.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*140,y=(e.clientY-r.top)/r.height*190,a=Math.atan2(x-LP[0],LP[1]-y);setPedal((a+LA)/(2*LA))}
+lev.addEventListener('pointerdown',e=>{lev.setPointerCapture(e.pointerId);pdr=true;pset(e)});
+lev.addEventListener('pointermove',e=>{if(pdr)pset(e)});
+['pointerup','pointercancel'].forEach(t=>lev.addEventListener(t,()=>{pdr=false}));
+$('#plock').onclick=()=>setPedal(0);
+/* ignition key: tap OFF to stop, hold the key to crank (START springs back to ON) */
+const ign=$('#ign');function keyStart(){if(dead)return;try{initAudio()}catch(_){}keyPos=2;keyHeld=true}
+function keyRelease(){if(keyHeld){keyHeld=false;keyPos=1;if(starting>0&&!running){starting=0;crankT=0}}}
+function keyOff(){keyPos=0;keyHeld=false;running=false;starting=0}
+ign.addEventListener('pointerdown',e=>{ign.setPointerCapture(e.pointerId);const r=ign.getBoundingClientRect();if(e.clientX-r.left<r.width*.33)keyOff();else keyStart()});
+['pointerup','pointercancel','lostpointercapture'].forEach(t=>ign.addEventListener(t,keyRelease));
+document.querySelectorAll('[data-ld]').forEach(b=>b.onclick=()=>{ld=b.dataset.ld;document.querySelectorAll('[data-ld]').forEach(x=>x.classList.toggle('sel',x===b));$('#lvLab').hidden=ld!=='hydro';lk=false;
+  say(ld==='hydro'?'Hydraulic pump load: close the load valve (=) to load the engine. Watch pressure, flow and oil temp.':'2,500 lb inertia drum load.',4)});
+$('#lv').addEventListener('input',()=>{loadV=+$('#lv').value/100});
 document.querySelectorAll('[data-oil]').forEach(b=>b.onclick=()=>{$('#oil').value=b.dataset.oil});
 document.querySelectorAll('[data-cell]').forEach(b=>b.onclick=()=>{$('#cell').value=b.dataset.cell;if(!running&&starting<=0)coolT=oilT=+b.dataset.cell});
 $('#cell').addEventListener('input',()=>{if(!running&&starting<=0)coolT=oilT=+$('#cell').value});
@@ -639,15 +714,15 @@ $('#zs').onclick=()=>view(V3(cur.len/2-.1,0,1.2),2.6,.35,.9);
 $('#zt').onclick=()=>{if(TC)view(TC.p.clone().add(V3(.5,0,0)),3.4,.35,TC.z>0?-.75:-2.4);else{const f=FLOW[0];if(f)view(f.pts[1].clone(),4,.3,.8)}};
 $('#zx').onclick=()=>{const t=TAIL[TAIL.length-1];if(t)view(t.p.clone().add(V3(1.2,.4,0)),7,.25,Math.sign(t.p.z)>0?.35:2.8)};
 $('#zo').onclick=()=>{view(OC,3,-.32,.35);SLO=.1;document.querySelectorAll('[data-s]').forEach(x=>x.classList.toggle('sel',x.dataset.s==='.1'))};
-$('#zw').onclick=()=>view(WC,6.5,.2,1);
-function startEngine(){try{initAudio()}catch(_){}starting=1.8+(cellT<30?(30-cellT)/30:0)}
+$('#zw').onclick=()=>ld==='hydro'?view(WC.clone().add(V3(1,.2,.2)),8.5,.42,2.05):view(WC,6.5,.2,1);
+function startEngine(){try{initAudio()}catch(_){}keyPos=1;crankT=0;starting=crankNeed=1.8+(cellT<30?(30-cellT)/30:0)}
 $('#zr').onclick=()=>{if(dead)rebuild();running=false;rpm=0;hit=0;startEngine();tgt.set(cur.len/2-.3,0,.8);dist=5;pit=.3;yaw=.9;SLO=.1;document.querySelectorAll('[data-s]').forEach(x=>x.classList.toggle('sel',x.dataset.s==='.1'))};
 document.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{SLO=+b.dataset.s;document.querySelectorAll('[data-s]').forEach(x=>x.classList.toggle('sel',x===b))});
-sbtn.onclick=()=>{if(dead){rebuild();return}if(running||starting>0){running=false;starting=0}else startEngine()};
+sbtn.onclick=()=>{if(dead){rebuild();return}if(running||starting>0)keyOff();else startEngine()};
 $('#glow').onclick=()=>{glowT=6;say('Glow plugs heating…',2)};
-$('#sup').onclick=()=>tx==='cvt'?shiftTo(1):shiftTo(gear+1);$('#sdn').onclick=()=>tx==='cvt'?shiftTo(-1):shiftTo(gear-1);
-document.querySelectorAll('[data-tx]').forEach(b=>b.onclick=()=>{tx=b.dataset.tx;document.querySelectorAll('[data-tx]').forEach(x=>x.classList.toggle('sel',x===b));gear=0;cvtD=tx==='cvt';cvtR=2.5;setK(...GP[0]);if(tx==='cvt')say('CVT in Drive. Press the throttle to go; S or the Neutral button to stop.',4);$('#shifter').style.display=tx==='cvt'?'none':'';
-  $('#sup').textContent=tx==='cvt'?'Drive (S)':'Shift up (S)';$('#sdn').textContent=tx==='cvt'?'Neutral (Shift+S)':'Shift down (Shift+S)'});
+$('#sup').onclick=()=>tx!=='m'?shiftTo(1):shiftTo(gear+1);$('#sdn').onclick=()=>tx!=='m'?shiftTo(-1):shiftTo(gear-1);
+document.querySelectorAll('[data-tx]').forEach(b=>b.onclick=()=>{tx=b.dataset.tx;document.querySelectorAll('[data-tx]').forEach(x=>x.classList.toggle('sel',x===b));gear=0;cvtD=tx==='cvt';atD=tx==='at';atG=0;cvtR=2.5;setK(...GP[0]);if(tx!=='m')say((tx==='cvt'?'CVT':'10-speed automatic')+' in Drive. Push the throttle lever to go; S or Neutral to stop.',4);$('#shifter').style.display=tx!=='m'?'none':'';
+  $('#sup').textContent=tx!=='m'?'Drive (S)':'Shift up (S)';$('#sdn').textContent=tx!=='m'?'Neutral (Shift+S)':'Shift down (Shift+S)'});
 const stg=$('#stage'),PANEL=['#strainBox','#keys','.ctl','#gH','#gauges','#sae'].map(q=>$(q)),HOMES=PANEL.map(el=>[el.parentNode,el.nextSibling]);
 function fsToggle(){const on=!stg.classList.contains('fs');stg.classList.toggle('fs',on);
   if(on)PANEL.forEach(el=>$('#fsPanel').appendChild(el));else for(let i=PANEL.length-1;i>=0;i--)HOMES[i][0].insertBefore(PANEL[i],HOMES[i][1]);$('#fsb').textContent=on?'Exit full screen':'Full screen';
@@ -655,21 +730,23 @@ function fsToggle(){const on=!stg.classList.contains('fs');stg.classList.toggle(
 $('#fsb').onclick=fsToggle;$('#pnl').onclick=()=>{const h=stg.classList.toggle('nop');$('#pnl').textContent=h?'Show controls':'Hide controls'};document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement&&stg.classList.contains('fs'))fsToggle()});
 const hold=(el,on)=>{el.addEventListener('pointerdown',e=>{on(true);el.setPointerCapture(e.pointerId)});['pointerup','pointercancel','lostpointercapture'].forEach(t=>el.addEventListener(t,()=>on(false)))};
 hold($('#rev'),v=>revHeld=v);hold($('#gas'),v=>gasHeld=v);hold($('#nos'),v=>nosHeld=v);$('#nosR').onclick=()=>{nosLvl=1;say('NOS bottle refilled.',2)};
-function setPedal(v,lock){pedal=Math.min(1,Math.max(0,v));pfill.style.height=pedal*100+'%';if(lock!==undefined){pLock=lock;$('#plock').classList.toggle('sel',pLock)}}
-const CAMS=['zf','zt','zx','zo','zw','zc','zs'];let camI=0;
+function setPedal(v){pedal=Math.min(1,Math.max(0,v));drawLever()}
+const CAMS=['zf','zt','zx','zo','zw','zc','zs'];drawLever();let camI=0;
 addEventListener('keydown',e=>{const tag=e.target.tagName,k=e.code;if(e.ctrlKey||e.metaKey||e.altKey)return;
   if(k==='Space'&&tag!=='BUTTON'){revHeld=true;e.preventDefault();return}
-  if(k==='KeyG'){gasHeld=true;return}if(k==='KeyN'){nosHeld=true;return}
-  if(k==='ArrowUp'||k==='ArrowDown'){if(tag==='INPUT')return;e.preventDefault();setPedal(pedal+(k==='ArrowUp'?.1:-.1),k==='ArrowUp'||pedal>.15);return}
+  if(k==='KeyG'){gasHeld=true;return}if(k==='KeyN'){nosHeld=true;return}if(k==='KeyK'){if(!e.repeat)keyStart();return}
+  if(k==='Minus'||k==='Equal'){const l=$('#lv');l.value=Math.min(100,Math.max(0,+l.value+(k==='Equal'?10:-10)));l.dispatchEvent(new Event('input'));return}
+  if(k==='ArrowUp'||k==='ArrowDown'){if(tag==='INPUT')return;e.preventDefault();setPedal(pedal+(k==='ArrowUp'?.1:-.1));return}
   if(k==='BracketLeft'||k==='BracketRight'){const c=$('#cell');c.value=Math.min(130,Math.max(-60,+c.value+(k==='BracketRight'?10:-10)));c.dispatchEvent(new Event('input'));return}
   if(e.repeat)return;
-  const d=/^Digit([0-5])$/.exec(k);if(d){if(tx==='m')shiftTo(+d[1]);else if(d[1]==='0')cvtD=false;return}
+  const d=/^Digit([0-5])$/.exec(k);if(d){if(tx==='m')shiftTo(+d[1]);else if(d[1]==='0')shiftTo(-1);return}
   switch(k){
-    case 'KeyS':shiftTo(tx==='cvt'?(e.shiftKey?-1:0):gear+(e.shiftKey?-1:1));e.preventDefault();break;
+    case 'KeyS':shiftTo(tx!=='m'?(e.shiftKey?-1:0):gear+(e.shiftKey?-1:1));e.preventDefault();break;
     case 'KeyE':sbtn.click();break;
-    case 'KeyL':$('#plock').click();break;
-    case 'KeyT':document.querySelector('[data-tx="'+(tx==='m'?'cvt':'m')+'"]').click();break;
-    case 'KeyD':if(tx==='cvt')cvtD=true;break;
+    case 'KeyL':setPedal(0);break;
+    case 'KeyB':document.querySelector('[data-ld="'+(ld==='drum'?'hydro':'drum')+'"]').click();break;
+    case 'KeyT':document.querySelector('[data-tx="'+({m:'cvt',cvt:'at',at:'m'})[tx]+'"]').click();break;
+    case 'KeyD':if(tx!=='m')shiftTo(1);break;
     case 'KeyR':$('#nosR').click();break;
     case 'KeyP':if(cur.diesel)$('#glow').click();break;
     case 'KeyO':$('#oil').value=+$('#oil').value<50?100:0;break;
@@ -678,15 +755,18 @@ addEventListener('keydown',e=>{const tag=e.target.tagName,k=e.code;if(e.ctrlKey|
     case 'KeyF':fsToggle();break;
     case 'KeyH':if(stg.classList.contains('fs'))$('#pnl').click();break;
     case 'Escape':if(stg.classList.contains('fs'))fsToggle();break}});
-addEventListener('keyup',e=>{if(e.code==='Space')revHeld=false;if(e.code==='KeyG')gasHeld=false;if(e.code==='KeyN')nosHeld=false});
+addEventListener('keyup',e=>{if(e.code==='Space')revHeld=false;if(e.code==='KeyK')keyRelease();if(e.code==='KeyG')gasHeld=false;if(e.code==='KeyN')nosHeld=false});
 function ui(){
   const e=cur,f=n=>Math.round(n).toLocaleString();
-  $('#rpmTxt').textContent='Crank '+f(rpm)+' rpm ('+Math.round(rpm/60)+' rev/s)'+(e.rot?'':', camshafts '+f(rpm/2)+' rpm')+(e.tu?', turbos '+f(TRPM)+' rpm':'')+(tx==='cvt'?'. CVT '+(cvtD?'Drive, ratio '+cvtR.toFixed(2)+':1':'Neutral'):'. Gear '+(gear||'N'))+(Gc?(lk?' (clutch locked)':' (clutch slipping)'):'')+'. Inertia drum '+f(wRpm)+' rpm.'+(SLO<1?' Animation slowed to '+SLO+'x.':'');
+  $('#rpmTxt').textContent='Crank '+f(rpm)+' rpm ('+Math.round(rpm/60)+' rev/s)'+(e.rot?'':', camshafts '+f(rpm/2)+' rpm')+(e.tu?', turbos '+f(TRPM)+' rpm':'')+(tx==='cvt'?'. CVT '+(cvtD?'Drive, ratio '+cvtR.toFixed(2)+':1':'Neutral'):tx==='at'?'. 10-speed auto '+(atD?'D'+(atG+1)+' ('+AR[atG].toFixed(2)+':1)':'Neutral'):'. Gear '+(gear||'N'))+(Gc?(tx==='at'&&atG<2?(lk?' (converter coupled)':' (torque converter slipping)'):lk?' (clutch locked)':' (clutch slipping)'):'')+(ld==='hydro'?'. Hydraulic pump '+f(wRpm)+' rpm, '+f(hydP)+' psi, '+f(hydQ)+' gpm.':'. Inertia drum '+f(wRpm)+' rpm.')+(SLO<1?' Animation slowed to '+SLO+'x.':'');
   $('#rRpm').textContent=f(rpm);$('#rHp').textContent=f(hpNow);$('#rTq').textContent=f(tqNow);
   $('#rBo').textContent=e.boost?boost.toFixed(1):'–';$('#rMph').textContent=Math.round(wRpm*.01065);$('#rEgt').textContent=f(egt>.01?cellT+egt*1500:cellT);
-  const gl=tx==='cvt'?(cvtD?'D':'N'):(gear||'N');$('#gearTag').textContent=gl;$('#gearTag').style.left=tx==='cvt'?'14px':'150px';
-  if(stg.classList.contains('fs'))$('#hud').textContent=f(rpm)+' rpm · '+f(hpNow)+' hp · '+f(tqNow)+' lb-ft'+(e.boost?' · '+boost.toFixed(1)+' psi':'')+' · '+Math.round(wRpm*.01065)+' mph · '+(tx==='cvt'?gl+' '+cvtR.toFixed(2)+':1':'gear '+gl)+' · EGT '+f(egt>.01?cellT+egt*1500:cellT)+'°F'+(nosOn?' · NOS ON':'')+(e.ers?' · ERS '+Math.round(ersSOC*100)+'%'+(ersMode>0?' DEPLOY':ersMode<0?' HARVEST':''):'');
-  sbtn.textContent=dead?'Rebuild engine':(running||starting>0?'Stop engine':'Start engine');sbtn.classList.toggle('on',running||starting>0);
+  const gl=tx==='cvt'?(cvtD?'D':'N'):tx==='at'?(atD?'D'+(atG+1):'N'):(gear||'N');$('#gearTag').textContent=gl;$('#gearTag').style.left=tx!=='m'?'14px':'150px';
+  if(stg.classList.contains('fs'))$('#hud').textContent=f(rpm)+' rpm · '+f(hpNow)+' hp · '+f(tqNow)+' lb-ft'+(e.boost?' · '+boost.toFixed(1)+' psi':'')+' · '+Math.round(wRpm*.01065)+' mph · '+(tx==='cvt'?gl+' '+cvtR.toFixed(2)+':1':tx==='at'?'auto '+gl:'gear '+gl)+(ld==='hydro'?' · '+f(hydP)+' psi':'')+' · EGT '+f(egt>.01?cellT+egt*1500:cellT)+'°F'+(nosOn?' · NOS ON':'')+(e.ers?' · ERS '+Math.round(ersSOC*100)+'%'+(ersMode>0?' DEPLOY':ersMode<0?' HARVEST':''):'');
+  $('#keyG').setAttribute('transform','rotate('+[-50,0,50][keyPos]+' 55 58)');const on=keyPos>0;
+  $('#lOil').className=on&&op<6&&!dead?'r':'';$('#lBat').className=on&&!running?'r':'';$('#lTemp').className=coolT>240?'r':'';$('#lGlow').className=on&&e.diesel&&!running&&glowH<needGlow()?'a':'';
+  $('#lvv').textContent=Math.round(loadV*100)+'% closed ('+f(hydP)+' psi)';
+  sbtn.textContent=dead?'Rebuild engine':(running||starting>0?'Stop (E)':'Auto start (E)');sbtn.classList.toggle('on',running||starting>0);
   $('#glow').classList.toggle('on',glowT>0);$('#glow').textContent=e.diesel?'Glow plugs '+Math.round(glowH*100)+'%'+(needGlow()>0?' (need '+Math.round(needGlow()*100)+'%)':''):'';
   $('#gas').classList.toggle('on',gasHeld);$('#nos').classList.toggle('on',nosOn);$('#nos').textContent='Hold for NOS (N) · '+Math.round(nosLvl*100)+'%';
   $('#oilv').textContent=oil+'%'+(oil<10?' (empty)':oil>110?' (overfilled)':oil>=90?' (full)':' (low)');

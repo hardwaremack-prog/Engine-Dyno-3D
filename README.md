@@ -28,9 +28,13 @@ Works on desktop and phone. No install needed. Turn your sound on. Tap **Full sc
 |---|---|
 | ![V16 diesel](screenshots/08-v16-diesel.png) | ![Full screen on a phone](screenshots/11-full-screen-phone.png) |
 
-| F1 V6 turbo hybrid with ERS |
+| F1 V6 turbo hybrid with ERS | 10-speed automatic |
+|---|---|
+| ![F1 V6 hybrid](screenshots/12-f1-v6-hybrid.png) | ![10-speed automatic](screenshots/13-10-speed-automatic.png) |
+
+| Hydraulic pump dyno load |
 |---|
-| ![F1 V6 hybrid](screenshots/12-f1-v6-hybrid.png) |
+| ![Hydraulic pump](screenshots/14-hydraulic-pump.png) |
 
 **Full screen with every control and key**
 
@@ -54,6 +58,8 @@ Works on desktop and phone. No install needed. Turn your sound on. Tap **Full sc
 
 ## What it does
 
+- **Ignition key:** turn the key to ON (the OIL and BATT lights come on, and on the diesel the glow plugs heat with a WAIT light), then hold it on START to crank. It springs back to ON when you let go. Tap OFF to shut down. **Auto start** (E) is still there.
+- **Throttle lever:** a dyno-cell throttle lever that stays where you set it, from IDLE to FULL. Drag it, or use ↑/↓. **Idle** (L) snaps it back.
 - **Full 3D cutaway:** pistons, rods, crank, cams, valves, spark or glow plugs, flywheel, starter and gearbox
 - **Realistic turbos:** snail-shell turbine and compressor housings, spinning compressor and turbine wheels, center housing with oil lines, wastegate actuator and pod filter. The turbine housing glows red-hot under load.
 - **Glowing exhaust:** headers, downpipes and tailpipes heat up from dull red to orange, with hot exhaust gas flowing through them
@@ -62,7 +68,8 @@ Works on desktop and phone. No install needed. Turn your sound on. Tap **Full sc
 - **NOS:** hold the NOS button (or **N**) above 60% throttle for a nitrous shot. There's a blue bottle with a feed line and a fogging nozzle on the intake. Bottle pressure follows the cell temperature (weak when cold, strong when hot). It adds big power but doubles engine strain, so hold it too long and it melts a piston. Refill with **R**.
 - **Raw fuel dump:** hold the button (or **G**) to spray raw fuel into the intake. A little makes it flare, a lot floods it and fouls the plugs. On the diesel it can cause a **runaway** that over-revs and destroys the engine.
 - **2,500 lb inertia drum:** connected through the transmission. The clutch slips and then locks up. Drum speed (mph) and drum power are measured like a real inertia dyno.
-- **Transmissions:** 5-speed manual (shifter, or **S** / **Shift+S**) or a **CVT** with moving pulleys and belt. It goes straight into Drive, slips at launch like a torque converter so the engine jumps to peak-power rpm, then sweeps the ratio from 3.2:1 down to 0.45:1 as the drum speeds up
+- **Dyno load:** choose the **2,500 lb inertia drum** or a **hydraulic pump absorber**. The pump has a load valve with a handwheel, a pressure hose, an oil cooler with a spinning fan and a reservoir, with flow you can see moving through the hoses. Close the valve to raise pressure and load the engine. Gauges show hydraulic pressure, flow (gpm), oil temperature and absorbed power.
+- **Transmissions:** 10-speed automatic (torque converter, four planetary gearsets with clutch packs that light up per gear, and lock-up in 3rd and up; it upshifts and kicks down on its own), 5-speed manual (shifter, or **S** / **Shift+S**) or a **CVT** with moving pulleys and belt. It goes straight into Drive, slips at launch like a torque converter so the engine jumps to peak-power rpm, then sweeps the ratio from 3.2:1 down to 0.45:1 as the drum speeds up
 - **Test cell temperature from −60°F to 130°F:** cold means thick oil, slow cranking, high oil pressure and denser air (more power). Hot means less power and overheating at full load.
 - **V16 diesel with glow plugs:** in a cold cell it won't fire until you heat the glow plugs (**P**). It blows white smoke while cold and black smoke when the turbos lag.
 - **Lubrication you can see:** oil pump and pickup, main oil gallery, main bearing feeds, and piston-cooling oil jets spraying under each piston. They follow the live oil pressure.
@@ -76,14 +83,17 @@ Drag to orbit, pinch or scroll to zoom. Everything also has an on-screen button.
 
 | Key | What it does |
 |---|---|
-| E | Start / stop engine (rebuild after a blow-up) |
-| ↑ / ↓ | Throttle up / down |
+| K | Hold the ignition key to START (crank) |
+| E | Auto start / stop engine (rebuild after a blow-up) |
+| ↑ / ↓ | Throttle lever up / down |
+| L | Throttle lever to idle |
 | Space | Hold to rev |
-| L | Lock the throttle pedal |
-| S / Shift+S | Shift up / down (CVT: S toggles Drive) |
+| S / Shift+S | Shift up / down (CVT or automatic: Drive / Neutral) |
 | 1–5, 0 | Pick a gear, or neutral |
-| T | Switch between manual and CVT |
-| D | CVT Drive |
+| T | Switch manual / CVT / 10-speed automatic |
+| D | Drive (CVT or automatic) |
+| B | Switch the dyno load: inertia drum or hydraulic pump |
+| − / = | Hydraulic pump load valve −/+ 10% |
 | N | Hold for NOS |
 | R | Refill the NOS bottle |
 | G | Hold to dump raw fuel into the intake |
