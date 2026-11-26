@@ -8,7 +8,7 @@ An engine dynamometer test cell in your web browser. A see-through 3D engine you
 
 **[Play Engine Dyno 3D](https://hardwaremack-prog.github.io/Engine-Dyno-3D/)**
 
-Works on desktop and phone. No install needed. Turn your sound on. Tap **Full screen** (or press **F**) for the big view. Full screen keeps every control, gauge and the key guide in a side panel (bottom panel on phones), and **H** hides it.
+Works on desktop and phone. No install needed. Turn your sound on. Tap **Full screen** (or press **F**) for the big view. Full screen keeps every control, gauge, engine choice, readout and the key guide in a side panel (bottom panel on phones), and **H** hides it.
 
 ## Screenshots
 
@@ -39,6 +39,10 @@ Works on desktop and phone. No install needed. Turn your sound on. Tap **Full sc
 | Flathead side valves (looking down through the heads) | GM 6.2 L diesel |
 |---|---|
 | ![Flathead side valves](screenshots/16-flathead-side-valves.png) | ![GM 6.2 diesel](screenshots/17-gm-6-2-diesel.png) |
+
+| Roots supercharger | 4-barrel carb |
+|---|---|
+| ![Supercharger](screenshots/18-supercharger.png) | ![4-barrel carb](screenshots/19-four-barrel-carb.png) |
 
 **Full screen with every control and key**
 
@@ -73,6 +77,7 @@ Works on desktop and phone. No install needed. Turn your sound on. Tap **Full sc
 - **F1 V6 turbo hybrid:** 1.6 L, 15,000 rpm, 4,000 rpm idle and about 1,000 hp combined. The green MGU-K motor adds about 160 hp of electric boost above 85% throttle and recharges the ERS battery when you lift off. The battery on the floor shows its charge, and there's an ERS battery gauge.
 - **Ford flathead V8:** the classic 1949 239 cu in side-valve V8. Its valves sit in the block beside each cylinder and open *upward*, pushed by lifters on a single camshaft in the middle of the V. It has flat heads with the spark plugs on top, a 2-barrel carb with an oil-bath air cleaner, a distributor and a generator, and the exhaust exits out the side of the block. It idles at 450 rpm with the classic burble, makes 100 hp, and runs hot like the real ones (watch the coolant gauge on a long pull).
 - **GM 6.2 L diesel V8:** the naturally aspirated 1980s Chevy/GMC pickup and Humvee diesel. It has glow plugs (hold the key at ON until WAIT goes out when it's cold), a mechanical injection pump at the front of the V with steel lines running to each injector, and diesel clatter that's louder when cold. It blows black smoke at full throttle and white smoke when cold. It makes 130 hp and 240 lb-ft, with a governor at 3,600 rpm.
+- **Induction choices** (any gas engine): **Stock**, **1-barrel carb** (smooth but chokes the engine at high rpm, about half the top-end power), **2-barrel carb** (good all-round), **4-barrel carb** (the rear secondaries open above 60% throttle for a little extra top end), or a belt-driven **Roots supercharger** (up to 9 psi with that classic whine; on the V8 it goes from about 670 to about 1,000 hp). The carbs have butterflies that move with the throttle under a see-through chrome air cleaner, and the blower shows its spinning rotors and drive belt. Diesels can run Stock or the supercharger. Press **C** to cycle.
 - **NOS:** hold the NOS button (or **N**) above 60% throttle for a nitrous shot. There's a blue bottle with a feed line and a fogging nozzle on the intake. Bottle pressure follows the cell temperature (weak when cold, strong when hot). It adds big power but doubles engine strain, so hold it too long and it melts a piston. Refill with **R**.
 - **Raw fuel dump:** hold the button (or **G**) to spray raw fuel into the intake. A little makes it flare, a lot floods it and fouls the plugs. On the diesel it can cause a **runaway** that over-revs and destroys the engine.
 - **2,500 lb inertia drum:** connected through the transmission. The clutch slips and then locks up. Drum speed (mph) and drum power are measured like a real inertia dyno.
@@ -101,6 +106,7 @@ Drag to orbit, pinch or scroll to zoom. Everything also has an on-screen button.
 | T | Switch manual / CVT / 10-speed automatic |
 | D | Drive (CVT or automatic) |
 | B | Switch the dyno load: inertia drum or hydraulic pump |
+| C | Cycle induction: stock / 1-, 2-, 4-barrel carb / supercharger |
 | − / = | Hydraulic pump load valve −/+ 10% |
 | N | Hold for NOS |
 | R | Refill the NOS bottle |
