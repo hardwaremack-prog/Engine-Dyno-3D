@@ -150,9 +150,10 @@ const E=[
  {name:'Turbo boxer-four',sp:'2.5 L, 330 hp',hp:330,red:6700,idle:800,tqPk:4200,width:3000,boost:20,spool:[2200,3800],lag:.8,rev:1.1,order:[1,3,2,4],cycle:720,ppr:2,snd:{p:1.25,odd:.6,cut:2000,vol:1},b:[-90,90],n:2,ph:[0,180],flat:1,tu:1},
  {name:'V12',sp:'6.5 L, 725 hp',hp:725,red:9000,idle:900,tqPk:7000,width:4500,boost:0,rev:.8,order:[1,7,5,11,3,9,6,12,2,8,4,10],cycle:720,ppr:6,snd:{p:.85,odd:.9,cut:4200,vol:.85},b:[-30,30],n:6,ph:[0,240,120,120,240,0],tu:0},
  {name:'V16 turbo diesel',sp:'65 L, 3,000 hp, glow plugs',hp:3000,red:2100,idle:600,tqPk:1400,width:1300,boost:45,spool:[800,1500],lag:1.2,rev:.3,order:[1,9,5,13,3,11,7,15,2,10,6,14,4,12,8,16],cycle:720,ppr:8,snd:{p:.8,odd:1,cut:1100,vol:1.15},b:[-30,30],n:8,ph:[0,90,270,180,180,270,90,0],tu:2,diesel:1},
- {name:'F1 V6 turbo hybrid',sp:'1.6 L, 840 hp + 160 hp ERS, 15,000 rpm',hp:840,red:15000,idle:4000,tqPk:10500,width:7000,boost:40,spool:[6000,9500],lag:.22,rev:2.4,order:[1,4,2,5,3,6],cycle:720,ppr:3,snd:{p:1.05,odd:.8,cut:9000,vol:.95},b:[-45,45],n:3,ph:[0,240,480],tu:1,ers:1,bsfc:.3}
+ {name:'F1 V6 turbo hybrid',sp:'1.6 L, 840 hp + 160 hp ERS, 15,000 rpm',hp:840,red:15000,idle:4000,tqPk:10500,width:7000,boost:40,spool:[6000,9500],lag:.22,rev:2.4,order:[1,4,2,5,3,6],cycle:720,ppr:3,snd:{p:1.05,odd:.8,cut:9000,vol:.95},b:[-45,45],n:3,ph:[0,240,480],tu:1,ers:1,bsfc:.3},
+ {name:'Ford flathead V8',sp:'239 cu in (3.9 L), 100 hp, side valves, 1949',hp:100,red:3800,idle:450,tqPk:2000,width:3200,boost:0,rev:.55,order:[1,5,4,8,6,3,7,2],cycle:720,ppr:4,snd:{p:.95,odd:1.15,cut:1300,vol:1},b:[-45,45],n:4,ph:[0,90,270,180],tu:0,flathead:1,hot:25}
 ];
-[[1.9,1.05],[1.5,0],[1.6,1.4],[1,0],[1.95,0],[1.95,0],[1.5,0]].forEach((m,i)=>E[i].im=m);E[1].v4=1;E[5].v4=1;E[6].v4=1;
+[[1.9,1.05],[1.5,0],[1.6,1.4],[1,0],[1.95,0],[1.95,0],[1.5,0],[1.15,0]].forEach((m,i)=>E[i].im=m);E[1].v4=1;E[5].v4=1;E[6].v4=1;
 const tq=(e,r,b)=>e.k*Math.max(.4,1-((r-e.tqPk)/e.width)**2)*(1+.9*b/14.7);
 for(const e of E){e.k=1;let m=0,t=0;const bo=r=>e.boost?e.boost*sst(e.spool[0],e.spool[1],r):0;for(let r=Math.min(1000,e.idle);r<=e.red;r+=50){const pw=tq(e,r,bo(r))*r/5252;if(pw>m){m=pw;e.pr=r}t=Math.max(t,tq(e,r,bo(r)))}e.k=e.hp/m;e.tm=t*e.k}
 const AR=[4.70,2.99,2.15,1.80,1.52,1.28,1.00,0.85,0.69,0.64],NI=[11,15,19,22,26],NO=[33,29,25,22,18],GR=NO.map((n,i)=>n/NI[i]),M=.0375,JW=8;
@@ -229,7 +230,7 @@ function step(dt){
   mf=running&&((avgF>.03&&Math.random()<avgF*.35)||Math.random()<flood*.45||(e.diesel&&coolT<60&&Math.random()<(60-coolT)/400));
   /* temperatures */
   const load=running?thr*(.3+.7*rpm/e.red):0,bf=e.boost?boost/e.boost:0;
-  const cTg=running?195+Math.max(0,cellT-85)*.9+load*22+(strain/LIM)*45:cellT;
+  const cTg=running?195+Math.max(0,cellT-85)*.9+load*(22+(e.hot||0))+(strain/LIM)*45:cellT;
   coolT+=(cTg-coolT)*Math.min(1,dt*(running?.025+.09*load:.008));
   oilT+=((running?coolT+8+load*40:cellT)-oilT)*Math.min(1,dt*(running?.018+.05*load:.006));
   iat=cellT+bf*45+(running?6:0);
@@ -388,12 +389,14 @@ function build3D(){
       const sp=new THREE.Shape();for(let k=0;k<3;k++){const a=k*2.0944+1.5708,x=.85*Math.cos(a),y=.85*Math.sin(a);k?sp.lineTo(x,y):sp.moveTo(x,y)}
       const rg=new THREE.ExtrudeGeometry(sp,{depth:.6,bevelEnabled:false});rg.translate(0,0,-.3);rg.rotateY(Math.PI/2);
       const m=mk(rg,0xc2185b);G.add(m);const pg=plugAt(g,1.45);RT.push({m,x:bx(i),c:i+1,pl:pg.pl,fl:pg.fl})}
-  }else e.b.forEach((a0,k)=>{const a=a0*R2;const bg=new THREE.Group();bg.rotation.x=a;G.add(bg);[-.3,.3].forEach(z=>{const s=mk(new THREE.CylinderGeometry(.07,.07,len,12),0x888899);s.rotation.z=Math.PI/2;s.position.set(0,2.75,z);bg.add(s)});for(let i=0;i<n;i++){
+  }else e.b.forEach((a0,k)=>{const a=a0*R2;const bg=new THREE.Group();bg.rotation.x=a;G.add(bg);const sIn=-(Math.sign(a)||1);if(!e.flathead)[-.3,.3].forEach(z=>{const s=mk(new THREE.CylinderGeometry(.07,.07,len,12),0x888899);s.rotation.z=Math.PI/2;s.position.set(0,2.75,z);bg.add(s)});for(let i=0;i<n;i++){
     const g=new THREE.Group();g.position.x=bx(i);g.rotation.x=a;G.add(g);
     const li=mk(new THREE.CylinderGeometry(.4,.4,1.5,24,1,true),0x9fb4c4,GL);li.position.y=1.05;
-    const hd=new THREE.Mesh(new THREE.CylinderGeometry(.46,.46,.25,24),HM);hd.position.y=1.9;g.add(li,hd);
+    const hd=e.flathead?new THREE.Mesh(new THREE.BoxGeometry(pit*.98,.24,1.55),HM):new THREE.Mesh(new THREE.CylinderGeometry(.46,.46,.25,24),HM);hd.position.set(0,e.flathead?1.97:1.9,e.flathead?sIn*.3:0);g.add(li,hd);
     const pg=plugAt(g,2.2,e.diesel),pi=mk(new THREE.CylinderGeometry(.38,.38,.42,24),0xb9c0c6),rod=mk(new THREE.CylinderGeometry(.06,.06,1,8),0xcc9966),pin=mk(new THREE.SphereGeometry(.12,10,8),0xe2b33e);
-    pi.rotation.x=a;G.add(pi,rod,pin);const cm=(e.v4?[[-.25,-.15,0],[-.25,.15,0],[.25,-.15,1],[.25,.15,1]]:[[-.3,0,0],[.3,0,1]]).map(([z,dx,t])=>{const lo=mk(LG,0xb0b6bd),vl=new THREE.Group();lo.position.set(bx(i)+dx,2.75,z);vl.position.set(bx(i)+dx,0,z);
+    pi.rotation.x=a;G.add(pi,rod,pin);const cm=e.flathead?[0,1].map(t=>{const dx=(k?.13:-.13)+(t?.22:-.22),lo=mk(LG,0xb0b6bd),vl=new THREE.Group();lo.position.set(bx(i)+dx,.55,0);G.add(lo);vl.position.set(bx(i)+dx,0,sIn*.62);
+      const st=mk(new THREE.CylinderGeometry(.025,.025,.8,8),0xcfd4d8),vh=mk(new THREE.CylinderGeometry(.13,.065,.05,16),t?0xd9743a:0x4aa3df),sp=mk(new THREE.CylinderGeometry(.07,.07,.3,8,6),0xccaa33,{wireframe:true}),lf=mk(new THREE.CylinderGeometry(.05,.05,.4,10),0x8a9096);
+      st.position.y=1.38;vh.position.y=1.79;sp.position.y=1.2;lf.position.y=.78;vl.add(st,vh,sp,lf);bg.add(vl);return{lo,vl,t,fh:1}}):(e.v4?[[-.25,-.15,0],[-.25,.15,0],[.25,-.15,1],[.25,.15,1]]:[[-.3,0,0],[.3,0,1]]).map(([z,dx,t])=>{const lo=mk(LG,0xb0b6bd),vl=new THREE.Group();lo.position.set(bx(i)+dx,2.75,z);vl.position.set(bx(i)+dx,0,z);
       const vr=e.v4?.09:.11,st=mk(new THREE.CylinderGeometry(.025,.025,.91,8),0xcfd4d8),hd=mk(new THREE.CylinderGeometry(vr,vr*.5,.05,16),t?0xd9743a:0x4aa3df),sp=mk(new THREE.CylinderGeometry(.07,.07,.3,8,6),0xccaa33,{wireframe:true});
       st.position.y=2.175;hd.position.y=1.72;sp.position.y=2.2;vl.add(st,hd,sp);bg.add(lo,vl);return{lo,vl,t}});
     P.push({x:bx(i),a,ph:(e.ph[i]||0)+(e.flat&&k?180:0),pi,rod,pin,pl:pg.pl,fl:pg.fl,c:k*n+i+1,cm})}});
@@ -412,7 +415,14 @@ function build3D(){
       const d=tgt.clone().sub(nz),jm=new THREE.Mesh(new THREE.ConeGeometry(.06,d.length(),10,1,true),new THREE.MeshBasicMaterial({color:0xffb020,transparent:true,opacity:0,blending:THREE.AdditiveBlending,depthWrite:false,side:THREE.DoubleSide}));
       jm.position.copy(nz).add(tgt).multiplyScalar(.5);jm.quaternion.setFromUnitVectors(UP,nz.clone().sub(tgt).normalize());G.add(jm);JETS.push({m:jm,nz,tgt})})}
   const im=e.im,plm=mk(new THREE.CylinderGeometry(.32,.32,len,16),0x9aa6b0,GL);plm.rotation.z=Math.PI/2;plm.position.set(0,im[0],im[1]);G.add(plm);
-  P.forEach(p=>pipe(V3(p.x,im[0],im[1]),V3(p.x,1.9*Math.cos(p.a),1.9*Math.sin(p.a)),.09,0x7e8a94));
+  P.forEach(p=>pipe(V3(p.x,im[0],im[1]),e.flathead?V3(0,Math.cos(p.a),Math.sin(p.a)).multiplyScalar(1.55).addScaledVector(V3(0,-Math.sin(p.a),Math.cos(p.a)),-(Math.sign(p.a)||1)*.62).setX(p.x):V3(p.x,1.9*Math.cos(p.a),1.9*Math.sin(p.a)),.09,0x7e8a94));
+  if(e.flathead){const cam=mk(new THREE.CylinderGeometry(.08,.08,len,12),0x888899);cam.rotation.z=Math.PI/2;cam.position.y=.55;G.add(cam);
+    const cb=mk(new THREE.BoxGeometry(.5,.35,.5),0x2b2b2b);cb.position.set(0,im[0]+.34,0);G.add(cb);
+    const ac=new THREE.Mesh(new THREE.CylinderGeometry(.72,.72,.28,40),MS(0x2f3a2a,{metalness:.5,roughness:.5,transparent:true,opacity:.4,depthWrite:false}));ac.position.set(0,im[0]+.66,0);G.add(ac);
+    const wn=mk(new THREE.CylinderGeometry(.08,.08,.18,10),0xb8c0c8);wn.position.set(0,im[0]+.88,0);G.add(wn);
+    const ds=mk(new THREE.CylinderGeometry(.17,.12,.45,16),0x1a1a1a);ds.position.set(-len/2+.05,1.0,0);G.add(ds);
+    const gn=mk(new THREE.CylinderGeometry(.24,.24,.75,20),0x1a1a1a);gn.rotation.z=Math.PI/2;gn.position.set(-len/2-.1,.75,.95);G.add(gn);
+    [-1,1].forEach(sd=>{const wo=mk(new THREE.CylinderGeometry(.11,.11,.3,12),0x8a8f94);wo.position.set(-len/2+.35,2.05*Math.cos(sd*45*R2),2.05*Math.sin(sd*45*R2));wo.rotation.x=sd*45*R2;G.add(wo)})}
   RT.forEach(r=>pipe(V3(r.x,im[0],im[1]),V3(r.x,.9,.5),.09,0x7e8a94));
   const tbx=-len/2-.3,tbm=mk(new THREE.CylinderGeometry(.28,.28,.5,16),0x555e66);tbm.rotation.z=Math.PI/2;tbm.position.set(tbx,im[0],im[1]);G.add(tbm);
   BF=new THREE.Group();BF.position.set(tbx,im[0],im[1]);const bd=mk(new THREE.CylinderGeometry(.25,.25,.03,16),0xddddff);bd.rotation.z=Math.PI/2;BF.add(bd);G.add(BF);
@@ -451,13 +461,14 @@ function build3D(){
       const s=Math.sign(t.p.z)||1,lf=V3(far+.12,Ly,Lz),ln=V3(t.p.x,Ly,Lz),tr=tailR(t.out,-.4,s);
       run([lf,ln,t.inl],.12);run([t.out,...tr],.13);addFlow([lf,ln,t.inl,t.p,t.out,...tr])})
   }else e.b.forEach(a0=>{const a=a0*R2,s=Math.sign(a)||1,u=V3(0,Math.cos(a),Math.sin(a)),w=outW(a),L=u.clone().multiplyScalar(1.45).addScaledVector(w,.95),cyl=P.filter(p=>Math.abs(p.a-a)<1e-6);
-    cyl.forEach(p=>run([u.clone().multiplyScalar(1.75).addScaledVector(w,.45).setX(p.x),L.clone().setX(p.x)],.075));
+    if(e.flathead)L.copy(u.clone().multiplyScalar(1.0).addScaledVector(w,1.05));
+    cyl.forEach(p=>run([u.clone().multiplyScalar(e.flathead?1.15:1.75).addScaledVector(w,e.flathead?.5:.45).setX(p.x),L.clone().setX(p.x)],.075));
     const lf=L.clone().setX(Math.min(...cyl.map(p=>p.x))-.2),lr=L.clone().setX(Math.max(...cyl.map(p=>p.x))+.25),tr=tailR(lr,.4,s);run([lf,lr,...tr],.12);addFlow([lf,lr,...tr])});
   /* intercooler and charge pipes */
   if(e.tu){const IC=V3(-len/2-2.6,im[0],im[1]),ic=mk(new THREE.BoxGeometry(.35,1.1,1.6),0x6a7f90),fr=mk(new THREE.BoxGeometry(.36,1.1,1.6),0xaabbcc,{wireframe:true});ic.position.copy(IC);fr.position.copy(IC);G.add(ic,fr);
     CP.push(pipe(IC,V3(tbx-.2,im[0],im[1]),.14,0x3a5a78));
     TB.forEach(t=>CP.push(seg(G,t.comp,V3(IC.x+.18,IC.y,t.z<0?-.6:.6),.13,MS(0x3a5a78))))}
-  else{const af=mk(new THREE.CylinderGeometry(.5,.5,.7,20),0xd9d2b8);af.rotation.z=Math.PI/2;af.position.set(tbx-1.1,im[0],im[1]);G.add(af);pipe(V3(tbx-.75,im[0],im[1]),V3(tbx-.2,im[0],im[1]),.2,0x555e66)}
+  else if(!e.flathead){const af=mk(new THREE.CylinderGeometry(.5,.5,.7,20),0xd9d2b8);af.rotation.z=Math.PI/2;af.position.set(tbx-1.1,im[0],im[1]);G.add(af);pipe(V3(tbx-.75,im[0],im[1]),V3(tbx-.2,im[0],im[1]),.2,0x555e66)}
   /* flywheel, starter, gearbox */
   fw=gear3(.95,48,.2,0x6b7782);fw.position.x=fx;const mkr=mk(new THREE.BoxGeometry(.1,.3,.2),0xff2d6f);mkr.position.y=.6;fw.add(mkr);G.add(fw);
   const sb=mk(new THREE.CylinderGeometry(.24,.24,.9,16),0x224488);sb.rotation.z=Math.PI/2;sb.position.set(fx-1.05,0,1.2);
@@ -559,7 +570,7 @@ function update3D(dt){
     const s=pz*dz+py*dy+Math.sqrt(.9025-(pz*dy-py*dz)**2);
     p.pin.position.set(p.x,py,pz);
     if(!p.dead){p.pi.position.set(p.x,dy*s,dz*s);const ax=dy*s-py,az=dz*s-pz;p.rod.position.set(p.x,py+ax/2,pz+az/2);p.rod.scale.y=Math.hypot(ax,az);p.rod.rotation.x=Math.atan2(az,ax)}
-    const cy=(va+p.ph)%720;p.cm.forEach(c=>{const rho=Math.PI+(cy-(c.t?630:90))/2*R2;c.lo.rotation.x=rho;c.vl.position.y=-.11*Math.pow(Math.max(0,-Math.cos(rho)),4)});
+    const cy=(va+p.ph)%720;p.cm.forEach(c=>{const rho=Math.PI+(cy-(c.t?630:90))/2*R2;c.lo.rotation.x=rho;c.vl.position.y=(c.fh?.14:-.11)*Math.pow(Math.max(0,-Math.cos(rho)),4)});
     if(e.diesel)p.pl.material.emissive.setRGB(glowH,glowH*.32,0);else p.pl.material.color.setScalar(1-.92*foul[p.c-1]);
     {const fo=!dead&&flashOn(p.c);p.fl.visible=fo;if(fo&&!e.diesel)spark(p.x,1.75*Math.cos(p.a),1.75*Math.sin(p.a),2,3.5)}
   });
@@ -708,7 +719,7 @@ document.querySelectorAll('[data-oil]').forEach(b=>b.onclick=()=>{$('#oil').valu
 document.querySelectorAll('[data-cell]').forEach(b=>b.onclick=()=>{$('#cell').value=b.dataset.cell;if(!running&&starting<=0)coolT=oilT=+b.dataset.cell});
 $('#cell').addEventListener('input',()=>{if(!running&&starting<=0)coolT=oilT=+$('#cell').value});
 const view=(t,d,p,y)=>{tgt.copy(t);dist=d;pit=p;yaw=y};
-$('#zc').onclick=()=>{const p=P[Math.min(1,P.length-1)];if(!p)return;view(V3(p.x,2.3*Math.cos(p.a),2.3*Math.sin(p.a)),2.6,.45,.6)};
+$('#zc').onclick=()=>{const p=P[Math.min(1,P.length-1)];if(!p)return;if(cur.flathead){view(V3(p.x,1.35,.55),3,.95,.35);return}view(V3(p.x,2.3*Math.cos(p.a),2.3*Math.sin(p.a)),2.6,.45,.6)};
 $('#zf').onclick=()=>view(V3(home.x,-.6,0),home.d,.3,.55);
 $('#zs').onclick=()=>view(V3(cur.len/2-.1,0,1.2),2.6,.35,.9);
 $('#zt').onclick=()=>{if(TC)view(TC.p.clone().add(V3(.5,0,0)),3.4,.35,TC.z>0?-.75:-2.4);else{const f=FLOW[0];if(f)view(f.pts[1].clone(),4,.3,.8)}};

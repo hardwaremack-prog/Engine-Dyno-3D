@@ -32,9 +32,13 @@ Works on desktop and phone. No install needed. Turn your sound on. Tap **Full sc
 |---|---|
 | ![F1 V6 hybrid](screenshots/12-f1-v6-hybrid.png) | ![10-speed automatic](screenshots/13-10-speed-automatic.png) |
 
-| Hydraulic pump dyno load |
+| Hydraulic pump dyno load | Ford flathead V8 |
+|---|---|
+| ![Hydraulic pump](screenshots/14-hydraulic-pump.png) | ![Ford flathead](screenshots/15-ford-flathead.png) |
+
+| Flathead side valves (looking down through the heads) |
 |---|
-| ![Hydraulic pump](screenshots/14-hydraulic-pump.png) |
+| ![Flathead side valves](screenshots/16-flathead-side-valves.png) |
 
 **Full screen with every control and key**
 
@@ -55,6 +59,7 @@ Works on desktop and phone. No install needed. Turn your sound on. Tap **Full sc
 | V12 | 6.5 L | 725 hp | 9,000 rpm |
 | V16 twin-turbo diesel (glow plugs) | 65 L | 3,000 hp | 2,100 rpm |
 | F1 V6 turbo hybrid (ERS) | 1.6 L | 840 hp + 160 hp electric | 15,000 rpm |
+| Ford flathead V8 (1949, side valves) | 239 cu in (3.9 L) | 100 hp | 3,800 rpm |
 
 ## What it does
 
@@ -65,6 +70,7 @@ Works on desktop and phone. No install needed. Turn your sound on. Tap **Full sc
 - **Glowing exhaust:** headers, downpipes and tailpipes heat up from dull red to orange, with hot exhaust gas flowing through them
 - **Tailpipe flames:** pops and flames on the rev limiter, on lift-off at high rpm, on misfires, and when there's raw fuel in the intake. Black smoke when it runs rich.
 - **F1 V6 turbo hybrid:** 1.6 L, 15,000 rpm, 4,000 rpm idle and about 1,000 hp combined. The green MGU-K motor adds about 160 hp of electric boost above 85% throttle and recharges the ERS battery when you lift off. The battery on the floor shows its charge, and there's an ERS battery gauge.
+- **Ford flathead V8:** the classic 1949 239 cu in side-valve V8. Its valves sit in the block beside each cylinder and open *upward*, pushed by lifters on a single camshaft in the middle of the V. It has flat heads with the spark plugs on top, a 2-barrel carb with an oil-bath air cleaner, a distributor and a generator, and the exhaust exits out the side of the block. It idles at 450 rpm with the classic burble, makes 100 hp, and runs hot like the real ones (watch the coolant gauge on a long pull).
 - **NOS:** hold the NOS button (or **N**) above 60% throttle for a nitrous shot. There's a blue bottle with a feed line and a fogging nozzle on the intake. Bottle pressure follows the cell temperature (weak when cold, strong when hot). It adds big power but doubles engine strain, so hold it too long and it melts a piston. Refill with **R**.
 - **Raw fuel dump:** hold the button (or **G**) to spray raw fuel into the intake. A little makes it flare, a lot floods it and fouls the plugs. On the diesel it can cause a **runaway** that over-revs and destroys the engine.
 - **2,500 lb inertia drum:** connected through the transmission. The clutch slips and then locks up. Drum speed (mph) and drum power are measured like a real inertia dyno.
