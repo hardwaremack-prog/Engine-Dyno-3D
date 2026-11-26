@@ -151,9 +151,10 @@ const E=[
  {name:'V12',sp:'6.5 L, 725 hp',hp:725,red:9000,idle:900,tqPk:7000,width:4500,boost:0,rev:.8,order:[1,7,5,11,3,9,6,12,2,8,4,10],cycle:720,ppr:6,snd:{p:.85,odd:.9,cut:4200,vol:.85},b:[-30,30],n:6,ph:[0,240,120,120,240,0],tu:0},
  {name:'V16 turbo diesel',sp:'65 L, 3,000 hp, glow plugs',hp:3000,red:2100,idle:600,tqPk:1400,width:1300,boost:45,spool:[800,1500],lag:1.2,rev:.3,order:[1,9,5,13,3,11,7,15,2,10,6,14,4,12,8,16],cycle:720,ppr:8,snd:{p:.8,odd:1,cut:1100,vol:1.15},b:[-30,30],n:8,ph:[0,90,270,180,180,270,90,0],tu:2,diesel:1},
  {name:'F1 V6 turbo hybrid',sp:'1.6 L, 840 hp + 160 hp ERS, 15,000 rpm',hp:840,red:15000,idle:4000,tqPk:10500,width:7000,boost:40,spool:[6000,9500],lag:.22,rev:2.4,order:[1,4,2,5,3,6],cycle:720,ppr:3,snd:{p:1.05,odd:.8,cut:9000,vol:.95},b:[-45,45],n:3,ph:[0,240,480],tu:1,ers:1,bsfc:.3},
- {name:'Ford flathead V8',sp:'239 cu in (3.9 L), 100 hp, side valves, 1949',hp:100,red:3800,idle:450,tqPk:2000,width:3200,boost:0,rev:.55,order:[1,5,4,8,6,3,7,2],cycle:720,ppr:4,snd:{p:.95,odd:1.15,cut:1300,vol:1},b:[-45,45],n:4,ph:[0,90,270,180],tu:0,flathead:1,hot:25}
+ {name:'Ford flathead V8',sp:'239 cu in (3.9 L), 100 hp, side valves, 1949',hp:100,red:3800,idle:450,tqPk:2000,width:3200,boost:0,rev:.55,order:[1,5,4,8,6,3,7,2],cycle:720,ppr:4,snd:{p:.95,odd:1.15,cut:1300,vol:1},b:[-45,45],n:4,ph:[0,90,270,180],tu:0,flathead:1,hot:25},
+ {name:'GM 6.2 L diesel V8',sp:'6.2 L, 130 hp, 240 lb-ft, glow plugs, 1984',hp:130,red:3600,idle:650,tqPk:2000,width:3400,boost:0,rev:.5,order:[1,8,7,2,6,5,4,3],cycle:720,ppr:4,snd:{p:.88,odd:.95,cut:1250,vol:1.05},b:[-45,45],n:4,ph:[0,90,270,180],tu:0,diesel:1,ipump:1}
 ];
-[[1.9,1.05],[1.5,0],[1.6,1.4],[1,0],[1.95,0],[1.95,0],[1.5,0],[1.15,0]].forEach((m,i)=>E[i].im=m);E[1].v4=1;E[5].v4=1;E[6].v4=1;
+[[1.9,1.05],[1.5,0],[1.6,1.4],[1,0],[1.95,0],[1.95,0],[1.5,0],[1.15,0],[1.5,0]].forEach((m,i)=>E[i].im=m);E[1].v4=1;E[5].v4=1;E[6].v4=1;
 const tq=(e,r,b)=>e.k*Math.max(.4,1-((r-e.tqPk)/e.width)**2)*(1+.9*b/14.7);
 for(const e of E){e.k=1;let m=0,t=0;const bo=r=>e.boost?e.boost*sst(e.spool[0],e.spool[1],r):0;for(let r=Math.min(1000,e.idle);r<=e.red;r+=50){const pw=tq(e,r,bo(r))*r/5252;if(pw>m){m=pw;e.pr=r}t=Math.max(t,tq(e,r,bo(r)))}e.k=e.hp/m;e.tm=t*e.k}
 const AR=[4.70,2.99,2.15,1.80,1.52,1.28,1.00,0.85,0.69,0.64],NI=[11,15,19,22,26],NO=[33,29,25,22,18],GR=NO.map((n,i)=>n/NI[i]),M=.0375,JW=8;
@@ -194,6 +195,7 @@ function audio(){
   filt.frequency.setTargetAtTime(e.snd.cut*(.35+.9*(rpm/e.red)*(.4+.6*thr)),t,.04);
   gain.gain.setTargetAtTime(running?(.12+.5*thr)*.5*e.snd.vol*(cut?.35:1)*(mf?.1:1)*(oil<4?1.2:1):0,t,.03);
   if(mf&&Math.random()<.2)puff(400,.3,.15);
+  if(e.diesel&&running&&Math.random()<.55)puff(2600,.035+.03*thr+(coolT<100?.03:0),.025);
   const bf=e.boost?boost/e.boost:0;
   wh.frequency.setTargetAtTime(1500+bf*2600+rpm*.1*(e.diesel?3:1),t,.05);whg.gain.setTargetAtTime(running?Math.pow(bf,1.5)*.035:0,t,.05);
   sw.frequency.setTargetAtTime(160+rpm*.6,t,.05);swg.gain.setTargetAtTime(starting>0?.05:0,t,.05);
@@ -416,6 +418,13 @@ function build3D(){
       jm.position.copy(nz).add(tgt).multiplyScalar(.5);jm.quaternion.setFromUnitVectors(UP,nz.clone().sub(tgt).normalize());G.add(jm);JETS.push({m:jm,nz,tgt})})}
   const im=e.im,plm=mk(new THREE.CylinderGeometry(.32,.32,len,16),0x9aa6b0,GL);plm.rotation.z=Math.PI/2;plm.position.set(0,im[0],im[1]);G.add(plm);
   P.forEach(p=>pipe(V3(p.x,im[0],im[1]),e.flathead?V3(0,Math.cos(p.a),Math.sin(p.a)).multiplyScalar(1.55).addScaledVector(V3(0,-Math.sin(p.a),Math.cos(p.a)),-(Math.sign(p.a)||1)*.62).setX(p.x):V3(p.x,1.9*Math.cos(p.a),1.9*Math.sin(p.a)),.09,0x7e8a94));
+  if(e.ipump){const PX=-len/2+.35,PY=.95,IP=MS(0x9aa3ab,{metalness:.8,roughness:.3});xcyl(G,PX,PY,0,.26,.62,IP);xcyl(G,PX+.36,PY,0,.18,.12,MS(0x2a2a2a));
+    const hd=V3(PX-.1,PY+.32,0),ST=MS(0xd6dde3,{metalness:.95,roughness:.2});const hb=mk(new THREE.CylinderGeometry(.16,.16,.12,16),0x2a2a2a);hb.position.copy(hd);G.add(hb);
+    P.forEach((p,i)=>{const u=V3(0,Math.cos(p.a),Math.sin(p.a)),iw=V3(0,-Math.sin(p.a),Math.cos(p.a)).multiplyScalar(-(Math.sign(p.a)||1)),inj=u.clone().multiplyScalar(2.02).addScaledVector(iw,.32).setX(p.x+.18);
+      const nz=mk(new THREE.CylinderGeometry(.05,.05,.22,10),0x707070);nz.position.copy(inj);nz.quaternion.setFromUnitVectors(UP,u);G.add(nz);
+      poly(G,[hd.clone().add(V3(0,.05,(i%2?.06:-.06))),V3(PX+.1+i*.06,PY+.55,Math.sign(p.a)*.1),V3(p.x+.18,PY+.62,Math.sign(p.a)*.35),inj.clone().addScaledVector(u,.12)],.022,ST)});
+    const ac=new THREE.Mesh(new THREE.CylinderGeometry(.62,.62,.36,40),MS(0x1a1a1a,{metalness:.4,roughness:.5,transparent:true,opacity:.45,depthWrite:false}));ac.position.set(.4,im[0]+.62,0);G.add(ac);
+    const cn=mk(new THREE.BoxGeometry(.5,.3,.5),0x55606a);cn.position.set(.4,im[0]+.32,0);G.add(cn)}
   if(e.flathead){const cam=mk(new THREE.CylinderGeometry(.08,.08,len,12),0x888899);cam.rotation.z=Math.PI/2;cam.position.y=.55;G.add(cam);
     const cb=mk(new THREE.BoxGeometry(.5,.35,.5),0x2b2b2b);cb.position.set(0,im[0]+.34,0);G.add(cb);
     const ac=new THREE.Mesh(new THREE.CylinderGeometry(.72,.72,.28,40),MS(0x2f3a2a,{metalness:.5,roughness:.5,transparent:true,opacity:.4,depthWrite:false}));ac.position.set(0,im[0]+.66,0);G.add(ac);
@@ -468,7 +477,7 @@ function build3D(){
   if(e.tu){const IC=V3(-len/2-2.6,im[0],im[1]),ic=mk(new THREE.BoxGeometry(.35,1.1,1.6),0x6a7f90),fr=mk(new THREE.BoxGeometry(.36,1.1,1.6),0xaabbcc,{wireframe:true});ic.position.copy(IC);fr.position.copy(IC);G.add(ic,fr);
     CP.push(pipe(IC,V3(tbx-.2,im[0],im[1]),.14,0x3a5a78));
     TB.forEach(t=>CP.push(seg(G,t.comp,V3(IC.x+.18,IC.y,t.z<0?-.6:.6),.13,MS(0x3a5a78))))}
-  else if(!e.flathead){const af=mk(new THREE.CylinderGeometry(.5,.5,.7,20),0xd9d2b8);af.rotation.z=Math.PI/2;af.position.set(tbx-1.1,im[0],im[1]);G.add(af);pipe(V3(tbx-.75,im[0],im[1]),V3(tbx-.2,im[0],im[1]),.2,0x555e66)}
+  else if(!e.flathead&&!e.ipump){const af=mk(new THREE.CylinderGeometry(.5,.5,.7,20),0xd9d2b8);af.rotation.z=Math.PI/2;af.position.set(tbx-1.1,im[0],im[1]);G.add(af);pipe(V3(tbx-.75,im[0],im[1]),V3(tbx-.2,im[0],im[1]),.2,0x555e66)}
   /* flywheel, starter, gearbox */
   fw=gear3(.95,48,.2,0x6b7782);fw.position.x=fx;const mkr=mk(new THREE.BoxGeometry(.1,.3,.2),0xff2d6f);mkr.position.y=.6;fw.add(mkr);G.add(fw);
   const sb=mk(new THREE.CylinderGeometry(.24,.24,.9,16),0x224488);sb.rotation.z=Math.PI/2;sb.position.set(fx-1.05,0,1.2);
