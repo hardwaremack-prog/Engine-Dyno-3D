@@ -56,8 +56,10 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--pw);outline-off
 #shifter{left:10px;bottom:10px}#pbox{right:10px;bottom:10px}#fsb{right:10px;top:10px;padding:8px 12px;font-size:17px}
 #hud{left:50%;top:10px;transform:translateX(-50%);display:none;font:700 20px/1.2 'Barlow Condensed',Impact,sans-serif;background:color-mix(in srgb,var(--panel) 85%,transparent);padding:6px 12px;border-radius:4px;text-align:center;white-space:nowrap}
 #fsPanel,#pnl{display:none}
+#pullO{right:10px;top:58px;padding:8px 12px;font-size:16px}#chartO{right:10px;top:104px;padding:8px 12px;font-size:16px}#stage.fs #pullO{right:370px;top:106px}#stage.fs #chartO{right:370px;top:152px}#stage.fs.nop #pullO,#stage.fs.nop #chartO{right:10px}#stage.fs.nop #chartO{display:none}
+@media (max-width:700px){#stage.fs #pullO,#stage.fs #chartO{right:10px}}
 #stage.fs{position:fixed;inset:0;z-index:50;background:var(--bg);display:grid;grid-template-columns:minmax(0,1fr) 360px;grid-template-rows:minmax(0,1fr);height:100vh;height:100dvh}
-#stage.fs #c{height:100%;min-height:0;border-radius:0}#stage.fs #hud{display:block;left:calc((100% - 360px)/2);top:10px}
+#stage.fs #c{height:100%;min-height:0;border-radius:0}#stage.fs.nop #hud{display:block}#stage.fs #hud{display:none;left:calc((100% - 360px)/2);top:10px}
 #stage.fs #fsPanel{display:block;overflow-y:auto;padding:10px 12px 40px;background:var(--bg);border-left:1px solid var(--line)}
 #stage.fs #pnl{display:block;right:370px;top:58px;padding:8px 12px;font-size:17px}#stage.fs #fsb,#stage.fs #pbox{right:370px}
 #stage.fs.nop{grid-template-columns:minmax(0,1fr) 0}#stage.fs.nop #fsPanel{display:none}#stage.fs.nop #fsb,#stage.fs.nop #pbox,#stage.fs.nop #pnl{right:10px}#stage.fs.nop #hud{left:50%}
@@ -77,6 +79,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--pw);outline-off
 #runLeg{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0}#runLeg span{display:inline-flex;align-items:center;gap:2px;background:var(--panel);border-radius:3px;font-size:13px;color:var(--ink)}
 #runLeg button{all:unset;cursor:pointer;padding:5px 7px}#runLeg button.x{color:var(--mute);padding:5px 8px}#runLeg span.off{opacity:.45}
 #chartSec details{font-size:14px;color:var(--mute);margin-top:4px}#chartSec table{border-collapse:collapse;width:100%;font-size:13px;color:var(--ink);margin-top:6px}#chartSec th,#chartSec td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line)}
+#keysD{margin:10px 0 4px;font-size:14px;color:var(--mute)}#keysD summary{cursor:pointer;font-weight:600}
 #keys{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:4px 12px;margin:10px 0 4px;font-size:14px;color:var(--mute)}
 #keys div{display:flex;gap:6px;align-items:baseline}kbd{font:700 13px/1 'Barlow Condensed',sans-serif;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-bottom-width:2px;border-radius:3px;padding:2px 5px;white-space:nowrap}
 .btn.nos{background:var(--panel);color:var(--ink);border:2px solid #2f6bff}.btn.nos.on{background:#2f6bff;color:#fff}
@@ -86,13 +89,15 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--pw);outline-off
 <body>
 <main>
   <h1>Engine dyno</h1>
-  <p>Made by Adam David Phillips. Drag to orbit, pinch or scroll to zoom. Everything can be run from the keyboard:</p>
+  <p>Made by Adam David Phillips. Drag to orbit, pinch or scroll to zoom. Everything also works from a keyboard (see Keyboard keys).</p>
+  <details id="keysD"><summary>Keyboard keys</summary>
   <div id="keys" aria-label="Keyboard controls">
     <div><kbd>K</kbd>Hold ignition key to START</div><div><kbd>E</kbd>Auto start / stop / rebuild</div><div><kbd>↑</kbd><kbd>↓</kbd>Throttle lever up / down</div><div><kbd>L</kbd>Throttle lever to idle</div><div><kbd>Space</kbd>Hold to rev</div>
     <div><kbd>S</kbd><kbd>Shift+S</kbd>Shift up / down</div><div><kbd>1</kbd>–<kbd>5</kbd><kbd>0</kbd>Pick gear / neutral</div><div><kbd>T</kbd>Manual / CVT / 10-speed auto</div><div><kbd>D</kbd>Drive (CVT or auto)</div><div><kbd>B</kbd>Drum or hydraulic pump load</div><div><kbd>C</kbd>Carb / supercharger choice</div><div><kbd>X</kbd>Dyno pull start / stop</div><div><kbd>−</kbd><kbd>=</kbd>Pump load valve −/+ 10%</div>
     <div><kbd>N</kbd>Hold for NOS</div><div><kbd>R</kbd>Refill NOS bottle</div><div><kbd>G</kbd>Hold to dump raw fuel</div><div><kbd>P</kbd>Glow plugs (diesel)</div>
     <div><kbd>[</kbd><kbd>]</kbd>Cell temp −/+ 10°F</div><div><kbd>O</kbd>Oil: full / drain</div><div><kbd>V</kbd>Next camera view</div><div><kbd>M</kbd>Slow motion</div>
     <div><kbd>F</kbd>Full screen</div><div><kbd>H</kbd>Hide controls (full screen)</div><div><kbd>Esc</kbd>Exit full screen</div>
+  </details>
   </div>
   <section id="list" role="radiogroup" aria-label="Engine"></section>
   <div id="stage"><canvas id="c" aria-label="3D engine"></canvas>
@@ -105,7 +110,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--pw);outline-off
     <button class="btn alt glow ov" id="glow" style="left:10px;top:188px;padding:8px 12px;font-size:16px" hidden>Glow plugs</button>
     <div class="ov" id="shifter"><svg viewBox="0 0 132 132"><path d="M26 26V106M66 26V106M106 26V66M26 66H106" stroke="currentColor" stroke-width="3" fill="none" opacity=".45"/><g font-size="13" fill="currentColor" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="700"><text x="26" y="16">1</text><text x="26" y="124">2</text><text x="66" y="16">3</text><text x="66" y="124">4</text><text x="106" y="16">5</text><text x="66" y="86">N</text></g><g id="knob" transform="translate(66 66)"><circle r="13" fill="var(--pw)"/></g></svg></div>
     <div class="ov" id="gearTag">N</div>
-    <button class="btn alt ov" id="fsb">Full screen</button><button class="btn alt ov" id="pnl">Hide controls</button><div class="ov" id="hud"></div>
+    <button class="btn alt ov" id="fsb">Full screen</button><button class="btn alt ov" id="pnl">Hide controls</button><button class="btn ov" id="pullO">Dyno pull (X)</button><button class="btn alt ov" id="chartO">Chart ↓</button><div class="ov" id="hud"></div>
     <aside id="fsPanel" aria-label="Controls"></aside>
     <div class="ov" id="pbox"><button class="btn alt" id="plock" style="padding:6px 10px;font-size:16px">Idle (L)</button><div id="lev" role="slider" aria-label="Throttle lever" aria-valuemin="0" aria-valuemax="100"><svg viewBox="0 0 140 190">
       <path d="M7 98 A152 152 0 0 1 133 98" fill="none" stroke="var(--line)" stroke-width="10" stroke-linecap="round"/><path id="levArc" d="" fill="none" stroke="var(--pw)" stroke-width="10" stroke-linecap="round"/>
@@ -773,7 +778,7 @@ function runList(){const L=$('#runLeg');L.innerHTML='';RUNS.forEach(r=>{const sp
     const b=document.createElement('button');b.innerHTML='<i style="background:'+slotCol(r.slot)+'"></i>'+r.name+' — '+fmt(r.ph[1])+' hp';b.title=r.vis?'Hide this run':'Show this run';b.setAttribute('aria-pressed',r.vis);b.onclick=()=>{r.vis=!r.vis;saveRuns();runList()};
     const x=document.createElement('button');x.className='x';x.textContent='×';x.setAttribute('aria-label','Delete run '+r.name);x.onclick=()=>{RUNS=RUNS.filter(q=>q!==r);saveRuns();runList()};sp.append(b,x);L.appendChild(sp)});
   $('#runTbl').innerHTML=RUNS.map(r=>'<tr><td><i style="display:inline-block;width:12px;height:3px;background:'+slotCol(r.slot)+';margin-right:5px;vertical-align:middle"></i>'+r.name+'</td><td>'+fmt(r.ph[1])+' hp @ '+fmt(r.ph[0])+' rpm</td><td>'+fmt(r.pt[1])+' lb-ft @ '+fmt(r.pt[0])+' rpm</td></tr>').join('')||'<tr><td colspan="3">No runs yet.</td></tr>'}
-$('#pullB').onclick=startPull;
+$('#pullB').onclick=startPull;$('#pullO').onclick=startPull;$('#chartO').onclick=()=>$('#chartSec').scrollIntoView({behavior:'smooth',block:'start'});
 $('#clrB').onclick=()=>{if(!RUNS.length)return;if(clrArm>0){RUNS=[];saveRuns();runList();clrArm=0;$('#clrB').textContent='Clear runs';return}clrArm=3;$('#clrB').textContent='Tap again to clear'};
 const niceMax=v=>{const m=Math.pow(10,Math.floor(Math.log10(Math.max(v,1)))),f=v/m;return(f<=1?1:f<=2?2:f<=2.5?2.5:f<=5?5:10)*m};
 function chartSeries(){const S=RUNS.filter(r=>r.vis).map(r=>({col:slotCol(r.slot),pts:r.pts,ph:r.ph,pt:r.pt,live:false}));
@@ -782,11 +787,11 @@ function drawChart(cv,idx,unit,S,xMax){const dpr=Math.min(2,devicePixelRatio||1)
   const x=cv.getContext('2d'),cs=getComputedStyle(document.documentElement),c=n=>cs.getPropertyValue(n).trim();x.setTransform(dpr,0,0,dpr,0,0);x.clearRect(0,0,W,H);
   const L=52,Rm=14,T=22,B=26,pw=W-L-Rm,phh=H-T-B;let yM=10;S.forEach(s=>s.pts.forEach(p=>yM=Math.max(yM,p[idx])));if(running)yM=Math.max(yM,idx===1?hpNow:tqNow);yM=niceMax(yM*1.08);
   const X=r=>L+pw*r/xMax,Y=v=>T+phh*(1-v/yM);
-  x.font='600 13px Barlow,sans-serif';x.fillStyle=c('--ink');x.textAlign='left';x.textBaseline='alphabetic';x.fillText(unit==='hp'?'Power (hp)':'Torque (lb-ft)',L,15);
+  x.font='600 13px Barlow,sans-serif';x.fillStyle=c('--ink');x.textAlign='left';x.textBaseline='alphabetic';x.fillText((unit==='hp'?'Power (hp)':'Torque (lb-ft)')+' vs engine rpm',L,15);
   x.font='12px Barlow,sans-serif';x.fillStyle=c('--mute');x.strokeStyle=c('--line');x.lineWidth=1;x.textAlign='right';x.textBaseline='middle';
   for(let i=0;i<=4;i++){const v=yM*i/4,y=Y(v);x.globalAlpha=.6;x.beginPath();x.moveTo(L,y);x.lineTo(L+pw,y);x.stroke();x.globalAlpha=1;x.fillText(fmt(v),L-6,y)}
   x.textAlign='center';x.textBaseline='top';const st=niceMax(xMax/6);for(let r=0;r<=xMax+1;r+=st)x.fillText(r>=1000?(r/1000)+'k':r,X(r),T+phh+6);
-  x.textAlign='right';x.fillText('rpm',L+pw,T+phh+6);
+  if(!S.some(s=>s.pts.length>1)){x.fillStyle=c('--mute');x.font='600 14px Barlow,sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText(pw<430?'No runs yet. Press Dyno pull.':'No runs yet. Start the engine, pick a gear, then press Dyno pull.',L+pw/2,T+phh/2)}
   x.lineJoin='round';x.lineCap='round';
   S.forEach(s=>{if(s.pts.length<2)return;x.strokeStyle=s.col;x.lineWidth=s.live?2.5:2;x.setLineDash(s.live?[6,4]:[]);x.beginPath();s.pts.forEach((p,i)=>i?x.lineTo(X(p[0]),Y(p[idx])):x.moveTo(X(p[0]),Y(p[idx])));x.stroke();x.setLineDash([])});
   const vis=S.filter(s=>!s.live),placed=[];vis.slice().sort((a,b)=>(idx===1?b.ph[1]-a.ph[1]:b.pt[1]-a.pt[1])).forEach(s=>{const pk=idx===1?s.ph:s.pt,px=X(pk[0]),py=Y(pk[1]);x.fillStyle=c('--panel');x.beginPath();x.arc(px,py,6,0,6.2832);x.fill();x.fillStyle=s.col;x.beginPath();x.arc(px,py,4.5,0,6.2832);x.fill();
@@ -798,7 +803,7 @@ function drawChart(cv,idx,unit,S,xMax){const dpr=Math.min(2,devicePixelRatio||1)
   if(hovR!=null){x.strokeStyle=c('--mute');x.lineWidth=1;x.beginPath();x.moveTo(X(hovR),T);x.lineTo(X(hovR),T+phh);x.stroke()}
   return{L,pw,xMax}}
 let CG=null;function charts(){const S=chartSeries();let xm=cur.red*1.05;S.forEach(s=>s.pts.forEach(p=>xm=Math.max(xm,p[0]*1.03)));xm=Math.ceil(xm/500)*500;
-  CG=drawChart($('#cPow'),1,'hp',S,xm);drawChart($('#cTq'),2,'lb-ft',S,xm);$('#pullB').textContent=pull?'Stop pull (X)':'Dyno pull (X)';$('#pullB').classList.toggle('on',!!pull);
+  CG=drawChart($('#cPow'),1,'hp',S,xm);drawChart($('#cTq'),2,'lb-ft',S,xm);$('#pullB').textContent=$('#pullO').textContent=pull?'Stop pull (X)':'Dyno pull (X)';$('#pullB').classList.toggle('on',!!pull);$('#pullO').classList.toggle('on',!!pull);
   if(clrArm>0){clrArm-=.1;if(clrArm<=0)$('#clrB').textContent='Clear runs'}}
 function hover(e){if(!CG)return;const cv=e.currentTarget,r=cv.getBoundingClientRect(),px=e.clientX-r.left;const rr=(px-CG.L)/CG.pw*CG.xMax;if(rr<0||rr>CG.xMax){unhover();return}hovR=rr;
   const S=chartSeries(),rows=S.map(s=>{if(!s.pts.length)return'';let b=s.pts[0];s.pts.forEach(p=>{if(Math.abs(p[0]-rr)<Math.abs(b[0]-rr))b=p});if(Math.abs(b[0]-rr)>CG.xMax/25)return'';
@@ -871,7 +876,7 @@ $('#glow').onclick=()=>{glowT=6;say('Glow plugs heating…',2)};
 $('#sup').onclick=()=>tx!=='m'?shiftTo(1):shiftTo(gear+1);$('#sdn').onclick=()=>tx!=='m'?shiftTo(-1):shiftTo(gear-1);
 document.querySelectorAll('[data-tx]').forEach(b=>b.onclick=()=>{tx=b.dataset.tx;document.querySelectorAll('[data-tx]').forEach(x=>x.classList.toggle('sel',x===b));gear=0;cvtD=tx==='cvt';atD=tx==='at';atG=0;cvtR=2.5;setK(...GP[0]);if(tx!=='m')say((tx==='cvt'?'CVT':'10-speed automatic')+' in Drive. Push the throttle lever to go; S or Neutral to stop.',4);$('#shifter').style.display=tx!=='m'?'none':'';
   $('#sup').textContent=tx!=='m'?'Drive (S)':'Shift up (S)';$('#sdn').textContent=tx!=='m'?'Neutral (Shift+S)':'Shift down (Shift+S)'});
-const stg=$('#stage'),PANEL=['#list','#readRow','#strainBox','#infoBox','#keys','.ctl','#chartSec','#gH','#gauges','#sae'].map(q=>$(q)),HOMES=PANEL.map(el=>[el.parentNode,el.nextSibling]);
+const stg=$('#stage'),PANEL=['#list','#readRow','#chartSec','#strainBox','#infoBox','#keysD','.ctl','#gH','#gauges','#sae'].map(q=>$(q)),HOMES=PANEL.map(el=>[el.parentNode,el.nextSibling]);
 function fsToggle(){const on=!stg.classList.contains('fs');stg.classList.toggle('fs',on);
   if(on)PANEL.forEach(el=>$('#fsPanel').appendChild(el));else for(let i=PANEL.length-1;i>=0;i--)HOMES[i][0].insertBefore(PANEL[i],HOMES[i][1]);$('#fsb').textContent=on?'Exit full screen':'Full screen';
   try{if(on&&stg.requestFullscreen)stg.requestFullscreen().catch(()=>{});else if(!on&&document.fullscreenElement)document.exitFullscreen()}catch(_){}}
