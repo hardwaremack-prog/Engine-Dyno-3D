@@ -40,6 +40,10 @@ Works on desktop and phone. No install needed. Turn your sound on. Tap **Full sc
 |---|---|
 | ![Flathead side valves](screenshots/16-flathead-side-valves.png) | ![GM 6.2 diesel](screenshots/17-gm-6-2-diesel.png) |
 
+| Briggs & Stratton 25 hp V-twin |
+|---|
+| ![Briggs V-twin](screenshots/20-briggs-v-twin.png) |
+
 | Roots supercharger | 4-barrel carb |
 |---|---|
 | ![Supercharger](screenshots/18-supercharger.png) | ![4-barrel carb](screenshots/19-four-barrel-carb.png) |
@@ -65,6 +69,7 @@ Works on desktop and phone. No install needed. Turn your sound on. Tap **Full sc
 | F1 V6 turbo hybrid (ERS) | 1.6 L | 840 hp + 160 hp electric | 15,000 rpm |
 | Ford flathead V8 (1949, side valves) | 239 cu in (3.9 L) | 100 hp | 3,800 rpm |
 | GM 6.2 L diesel V8 (1984, glow plugs) | 6.2 L | 130 hp, 240 lb-ft | 3,600 rpm |
+| Briggs & Stratton V-twin (air-cooled) | 724 cc | 25 hp, 43 lb-ft | governed 3,600 rpm |
 
 ## What it does
 
@@ -78,6 +83,7 @@ Works on desktop and phone. No install needed. Turn your sound on. Tap **Full sc
 - **Ford flathead V8:** the classic 1949 239 cu in side-valve V8. Its valves sit in the block beside each cylinder and open *upward*, pushed by lifters on a single camshaft in the middle of the V. It has flat heads with the spark plugs on top, a 2-barrel carb with an oil-bath air cleaner, a distributor and a generator, and the exhaust exits out the side of the block. It idles at 450 rpm with the classic burble, makes 100 hp, and runs hot like the real ones (watch the coolant gauge on a long pull).
 - **GM 6.2 L diesel V8:** the naturally aspirated 1980s Chevy/GMC pickup and Humvee diesel. It has glow plugs (hold the key at ON until WAIT goes out when it's cold), a mechanical injection pump at the front of the V with steel lines running to each injector, and diesel clatter that's louder when cold. It blows black smoke at full throttle and white smoke when cold. It makes 130 hp and 240 lb-ft, with a governor at 3,600 rpm.
 - **Induction choices** (any gas engine): **Stock**, **1-barrel carb** (smooth but chokes the engine at high rpm, about half the top-end power), **2-barrel carb** (good all-round), **4-barrel carb** (the rear secondaries open above 60% throttle for a little extra top end), or a belt-driven **Roots supercharger** (up to 9 psi with that classic whine; on the V8 it goes from about 670 to about 1,000 hp). The carbs have butterflies that move with the throttle under a see-through chrome air cleaner, and the blower shows its spinning rotors and drive belt. Diesels can run Stock or the supercharger. Press **C** to cycle.
+- **Briggs & Stratton 25 hp V-twin:** an air-cooled 724 cc V-twin like the ones on riding mowers. It has finned cylinders, a flywheel cooling fan under a yellow shroud, a canister air filter, and the uneven *potato-potato* V-twin firing (270°/450°). The throttle lever works like the real speed control: it sets the governed speed, from 1,750 rpm idle to 3,600 rpm, and the governor opens the throttle to hold that speed as you add load. Being air-cooled, it shows **cylinder head temperature** (red line 420°F) instead of coolant temperature.
 - **NOS:** hold the NOS button (or **N**) above 60% throttle for a nitrous shot. There's a blue bottle with a feed line and a fogging nozzle on the intake. Bottle pressure follows the cell temperature (weak when cold, strong when hot). It adds big power but doubles engine strain, so hold it too long and it melts a piston. Refill with **R**.
 - **Raw fuel dump:** hold the button (or **G**) to spray raw fuel into the intake. A little makes it flare, a lot floods it and fouls the plugs. On the diesel it can cause a **runaway** that over-revs and destroys the engine.
 - **2,500 lb inertia drum:** connected through the transmission. The clutch slips and then locks up. Drum speed (mph) and drum power are measured like a real inertia dyno.

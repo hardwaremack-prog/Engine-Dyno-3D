@@ -155,15 +155,16 @@ const E=[
  {name:'V16 turbo diesel',sp:'65 L, 3,000 hp, glow plugs',hp:3000,red:2100,idle:600,tqPk:1400,width:1300,boost:45,spool:[800,1500],lag:1.2,rev:.3,order:[1,9,5,13,3,11,7,15,2,10,6,14,4,12,8,16],cycle:720,ppr:8,snd:{p:.8,odd:1,cut:1100,vol:1.15},b:[-30,30],n:8,ph:[0,90,270,180,180,270,90,0],tu:2,diesel:1},
  {name:'F1 V6 turbo hybrid',sp:'1.6 L, 840 hp + 160 hp ERS, 15,000 rpm',hp:840,red:15000,idle:4000,tqPk:10500,width:7000,boost:40,spool:[6000,9500],lag:.22,rev:2.4,order:[1,4,2,5,3,6],cycle:720,ppr:3,snd:{p:1.05,odd:.8,cut:9000,vol:.95},b:[-45,45],n:3,ph:[0,240,480],tu:1,ers:1,bsfc:.3},
  {name:'Ford flathead V8',sp:'239 cu in (3.9 L), 100 hp, side valves, 1949',hp:100,red:3800,idle:450,tqPk:2000,width:3200,boost:0,rev:.55,order:[1,5,4,8,6,3,7,2],cycle:720,ppr:4,snd:{p:.95,odd:1.15,cut:1300,vol:1},b:[-45,45],n:4,ph:[0,90,270,180],tu:0,flathead:1,hot:25},
- {name:'GM 6.2 L diesel V8',sp:'6.2 L, 130 hp, 240 lb-ft, glow plugs, 1984',hp:130,red:3600,idle:650,tqPk:2000,width:3400,boost:0,rev:.5,order:[1,8,7,2,6,5,4,3],cycle:720,ppr:4,snd:{p:.88,odd:.95,cut:1250,vol:1.05},b:[-45,45],n:4,ph:[0,90,270,180],tu:0,diesel:1,ipump:1}
+ {name:'GM 6.2 L diesel V8',sp:'6.2 L, 130 hp, 240 lb-ft, glow plugs, 1984',hp:130,red:3600,idle:650,tqPk:2000,width:3400,boost:0,rev:.5,order:[1,8,7,2,6,5,4,3],cycle:720,ppr:4,snd:{p:.88,odd:.95,cut:1250,vol:1.05},b:[-45,45],n:4,ph:[0,90,270,180],tu:0,diesel:1,ipump:1},
+ {name:'Briggs & Stratton V-twin',sp:'724 cc, 25 hp, air-cooled, governed 3,600 rpm',hp:25,red:3600,idle:1750,tqPk:2600,width:2600,boost:0,rev:6,order:[1,2],cycle:720,ppr:.5,snd:{p:.72,odd:1,cut:1700,vol:.9},b:[-45,45],n:1,ph:[0],tu:0,air:1,gov:1,bs:1,fireAt:[0,270]}
 ];
-[[1.9,1.05],[1.5,0],[1.6,1.4],[1,0],[1.95,0],[1.95,0],[1.5,0],[1.15,0],[1.5,0]].forEach((m,i)=>E[i].im=m);E[1].v4=1;E[5].v4=1;E[6].v4=1;
+[[1.9,1.05],[1.5,0],[1.6,1.4],[1,0],[1.95,0],[1.95,0],[1.5,0],[1.15,0],[1.5,0],[1.35,0]].forEach((m,i)=>E[i].im=m);E[1].v4=1;E[5].v4=1;E[6].v4=1;
 const tq=(e,r,b)=>e.k*Math.max(.4,1-((r-e.tqPk)/e.width)**2)*(1+.9*b/14.7);
 for(const e of E){e.k=1;let m=0,t=0;const bo=r=>e.boost?e.boost*sst(e.spool[0],e.spool[1],r):0;for(let r=Math.min(1000,e.idle);r<=e.red;r+=50){const pw=tq(e,r,bo(r))*r/5252;if(pw>m){m=pw;e.pr=r}t=Math.max(t,tq(e,r,bo(r)))}e.k=e.hp/m;e.tm=t*e.k}
 const AR=[4.70,2.99,2.15,1.80,1.52,1.28,1.00,0.85,0.69,0.64],NI=[11,15,19,22,26],NO=[33,29,25,22,18],GR=NO.map((n,i)=>n/NI[i]),M=.0375,JW=8;
 let cur=E[0],running=false,starting=0,rpm=0,thr=0,prevThr=0,boost=0,cut=false,revHeld=false,va=0,vis=0,gear=0,oil=100,LIM=45,SLO=1,TRPM=0;
 let dead=false,strain=0,shk=0,flash=0,hpNow=0,tqNow=0,foul=[],fs=[],avgF=0,mf=false,ts=0,proj=null,PR=[];
-let ind='stock',scB=0,ld='drum',loadV=.4,hydP=0,hydQ=0,hydT=70,atD=false,atG=0,atT=0,shCut=0,keyPos=0,keyHeld=false,crankT=0,crankNeed=1.8,ersSOC=1,ersMode=0,ersHp=0,nosHeld=false,nosOn=false,nosLvl=1,nosP=745,nosMsg=0,tx='m',cvtD=false,cvtR=2.5,Gc=0,fuel=0,gasHeld=false,egt=0,af=0,popQ=0,wRpm=0,wa=0,lk=false,whp=0,lastGear=0,cellT=70,coolT=70,oilT=70,iat=70,op=0,glowT=0,glowH=0,msg='',msgT=0,tflash=0,afr=0,ffl=0,dens=1,CF=1,smokeW=0;
+let gth=0,ind='stock',scB=0,ld='drum',loadV=.4,hydP=0,hydQ=0,hydT=70,atD=false,atG=0,atT=0,shCut=0,keyPos=0,keyHeld=false,crankT=0,crankNeed=1.8,ersSOC=1,ersMode=0,ersHp=0,nosHeld=false,nosOn=false,nosLvl=1,nosP=745,nosMsg=0,tx='m',cvtD=false,cvtR=2.5,Gc=0,fuel=0,gasHeld=false,egt=0,af=0,popQ=0,wRpm=0,wa=0,lk=false,whp=0,lastGear=0,cellT=70,coolT=70,oilT=70,iat=70,op=0,glowT=0,glowH=0,msg='',msgT=0,tflash=0,afr=0,ffl=0,dens=1,CF=1,smokeW=0;
 
 /* ---------- audio ---------- */
 let bw,bwg,AC,o1,o2,filt,gain,wh,whg,sw,swg,noise;
@@ -236,8 +237,8 @@ function step(dt){
   avgF=foul.reduce((a,b)=>a+b,0)/foul.length;
   mf=running&&((avgF>.03&&Math.random()<avgF*.35)||Math.random()<flood*.45||(e.diesel&&coolT<60&&Math.random()<(60-coolT)/400));
   /* temperatures */
-  const load=running?thr*(.3+.7*rpm/e.red):0,bf=e.boost?boost/e.boost:0;
-  const cTg=running?195+Math.max(0,cellT-85)*.9+load*(22+(e.hot||0))+(strain/LIM)*45:cellT;
+  const load=running?(e.gov?gth:thr)*(.3+.7*rpm/e.red):0,bf=e.boost?boost/e.boost:0;
+  const cTg=running&&e.air?250+load*170+Math.max(0,cellT-85)*1.2+(strain/LIM)*60:running?195+Math.max(0,cellT-85)*.9+load*(22+(e.hot||0))+(strain/LIM)*45:cellT;
   coolT+=(cTg-coolT)*Math.min(1,dt*(running?.025+.09*load:.008));
   oilT+=((running?coolT+8+load*40:cellT)-oilT)*Math.min(1,dt*(running?.018+.05*load:.006));
   iat=cellT+bf*45+(running?6:0);
@@ -268,9 +269,10 @@ function step(dt){
   if(starting>0){if(!keyHeld)starting-=dt;crankT+=dt;const cr=280*(.5+.5*sst(-60,50,cellT))*(e.diesel?.75:1);rpm+=(cr-rpm)*Math.min(1,dt*5);
     if(keyHeld?crankT>=crankNeed:starting<=0){starting=0;crankT=0;if(e.diesel&&glowH<needGlow()-.001)say('The diesel will not fire: too cold. Leave the key at ON to heat the glow plugs (or press P), then crank again.',5);else running=true}}
   else{
-    if(running){if(rpm>=e.red)cut=true;else if(rpm<e.red-(e.diesel?60:250))cut=false;
+    const th=e.gov?Math.min(1,Math.max(0,(e.idle+(e.red-e.idle)*thr-rpm)/260+.08)):thr;gth=th;
+    if(running){if(e.gov)cut=false;else if(rpm>=e.red)cut=true;else if(rpm<e.red-(e.diesel?60:250))cut=false;
       const iM=ind==='c1'?1-.5*sst(.25*e.red,.8*e.red,rpm):ind==='c2'?1-.22*sst(.4*e.red,.95*e.red,rpm):ind==='c4'?1+.06*sst(.5*e.red,.85*e.red,rpm)*sst(.6,.95,thr):1;
-      T0=cut||mf?0:tq(e,rpm,boost+scB)*thr*(1-.7*avgF)*dens*iM-(ind==='sc'?e.k*.07*rpm/e.red:0)+(e.diesel?0:e.k*.3*Math.min(fuel,.6)*(1-flood))+(nosOn?e.k*.6*nEff:0);
+      T0=cut||mf?0:tq(e,rpm,boost+scB)*th*(1-.7*avgF)*dens*iM-(ind==='sc'?e.k*.07*rpm/e.red:0)+(e.diesel?0:e.k*.3*Math.min(fuel,.6)*(1-flood))+(nosOn?e.k*.6*nEff:0);
       T=T0+Math.min(e.k*(e.ers?1.3:.5),Math.max(0,(e.idle-rpm)*e.k*.004))*(1-.5*avgF);
       ersMode=0;ersHp=0;if(e.ers&&!dead){if(thr>.85&&ersSOC>0){ersMode=1;const d=Math.min(e.k*.9,161*5252/Math.max(rpm,3000));T+=d;T0+=d;ersHp=d*rpm/5252;ersSOC=Math.max(0,ersSOC-dt/33)}
         else if(thr<.25&&rpm>e.idle*1.4&&ersSOC<1){ersMode=-1;T-=e.k*.1;ersSOC=Math.min(1,ersSOC+dt/18)}}}
@@ -304,7 +306,7 @@ function step(dt){
   smokeW=e.diesel&&running?Math.max(0,(110-coolT)/170):0;
   afr=!running?0:e.diesel?Math.max(14,60-38*thr-14*Math.min(fuel,1)):Math.max(7,14.7-2.4*thr-5*fuel);
   ffl=running?Math.max(0,hpNow-ersHp)*(e.bsfc||(e.diesel?.35:.5))*(nosOn?.8:1)+e.hp*.012+fuel*e.hp*.15:0;
-  if(running&&!dead){const hot=coolT>245;if(thr>.8||oil<4||hot)strain+=dt*(hot?1.3:1)*(nosOn?2.2:1);else strain=Math.max(0,strain-dt*1.5);if(strain>=LIM)blow(nosOn?'Too much NOS! It melted a piston.':oil<4?'Seized: no oil.':hot?'Overheated and blew a head gasket.':'Blown up from too long at full throttle.')}
+  if(running&&!dead){const hot=coolT>(e.air?430:245);if((e.gov?gth:thr)>.8||oil<4||hot)strain+=dt*(hot?1.3:1)*(nosOn?2.2:1);else strain=Math.max(0,strain-dt*1.5);if(strain>=LIM)blow(nosOn?'Too much NOS! It melted a piston.':oil<4?'Seized: no oil.':hot?'Overheated and blew a head gasket.':'Blown up from too long at full throttle.')}
   else if(!dead)strain=Math.max(0,strain-dt*1.5);
   shk=dead?shk*Math.exp(-dt*3):(strain>LIM*.6?(strain/LIM-.6)*5:0);flash=Math.max(0,flash-dt*2.5);
 }
@@ -347,7 +349,7 @@ function wheelLabel(){const c=document.createElement('canvas');c.width=c.height=
   x.fillStyle='#ffd23a';x.font='bold 56px sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText('2,500 LB',0,-178);x.fillStyle='#e8edf0';x.font='bold 36px sans-serif';x.fillText('INERTIA DRUM',0,180);
   x.fillStyle='#ff2d6f';x.fillRect(-12,-235,24,52);const t=new THREE.CanvasTexture(c);return new THREE.MeshStandardMaterial({map:t,transparent:true,metalness:.3,roughness:.5,depthWrite:false})}
 let G=new THREE.Group(),P=[],RT=[],TB=[],GI=[],GO=[],CP=[],BF,HM,oilM,fw,pn,osh,sh2,bn,W,sa=0,ssp=0,hit=0;
-let FHC,IND={},DRG,HY,HDM,ATG,ERSM,ERSG,ERSB,ERSF,NZ,NJ,NOSL,CV,HOTP,HOTH,ALU,OILM,DOTM,FLOW=[],TAIL=[],JETS=[],BRG=[],INJ,JET,home={x:1,d:15},TC={},OC=V3(0,0,0),WC=V3(0,0,0);
+let FINM,BSF,FHC,IND={},DRG,HY,HDM,ATG,ERSM,ERSG,ERSB,ERSF,NZ,NJ,NOSL,CV,HOTP,HOTH,ALU,OILM,DOTM,FLOW=[],TAIL=[],JETS=[],BRG=[],INJ,JET,home={x:1,d:15},TC={},OC=V3(0,0,0),WC=V3(0,0,0);
 function buildTurbo(T,s){
   const g=new THREE.Group();g.position.copy(T);G.add(g);
   g.add(volute(.2,.3,.07,.18,Math.PI/2,HOTH));
@@ -382,6 +384,7 @@ function build3D(){
   const e=cur,n=e.n,pit=e.rot?1.5:e.flat?1.3:1.05,len=n*pit,bx=i=>(i-(n-1)/2)*pit;e.len=len;
   const fx=len/2+.3,gx0=fx+.6,D=1.65,TY=-2.55;
   foul=Array(n*e.b.length).fill(0);fs=foul.map(Math.random);
+  FINM=MS(0x5b6168,{metalness:.5,roughness:.5,transparent:true,opacity:.45,depthWrite:false,side:THREE.DoubleSide});
   HM=new THREE.MeshStandardMaterial({color:0x445566,metalness:.6,roughness:.4,transparent:true,opacity:.35,depthWrite:false});
   HOTP=MS(0x7a6a5e,{transparent:true,opacity:.5,depthWrite:false,side:THREE.DoubleSide});
   HOTH=MS(0x3e3a37,{roughness:.85,metalness:.5,side:THREE.DoubleSide});
@@ -398,17 +401,18 @@ function build3D(){
       const sp=new THREE.Shape();for(let k=0;k<3;k++){const a=k*2.0944+1.5708,x=.85*Math.cos(a),y=.85*Math.sin(a);k?sp.lineTo(x,y):sp.moveTo(x,y)}
       const rg=new THREE.ExtrudeGeometry(sp,{depth:.6,bevelEnabled:false});rg.translate(0,0,-.3);rg.rotateY(Math.PI/2);
       const m=mk(rg,0xc2185b);G.add(m);const pg=plugAt(g,1.45);RT.push({m,x:bx(i),c:i+1,pl:pg.pl,fl:pg.fl})}
-  }else e.b.forEach((a0,k)=>{const a=a0*R2;const bg=new THREE.Group();bg.rotation.x=a;G.add(bg);const sIn=-(Math.sign(a)||1);if(!e.flathead)[-.3,.3].forEach(z=>{const s=mk(new THREE.CylinderGeometry(.07,.07,len,12),0x888899);s.rotation.z=Math.PI/2;s.position.set(0,2.75,z);bg.add(s)});for(let i=0;i<n;i++){
-    const g=new THREE.Group();g.position.x=bx(i);g.rotation.x=a;G.add(g);
+  }else e.b.forEach((a0,k)=>{const a=a0*R2,xo=n===1?(k?.2:-.2):0;const bg=new THREE.Group();bg.rotation.x=a;G.add(bg);const sIn=-(Math.sign(a)||1);if(!e.flathead)[-.3,.3].forEach(z=>{const s=mk(new THREE.CylinderGeometry(.07,.07,len,12),0x888899);s.rotation.z=Math.PI/2;s.position.set(0,2.75,z);bg.add(s)});for(let i=0;i<n;i++){
+    const g=new THREE.Group();g.position.x=(bx(i)+xo);g.rotation.x=a;G.add(g);
     const li=mk(new THREE.CylinderGeometry(.4,.4,1.5,24,1,true),0x9fb4c4,GL);li.position.y=1.05;
+    if(e.air)for(let f=0;f<9;f++){const fn=new THREE.Mesh(new THREE.CylinderGeometry(.66,.66,.035,32,1,true),FINM);fn.position.y=.45+f*.16;g.add(fn);const fd=new THREE.Mesh(new THREE.RingGeometry(.4,.66,32),FINM);fd.rotation.x=-Math.PI/2;fd.position.y=.45+f*.16;g.add(fd)}
     const hd=e.flathead?new THREE.Mesh(new THREE.BoxGeometry(pit*.98,.24,1.55),HM):new THREE.Mesh(new THREE.CylinderGeometry(.46,.46,.25,24),HM);hd.position.set(0,e.flathead?1.97:1.9,e.flathead?sIn*.3:0);g.add(li,hd);
     const pg=plugAt(g,2.2,e.diesel),pi=mk(new THREE.CylinderGeometry(.38,.38,.42,24),0xb9c0c6),rod=mk(new THREE.CylinderGeometry(.06,.06,1,8),0xcc9966),pin=mk(new THREE.SphereGeometry(.12,10,8),0xe2b33e);
-    pi.rotation.x=a;G.add(pi,rod,pin);const cm=e.flathead?[0,1].map(t=>{const dx=(k?.13:-.13)+(t?.22:-.22),lo=mk(LG,0xb0b6bd),vl=new THREE.Group();lo.position.set(bx(i)+dx,.55,0);G.add(lo);vl.position.set(bx(i)+dx,0,sIn*.62);
+    pi.rotation.x=a;G.add(pi,rod,pin);const cm=e.flathead?[0,1].map(t=>{const dx=(k?.13:-.13)+(t?.22:-.22),lo=mk(LG,0xb0b6bd),vl=new THREE.Group();lo.position.set((bx(i)+xo)+dx,.55,0);G.add(lo);vl.position.set((bx(i)+xo)+dx,0,sIn*.62);
       const st=mk(new THREE.CylinderGeometry(.025,.025,.8,8),0xcfd4d8),vh=mk(new THREE.CylinderGeometry(.13,.065,.05,16),t?0xd9743a:0x4aa3df),sp=mk(new THREE.CylinderGeometry(.07,.07,.3,8,6),0xccaa33,{wireframe:true}),lf=mk(new THREE.CylinderGeometry(.05,.05,.4,10),0x8a9096);
-      st.position.y=1.38;vh.position.y=1.79;sp.position.y=1.2;lf.position.y=.78;vl.add(st,vh,sp,lf);bg.add(vl);return{lo,vl,t,fh:1}}):(e.v4?[[-.25,-.15,0],[-.25,.15,0],[.25,-.15,1],[.25,.15,1]]:[[-.3,0,0],[.3,0,1]]).map(([z,dx,t])=>{const lo=mk(LG,0xb0b6bd),vl=new THREE.Group();lo.position.set(bx(i)+dx,2.75,z);vl.position.set(bx(i)+dx,0,z);
+      st.position.y=1.38;vh.position.y=1.79;sp.position.y=1.2;lf.position.y=.78;vl.add(st,vh,sp,lf);bg.add(vl);return{lo,vl,t,fh:1}}):(e.v4?[[-.25,-.15,0],[-.25,.15,0],[.25,-.15,1],[.25,.15,1]]:[[-.3,0,0],[.3,0,1]]).map(([z,dx,t])=>{const lo=mk(LG,0xb0b6bd),vl=new THREE.Group();lo.position.set((bx(i)+xo)+dx,2.75,z);vl.position.set((bx(i)+xo)+dx,0,z);
       const vr=e.v4?.09:.11,st=mk(new THREE.CylinderGeometry(.025,.025,.91,8),0xcfd4d8),hd=mk(new THREE.CylinderGeometry(vr,vr*.5,.05,16),t?0xd9743a:0x4aa3df),sp=mk(new THREE.CylinderGeometry(.07,.07,.3,8,6),0xccaa33,{wireframe:true});
       st.position.y=2.175;hd.position.y=1.72;sp.position.y=2.2;vl.add(st,hd,sp);bg.add(lo,vl);return{lo,vl,t}});
-    P.push({x:bx(i),a,ph:(e.ph[i]||0)+(e.flat&&k?180:0),pi,rod,pin,pl:pg.pl,fl:pg.fl,c:k*n+i+1,cm})}});
+    P.push({x:(bx(i)+xo),a,ph:(e.ph[i]||0)+(e.flat&&k?180:0),pi,rod,pin,pl:pg.pl,fl:pg.fl,c:k*n+i+1,cm})}});
   /* ---- lubrication: pump, pickup, main gallery, main bearings, piston cooling jets ---- */
   {const gz=.62,gy=-.42,gx=V3(-len/2-.05,gy,gz);
     seg(G,V3(-len/2,gy,gz),V3(len/2,gy,gz),.065,OILM);
@@ -449,6 +453,13 @@ function build3D(){
     xcyl(g,px,cpY,0,.3,.12,MS(0x1a1a1a));xcyl(g,px,bpY,im[1],.2,.12,MS(0x1a1a1a));
     const BM=MS(0x111111,{roughness:.8});[-1,1].forEach(sd=>seg(g,V3(px,cpY,sd*.3),V3(px,bpY,im[1]+sd*.2),.035,BM));
     IND.sc={g,rot};}
+  if(e.bs){FHC=new THREE.Group();G.add(FHC);const ac=new THREE.Mesh(new THREE.CylinderGeometry(.42,.42,.42,32),MS(0x2b2f33,{metalness:.4,roughness:.5,transparent:true,opacity:.6,depthWrite:false}));ac.position.set(0,im[0]+.55,0);FHC.add(ac);
+    const lid=mk(new THREE.CylinderGeometry(.44,.44,.06,32),0xf2c230,{metalness:.3,roughness:.5});lid.position.set(0,im[0]+.78,0);FHC.add(lid);const cb=mk(new THREE.BoxGeometry(.3,.25,.3),0x8d8f8a);cb.position.set(0,im[0]+.25,0);FHC.add(cb);
+    const fx0=-len/2-.42;BSF=new THREE.Group();BSF.position.set(fx0,0,0);G.add(BSF);xcyl(BSF,0,0,0,.95,.08,MS(0x3a3f45,{metalness:.7,roughness:.4}));
+    for(let i=0;i<18;i++){const q=new THREE.Group();q.rotation.x=i/18*6.2832;const bl=mk(new THREE.BoxGeometry(.14,.42,.03),0x2b2f33);bl.position.set(-.1,.68,0);q.add(bl);BSF.add(q)}
+    const shd=new THREE.Mesh(new THREE.BoxGeometry(.5,2.3,2.3),MS(0xf2c230,{metalness:.2,roughness:.6,transparent:true,opacity:.22,depthWrite:false,side:THREE.DoubleSide}));shd.position.set(fx0-.05,.3,0);G.add(shd);
+    const scr=mk(new THREE.CylinderGeometry(.55,.55,.04,32),0x222222,{wireframe:true});scr.rotation.z=Math.PI/2;scr.position.set(fx0-.32,0,0);G.add(scr);
+    const mf=mk(new THREE.BoxGeometry(.7,.45,.5),0x3a3a3a,{metalness:.5,roughness:.6});mf.position.set(.1,-.35,1.55);G.add(mf)}
   if(e.flathead){const cam=mk(new THREE.CylinderGeometry(.08,.08,len,12),0x888899);cam.rotation.z=Math.PI/2;cam.position.y=.55;G.add(cam);
     FHC=new THREE.Group();G.add(FHC);const cb=mk(new THREE.BoxGeometry(.5,.35,.5),0x2b2b2b);cb.position.set(0,im[0]+.34,0);FHC.add(cb);
     const ac=new THREE.Mesh(new THREE.CylinderGeometry(.72,.72,.28,40),MS(0x2f3a2a,{metalness:.5,roughness:.5,transparent:true,opacity:.4,depthWrite:false}));ac.position.set(0,im[0]+.66,0);FHC.add(ac);
@@ -501,7 +512,7 @@ function build3D(){
   if(e.tu){const IC=V3(-len/2-2.6,im[0],im[1]),ic=mk(new THREE.BoxGeometry(.35,1.1,1.6),0x6a7f90),fr=mk(new THREE.BoxGeometry(.36,1.1,1.6),0xaabbcc,{wireframe:true});ic.position.copy(IC);fr.position.copy(IC);G.add(ic,fr);
     CP.push(pipe(IC,V3(tbx-.2,im[0],im[1]),.14,0x3a5a78));
     TB.forEach(t=>CP.push(seg(G,t.comp,V3(IC.x+.18,IC.y,t.z<0?-.6:.6),.13,MS(0x3a5a78))))}
-  else if(!e.flathead&&!e.ipump){const af=mk(new THREE.CylinderGeometry(.5,.5,.7,20),0xd9d2b8);af.rotation.z=Math.PI/2;af.position.set(tbx-1.1,im[0],im[1]);G.add(af);pipe(V3(tbx-.75,im[0],im[1]),V3(tbx-.2,im[0],im[1]),.2,0x555e66)}
+  else if(!e.flathead&&!e.ipump&&!e.bs){const af=mk(new THREE.CylinderGeometry(.5,.5,.7,20),0xd9d2b8);af.rotation.z=Math.PI/2;af.position.set(tbx-1.1,im[0],im[1]);G.add(af);pipe(V3(tbx-.75,im[0],im[1]),V3(tbx-.2,im[0],im[1]),.2,0x555e66)}
   /* flywheel, starter, gearbox */
   fw=gear3(.95,48,.2,0x6b7782);fw.position.x=fx;const mkr=mk(new THREE.BoxGeometry(.1,.3,.2),0xff2d6f);mkr.position.y=.6;fw.add(mkr);G.add(fw);
   const sb=mk(new THREE.CylinderGeometry(.24,.24,.9,16),0x224488);sb.rotation.z=Math.PI/2;sb.position.set(fx-1.05,0,1.2);
@@ -597,7 +608,7 @@ const rnd=s=>(Math.random()-.5)*s;
 function update3D(dt){
   const e=cur,heat=Math.min(1,strain/LIM),step=e.cycle/e.order.length;
   HM.emissive.setRGB(heat*.9,heat*.12,0);
-  const flashOn=c=>{const d=((vis-e.order.indexOf(c)*step)%e.cycle+e.cycle)%e.cycle;return running&&d<step*.35&&Math.random()>foul[c-1]};
+  const flashOn=c=>{const d=((vis-(e.fireAt?e.fireAt[e.order.indexOf(c)]:e.order.indexOf(c)*step))%e.cycle+e.cycle)%e.cycle;return running&&d<step*.35&&Math.random()>foul[c-1]};
   P.forEach(p=>{
     const th=(va+p.ph)*R2,py=.28*Math.cos(th),pz=.28*Math.sin(th),dy=Math.cos(p.a),dz=Math.sin(p.a);
     const s=pz*dz+py*dy+Math.sqrt(.9025-(pz*dy-py*dz)**2);
@@ -635,6 +646,7 @@ function update3D(dt){
   {['c1','c2','c4','sc'].forEach(k=>{if(IND[k])IND[k].g.visible=ind===k});if(FHC)FHC.visible=ind==='stock';
     if(ind!=='stock'&&ind!=='sc')IND[ind].fl.forEach(f=>{const o=f.sec?sst(.6,.95,thr):thr;f.m.rotation.x=o*1.35});
     if(ind==='sc')IND.sc.rot.forEach((r,i)=>r.rotation.x=(i?-1:1)*va*R2*1.8)}
+  if(cur.bs&&BSF)BSF.rotation.x=va*R2;
   /* ERS */
   if(e.ers&&ERSM){ERSM.emissive.setRGB(0,ersMode>0?.55:0,ersMode<0?.6:ersMode>0?.25:0);ERSG.rotation.x=va*R2*2.5;ERSF.scale.x=Math.max(.02,ersSOC);ERSF.position.x=-e.len/2-1.4-(1-ersSOC)*.5;ERSF.material.emissiveIntensity=.4+(ersMode?.6:0)}
   /* NOS */
@@ -692,7 +704,7 @@ const GAU=[
  ['Exhaust temp','°F',()=>0,()=>1800,()=>egt>0.01?cellT+egt*1500:cellT,()=>1600],
  ['Oil pressure','psi',()=>0,()=>100,()=>op,null,null,10],
  ['Oil temp','°F',()=>-60,()=>320,()=>oilT,()=>270],
- ['Coolant temp','°F',()=>-60,()=>280,()=>coolT,()=>240],
+ [e=>e.air?'Cylinder head':'Coolant temp','°F',()=>-60,e=>e.air?500:280,()=>coolT,e=>e.air?420:240],
  ['Intake air','°F',()=>-60,()=>250,()=>iat,()=>180],
  ['Fuel flow','lb/hr',()=>0,e=>Math.ceil(e.hp*.7/50)*50,()=>ffl],
  ['Load speed','mph',()=>0,()=>160,()=>wRpm*.01065],
@@ -705,8 +717,8 @@ const GAU=[
  ['Test cell','°F',()=>-60,()=>130,()=>cellT,()=>110,null,-20]
 ];
 const gcv=GAU.map(g=>{const c=document.createElement('canvas');c.width=c.height=240;c.setAttribute('role','img');$('#gauges').appendChild(c);return c});
-function drawGauge(c,[lab,unit,fmin,fmax,fv,fred,ffmt,lowZ]){
-  const e=cur,x=c.getContext('2d'),W=c.width,cx=W/2,cy=W*.52,r=W*.38,cs=getComputedStyle(document.documentElement),col=n=>cs.getPropertyValue(n).trim();
+function drawGauge(c,[lab0,unit,fmin,fmax,fv,fred,ffmt,lowZ]){
+  const e=cur,lab=typeof lab0==='function'?lab0(cur):lab0,x=c.getContext('2d'),W=c.width,cx=W/2,cy=W*.52,r=W*.38,cs=getComputedStyle(document.documentElement),col=n=>cs.getPropertyValue(n).trim();
   const min=fmin(e),max=fmax(e),v=fv(),red=fred?fred(e):null,a0=Math.PI*.75,a1=Math.PI*2.25,ang=q=>a0+(a1-a0)*Math.min(1,Math.max(0,(q-min)/(max-min)));
   x.clearRect(0,0,W,W);x.lineCap='butt';x.lineWidth=W*.045;x.strokeStyle=col('--line');x.beginPath();x.arc(cx,cy,r,a0,a1);x.stroke();
   x.strokeStyle=col('--red');if(red!=null){x.beginPath();x.arc(cx,cy,r,ang(red),a1);x.stroke()}if(lowZ!=null){x.beginPath();x.arc(cx,cy,r,a0,ang(lowZ));x.stroke()}
@@ -816,7 +828,7 @@ function ui(){
   const gl=tx==='cvt'?(cvtD?'D':'N'):tx==='at'?(atD?'D'+(atG+1):'N'):(gear||'N');$('#gearTag').textContent=gl;$('#gearTag').style.left=tx!=='m'?'14px':'150px';
   if(stg.classList.contains('fs'))$('#hud').textContent=f(rpm)+' rpm · '+f(hpNow)+' hp · '+f(tqNow)+' lb-ft'+(e.boost||ind==='sc'?' · '+(boost+scB).toFixed(1)+' psi':'')+' · '+Math.round(wRpm*.01065)+' mph · '+(tx==='cvt'?gl+' '+cvtR.toFixed(2)+':1':tx==='at'?'auto '+gl:'gear '+gl)+(ld==='hydro'?' · '+f(hydP)+' psi':'')+' · EGT '+f(egt>.01?cellT+egt*1500:cellT)+'°F'+(nosOn?' · NOS ON':'')+(e.ers?' · ERS '+Math.round(ersSOC*100)+'%'+(ersMode>0?' DEPLOY':ersMode<0?' HARVEST':''):'');
   $('#keyG').setAttribute('transform','rotate('+[-50,0,50][keyPos]+' 55 58)');const on=keyPos>0;
-  $('#lOil').className=on&&op<6&&!dead?'r':'';$('#lBat').className=on&&!running?'r':'';$('#lTemp').className=coolT>240?'r':'';$('#lGlow').className=on&&e.diesel&&!running&&glowH<needGlow()?'a':'';
+  $('#lOil').className=on&&op<6&&!dead?'r':'';$('#lBat').className=on&&!running?'r':'';$('#lTemp').className=coolT>(e.air?420:240)?'r':'';$('#lGlow').className=on&&e.diesel&&!running&&glowH<needGlow()?'a':'';
   $('#lvv').textContent=Math.round(loadV*100)+'% closed ('+f(hydP)+' psi)';
   sbtn.textContent=dead?'Rebuild engine':(running||starting>0?'Stop (E)':'Auto start (E)');sbtn.classList.toggle('on',running||starting>0);
   $('#glow').classList.toggle('on',glowT>0);$('#glow').textContent=e.diesel?'Glow plugs '+Math.round(glowH*100)+'%'+(needGlow()>0?' (need '+Math.round(needGlow()*100)+'%)':''):'';
@@ -825,7 +837,7 @@ function ui(){
   $('#cellv').textContent=cellT+'°F'+(cellT<=0?' (arctic: slow cranking, thick oil'+(e.diesel?', needs glow plugs':'')+')':cellT>=105?' (hot: less power, runs hot)':'');
   $('#sBar').style.width=Math.min(100,strain/LIM*100)+'%';
   const fl=e.diesel?0:Math.max(0,(fuel-.7)/.8);
-  $('#sTxt').textContent=dead?'Engine destroyed. Rebuild it to try again.':'Strain '+strain.toFixed(1)+' of '+LIM.toFixed(0)+' s at full throttle.'+(oil<4?' No oil: it will seize in about 5 s.':'')+(coolT>245?' Overheating!':'')+(e.ers?' ERS battery '+Math.round(ersSOC*100)+'%'+(ersMode>0?' (deploying +'+Math.round(ersHp)+' hp electric)':ersMode<0?' (harvesting)':'')+'.':'')+(avgF>.02?' Spark plugs fouled '+Math.round(avgF*100)+'%.':'')+(fuel>.05?(e.diesel?' Fuel in the intake: '+Math.round(fuel*50)+'%, diesel runaway risk!':' Raw fuel in the intake: '+Math.round(fuel*50)+'%'+(fl>0?' (flooding)':'')+'.'):'');
+  $('#sTxt').textContent=dead?'Engine destroyed. Rebuild it to try again.':'Strain '+strain.toFixed(1)+' of '+LIM.toFixed(0)+' s at full throttle.'+(oil<4?' No oil: it will seize in about 5 s.':'')+(coolT>(e.air?430:245)?' Overheating!':'')+(e.ers?' ERS battery '+Math.round(ersSOC*100)+'%'+(ersMode>0?' (deploying +'+Math.round(ersHp)+' hp electric)':ersMode<0?' (harvesting)':'')+'.':'')+(avgF>.02?' Spark plugs fouled '+Math.round(avgF*100)+'%.':'')+(fuel>.05?(e.diesel?' Fuel in the intake: '+Math.round(fuel*50)+'%, diesel runaway risk!':' Raw fuel in the intake: '+Math.round(fuel*50)+'%'+(fl>0?' (flooding)':'')+'.'):'');
   $('#msg').textContent=msg;
 }
 list();build3D();coolT=oilT=cellT;
