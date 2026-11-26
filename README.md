@@ -74,7 +74,7 @@ Works on desktop and phone. No install needed. Turn your sound on. Tap **Full sc
 ## What it does
 
 - **Ignition key:** turn the key to ON (the OIL and BATT lights come on, and on the diesel the glow plugs heat with a WAIT light), then hold it on START to crank. It springs back to ON when you let go. Tap OFF to shut down. **Auto start** (E) is still there.
-- **Throttle lever:** a dyno-cell throttle lever that stays where you set it, from IDLE to FULL. Drag it, or use ↑/↓. **Idle** (L) snaps it back.
+- **Throttle lever:** a dyno-cell throttle lever that stays where you set it, from IDLE to FULL. Drag it in any direction (up or right for more, down or left for less), tap to jump to a spot, or use ↑/↓. **Idle** (L) snaps it back.
 - **Full 3D cutaway:** pistons, rods, crank, cams, valves, spark or glow plugs, flywheel, starter and gearbox
 - **Realistic turbos:** snail-shell turbine and compressor housings, spinning compressor and turbine wheels, center housing with oil lines, wastegate actuator and pod filter. The turbine housing glows red-hot under load.
 - **Glowing exhaust:** headers, downpipes and tailpipes heat up from dull red to orange, with hot exhaust gas flowing through them

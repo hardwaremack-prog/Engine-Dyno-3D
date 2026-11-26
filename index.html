@@ -67,6 +67,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--pw);outline-off
  #stage.fs.nop{grid-template-rows:minmax(0,1fr) 0}#stage.fs.nop #pbox,#stage.fs.nop #shifter{bottom:10px!important}#stage.fs.nop #gearTag{bottom:12px}#stage.fs.nop #hud{bottom:160px}}
 #ign{width:104px;height:104px;cursor:pointer;touch-action:none;user-select:none;-webkit-user-select:none}#ign svg{width:100%;height:100%;display:block}
 #lamps{display:flex;gap:4px}#lamps i{font:700 12px/1 'Barlow Condensed',sans-serif;font-style:normal;padding:3px 5px;border-radius:3px;background:#2a2f35;color:#5f6870}#lamps i.r{background:#e53935;color:#fff}#lamps i.a{background:#ffb300;color:#111}
+#lev,#ign,#shifter,#pbox,#lev *,#ign *,#shifter *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
 #lev{position:relative;width:118px;height:160px;background:color-mix(in srgb,var(--panel) 82%,transparent);border:2px solid var(--ink);border-radius:6px;touch-action:none;cursor:grab}#lev svg{width:100%;height:100%;display:block}
 #levV{position:absolute;left:0;right:0;bottom:4px;text-align:center;font:700 15px 'Barlow Condensed',sans-serif}
 #keys{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:4px 12px;margin:10px 0 4px;font-size:14px;color:var(--mute)}
@@ -746,14 +747,20 @@ function shMove(e){const r=shf.getBoundingClientRect(),[x,y]=gate((e.clientX-r.l
 shf.addEventListener('pointerdown',e=>{shf.setPointerCapture(e.pointerId);shd=true;shMove(e)});
 shf.addEventListener('pointermove',e=>{if(shd)shMove(e)});
 ['pointerup','pointercancel'].forEach(t=>shf.addEventListener(t,()=>{shd=false;setK(...GP[gear])}));
-let pedal=0,pLock=false,pdr=false;const lev=$('#lev'),LA=25*R2,LP=[70,176],LL=136;
+let pedal=0,pLock=false,pdr=false;const lev=$('#lev'),LA=20*R2,LP=[70,176],LL=136;
 function drawLever(){const a=-LA+2*LA*pedal,x=LP[0]+LL*Math.sin(a),y=LP[1]-LL*Math.cos(a);$('#levArm').setAttribute('x2',x);$('#levArm').setAttribute('y2',y);$('#levKnob').setAttribute('cx',x);$('#levKnob').setAttribute('cy',y);
   const r=152,c=[70,174],p0=[c[0]-r*Math.sin(LA),c[1]-r*Math.cos(LA)],p1=[c[0]+r*Math.sin(a),c[1]-r*Math.cos(a)];$('#levArc').setAttribute('d',pedal>.005?'M'+p0[0]+' '+p0[1]+' A'+r+' '+r+' 0 0 1 '+p1[0]+' '+p1[1]:'');
   $('#levV').textContent=Math.round(pedal*100)+'%';lev.setAttribute('aria-valuenow',Math.round(pedal*100))}
 function pset(e){const r=lev.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*140,y=(e.clientY-r.top)/r.height*190,a=Math.atan2(x-LP[0],LP[1]-y);setPedal((a+LA)/(2*LA))}
-lev.addEventListener('pointerdown',e=>{lev.setPointerCapture(e.pointerId);pdr=true;pset(e)});
-lev.addEventListener('pointermove',e=>{if(pdr)pset(e)});
-['pointerup','pointercancel'].forEach(t=>lev.addEventListener(t,()=>{pdr=false}));
+/* drag in any direction: up or right = more throttle, down or left = less; a tap without dragging jumps to that spot */
+let ld0=null;
+lev.addEventListener('pointerdown',e=>{e.preventDefault();try{lev.setPointerCapture(e.pointerId)}catch(_){}pdr=true;ld0={x:e.clientX,y:e.clientY,p:pedal,moved:false}});
+lev.addEventListener('pointermove',e=>{if(!pdr||!ld0)return;e.preventDefault();const r=lev.getBoundingClientRect(),dx=e.clientX-ld0.x,dy=e.clientY-ld0.y;
+  if(Math.abs(dx)+Math.abs(dy)>4)ld0.moved=true;if(ld0.moved)setPedal(ld0.p+dx/(r.width*.85)-dy/(r.height*.85))});
+lev.addEventListener('pointerup',e=>{if(pdr&&ld0&&!ld0.moved)pset(e);pdr=false;ld0=null});
+lev.addEventListener('pointercancel',()=>{pdr=false;ld0=null});
+['touchstart','touchmove'].forEach(t=>lev.addEventListener(t,e=>e.preventDefault(),{passive:false}));
+lev.addEventListener('contextmenu',e=>e.preventDefault());
 $('#plock').onclick=()=>setPedal(0);
 /* ignition key: tap OFF to stop, hold the key to crank (START springs back to ON) */
 const ign=$('#ign');function keyStart(){if(dead)return;try{initAudio()}catch(_){}keyPos=2;keyHeld=true}
@@ -761,6 +768,7 @@ function keyRelease(){if(keyHeld){keyHeld=false;keyPos=1;if(starting>0&&!running
 function keyOff(){keyPos=0;keyHeld=false;running=false;starting=0}
 ign.addEventListener('pointerdown',e=>{ign.setPointerCapture(e.pointerId);const r=ign.getBoundingClientRect();if(e.clientX-r.left<r.width*.33)keyOff();else keyStart()});
 ['pointerup','pointercancel','lostpointercapture'].forEach(t=>ign.addEventListener(t,keyRelease));
+['touchstart','touchmove'].forEach(t=>ign.addEventListener(t,e=>e.preventDefault(),{passive:false}));ign.addEventListener('contextmenu',e=>e.preventDefault());
 function setInd(k){if(k!=='stock'&&k!=='sc'&&cur.diesel){say('Diesels don\'t use carburetors. Pick Stock or Supercharger.',4);k='stock'}ind=k;document.querySelectorAll('[data-ind]').forEach(x=>x.classList.toggle('sel',x.dataset.ind===k));
   if(k!=='stock')say(({c1:'Single-barrel carb: smooth and economical, but it chokes the engine at high rpm.',c2:'Two-barrel carb: good all-round flow.',c4:'Four-barrel carb: the rear secondaries open above 60% throttle for extra top-end power.',sc:'Roots supercharger: belt-driven blower, up to 9 psi with that classic whine.'})[k],4)}
 document.querySelectorAll('[data-ind]').forEach(b=>b.onclick=()=>setInd(b.dataset.ind));
