@@ -70,6 +70,13 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--pw);outline-off
 #lev,#ign,#shifter,#pbox,#lev *,#ign *,#shifter *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
 #lev{position:relative;width:118px;height:160px;background:color-mix(in srgb,var(--panel) 82%,transparent);border:2px solid var(--ink);border-radius:6px;touch-action:none;cursor:grab}#lev svg{width:100%;height:100%;display:block}
 #levV{position:absolute;left:0;right:0;bottom:4px;text-align:center;font:700 15px 'Barlow Condensed',sans-serif}
+#chartSec .bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}#chartSec .bar .btn{padding:10px 12px;font-size:17px}
+.cwrap{position:relative;margin-bottom:6px}.cwrap canvas{display:block;width:100%;height:210px;background:var(--panel);border-radius:4px;touch-action:pan-y}
+#ctip{position:absolute;pointer-events:none;display:none;z-index:5;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:4px;padding:6px 8px;font-size:13px;line-height:1.35;box-shadow:0 2px 8px rgba(0,0,0,.18);white-space:nowrap}
+#ctip i,#runLeg i{display:inline-block;width:14px;height:3px;border-radius:2px;vertical-align:middle;margin-right:5px}
+#runLeg{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0}#runLeg span{display:inline-flex;align-items:center;gap:2px;background:var(--panel);border-radius:3px;font-size:13px;color:var(--ink)}
+#runLeg button{all:unset;cursor:pointer;padding:5px 7px}#runLeg button.x{color:var(--mute);padding:5px 8px}#runLeg span.off{opacity:.45}
+#chartSec details{font-size:14px;color:var(--mute);margin-top:4px}#chartSec table{border-collapse:collapse;width:100%;font-size:13px;color:var(--ink);margin-top:6px}#chartSec th,#chartSec td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line)}
 #keys{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:4px 12px;margin:10px 0 4px;font-size:14px;color:var(--mute)}
 #keys div{display:flex;gap:6px;align-items:baseline}kbd{font:700 13px/1 'Barlow Condensed',sans-serif;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-bottom-width:2px;border-radius:3px;padding:2px 5px;white-space:nowrap}
 .btn.nos{background:var(--panel);color:var(--ink);border:2px solid #2f6bff}.btn.nos.on{background:#2f6bff;color:#fff}
@@ -82,7 +89,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--pw);outline-off
   <p>Made by Adam David Phillips. Drag to orbit, pinch or scroll to zoom. Everything can be run from the keyboard:</p>
   <div id="keys" aria-label="Keyboard controls">
     <div><kbd>K</kbd>Hold ignition key to START</div><div><kbd>E</kbd>Auto start / stop / rebuild</div><div><kbd>↑</kbd><kbd>↓</kbd>Throttle lever up / down</div><div><kbd>L</kbd>Throttle lever to idle</div><div><kbd>Space</kbd>Hold to rev</div>
-    <div><kbd>S</kbd><kbd>Shift+S</kbd>Shift up / down</div><div><kbd>1</kbd>–<kbd>5</kbd><kbd>0</kbd>Pick gear / neutral</div><div><kbd>T</kbd>Manual / CVT / 10-speed auto</div><div><kbd>D</kbd>Drive (CVT or auto)</div><div><kbd>B</kbd>Drum or hydraulic pump load</div><div><kbd>C</kbd>Carb / supercharger choice</div><div><kbd>−</kbd><kbd>=</kbd>Pump load valve −/+ 10%</div>
+    <div><kbd>S</kbd><kbd>Shift+S</kbd>Shift up / down</div><div><kbd>1</kbd>–<kbd>5</kbd><kbd>0</kbd>Pick gear / neutral</div><div><kbd>T</kbd>Manual / CVT / 10-speed auto</div><div><kbd>D</kbd>Drive (CVT or auto)</div><div><kbd>B</kbd>Drum or hydraulic pump load</div><div><kbd>C</kbd>Carb / supercharger choice</div><div><kbd>X</kbd>Dyno pull start / stop</div><div><kbd>−</kbd><kbd>=</kbd>Pump load valve −/+ 10%</div>
     <div><kbd>N</kbd>Hold for NOS</div><div><kbd>R</kbd>Refill NOS bottle</div><div><kbd>G</kbd>Hold to dump raw fuel</div><div><kbd>P</kbd>Glow plugs (diesel)</div>
     <div><kbd>[</kbd><kbd>]</kbd>Cell temp −/+ 10°F</div><div><kbd>O</kbd>Oil: full / drain</div><div><kbd>V</kbd>Next camera view</div><div><kbd>M</kbd>Slow motion</div>
     <div><kbd>F</kbd>Full screen</div><div><kbd>H</kbd>Hide controls (full screen)</div><div><kbd>Esc</kbd>Exit full screen</div>
@@ -115,6 +122,15 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--pw);outline-off
   </div>
   <div class="strain" id="strainBox"><div><i id="sBar"></i></div><span id="sTxt"></span> <span id="msg"></span></div>
   <div class="strain" id="infoBox"><span id="rpmTxt"></span></div>
+  <section id="chartSec" aria-label="Dyno chart">
+    <h2>Dyno chart</h2>
+    <p id="chartHelp" style="font-size:14px">Start the engine, put it in a gear against the drum (3rd or 4th works well), then press <b>Dyno pull</b> (or <b>X</b>). It goes to full throttle, sweeps to redline, and saves the run so you can compare setups.</p>
+    <div class="bar"><button class="btn" id="pullB">Dyno pull (X)</button><button class="btn alt" id="clrB">Clear runs</button></div>
+    <div class="cwrap"><canvas id="cPow" role="img" aria-label="Power in horsepower versus engine rpm"></canvas></div>
+    <div class="cwrap"><canvas id="cTq" role="img" aria-label="Torque in pound-feet versus engine rpm"></canvas><div id="ctip"></div></div>
+    <div id="runLeg" aria-label="Saved runs"></div>
+    <details><summary>Table view</summary><table><thead><tr><th>Run</th><th>Peak power</th><th>Peak torque</th></tr></thead><tbody id="runTbl"></tbody></table></details>
+  </section>
   <h2 id="gH">Test cell instruments</h2>
   <div id="gauges"></div>
   <div id="sae"></div>
@@ -160,7 +176,7 @@ const E=[
  {name:'Briggs & Stratton V-twin',sp:'724 cc, 25 hp, air-cooled, governed 3,600 rpm',hp:25,red:3600,idle:1750,tqPk:2600,width:2600,boost:0,rev:6,order:[1,2],cycle:720,ppr:.5,snd:{p:.72,odd:1,cut:1700,vol:.9},b:[-45,45],n:1,ph:[0],tu:0,air:1,gov:1,bs:1,fireAt:[0,270]}
 ];
 [[1.9,1.05],[1.5,0],[1.6,1.4],[1,0],[1.95,0],[1.95,0],[1.5,0],[1.15,0],[1.5,0],[1.35,0]].forEach((m,i)=>E[i].im=m);E[1].v4=1;E[5].v4=1;E[6].v4=1;
-const tq=(e,r,b)=>e.k*Math.max(.4,1-((r-e.tqPk)/e.width)**2)*(1+.9*b/14.7);
+const tq=(e,r,b)=>{const f=1-((r-e.tqPk)/e.width)**2-.4;return e.k*(.4+(f+Math.sqrt(f*f+.012))/2)*(1+.9*b/14.7)};
 for(const e of E){e.k=1;let m=0,t=0;const bo=r=>e.boost?e.boost*sst(e.spool[0],e.spool[1],r):0;for(let r=Math.min(1000,e.idle);r<=e.red;r+=50){const pw=tq(e,r,bo(r))*r/5252;if(pw>m){m=pw;e.pr=r}t=Math.max(t,tq(e,r,bo(r)))}e.k=e.hp/m;e.tm=t*e.k}
 const AR=[4.70,2.99,2.15,1.80,1.52,1.28,1.00,0.85,0.69,0.64],NI=[11,15,19,22,26],NO=[33,29,25,22,18],GR=NO.map((n,i)=>n/NI[i]),M=.0375,JW=8;
 let cur=E[0],running=false,starting=0,rpm=0,thr=0,prevThr=0,boost=0,cut=false,revHeld=false,va=0,vis=0,gear=0,oil=100,LIM=45,SLO=1,TRPM=0;
@@ -295,6 +311,7 @@ function step(dt){
   if(dead)rpm*=Math.exp(-dt*5);
   if(!dead&&rpm>e.red*1.3)blow(e.diesel?'Diesel runaway! It over-revved on the fuel in the intake and came apart.':'Over-rev! The valves floated and the engine came apart.');
   hpNow=T0*rpm/5252;tqNow=T0;
+  if(pull)pullStep(dt);
   vis=(vis+rpm*6*dt*SLO)%e.cycle;va=(va+rpm*6*dt*SLO)%720;wa=(wa+wRpm*6*dt*SLO)%360;
   /* exhaust temperature and afterfire */
   const eT=running||rpm>300&&fuel>0?(e.diesel?.15+.6*load+.25*Math.min(1,fuel):.18+.5*thr*(.35+.65*rpm/e.red)+.2*bf+(cut?.25:0)+.3*Math.min(1,fuel)+(mf?.2:0)+(nosOn?.3:0)):0;
@@ -731,7 +748,67 @@ function drawGauge(c,[lab0,unit,fmin,fmax,fv,fred,ffmt,lowZ]){
   x.font=`700 ${W*.13}px 'Barlow Condensed',sans-serif`;x.fillText(ffmt?ffmt(v):Math.round(v).toLocaleString(),cx,cy+r*.62);
   x.fillStyle=col('--mute');x.font=`600 ${W*.075}px Barlow,sans-serif`;x.fillText(lab+(unit?' '+unit:''),cx,W*.94);
   c.setAttribute('aria-label',lab+': '+(ffmt?ffmt(v):Math.round(v))+' '+unit)}
-let gt=0;function gauges(dt){gt-=dt;if(gt>0)return;gt=.1;GAU.forEach((g,i)=>drawGauge(gcv[i],g));
+/* ---------- dyno chart: power and torque vs rpm, saved runs ---------- */
+const SLOT_L=['#257de0','#f47230','#00b894','#f2a600','#ee7fac','#008a17','#6a4ce2','#ec4647'],SLOT_D=['#338ced','#e76624','#00a888','#d28e05','#e24d8b','#0aac23','#9887ef','#eb6263'];
+let RUNS=[],pull=null,hovR=null,clrArm=0;try{RUNS=JSON.parse(localStorage.getItem('dynoRuns')||'[]')}catch(_){RUNS=[]}
+const isDark=()=>getComputedStyle(document.documentElement).getPropertyValue('--bg').trim()==='#11171c',slotCol=i=>(isDark()?SLOT_D:SLOT_L)[i];
+function saveRuns(){try{localStorage.setItem('dynoRuns',JSON.stringify(RUNS))}catch(_){}}
+function freeSlot(){for(let i=0;i<8;i++)if(!RUNS.some(r=>r.slot===i))return i;const o=RUNS.shift();return o.slot}
+const fmt=n=>Math.round(n).toLocaleString();
+function setupName(){return cur.name+' · '+({stock:'stock',c1:'1-bbl carb',c2:'2-bbl carb',c4:'4-bbl carb',sc:'supercharged'})[ind]+' · '+cellT+'°F'}
+function startPull(){if(pull){endPull();return}if(!running||dead){say('Start the engine first (hold the key or press E), then press Dyno pull.',4);return}
+  pull={t:0,bins:{},bw:cur.red/80,lastR:rpm,still:0,prev:pedal,slot:freeSlot(),gov:!!cur.gov,red:cur.red};setPedal(1);
+  say(cur.gov?'Dyno pull: governed engine. Close the pump load valve (=) to pull the speed down while it records.':'Dyno pull: full throttle, sweeping to redline…',4)}
+function pullStep(dt){const p=pull,e=cur;p.t+=dt;if(dead||!running){endPull();return}
+  if(thr>.9&&rpm>e.idle*1.02){const k=Math.floor(rpm/p.bw),o=p.bins[k];if(!o||hpNow>o.hp)p.bins[k]={r:(k+.5)*p.bw,hp:Math.max(0,hpNow),tq:Math.max(0,tqNow)}}
+  if(p.gov){if(p.t>30)endPull();return}
+  if(rpm>p.lastR+5){p.lastR=rpm;p.still=0}else p.still+=dt;
+  if(rpm>=e.red*.985||cut||p.still>4||p.t>60)endPull()}
+function endPull(){const p=pull;pull=null;setPedal(p.gov?p.prev:0);const pts=Object.values(p.bins).sort((a,b)=>a.r-b.r);
+  if(pts.length<6){say('Run too short to save. Use a higher gear so the sweep takes a few seconds.',4);return}
+  let ph=pts[0],pt=pts[0];pts.forEach(q=>{if(q.hp>ph.hp)ph=q;if(q.tq>pt.tq)pt=q});
+  RUNS.push({id:Date.now(),slot:p.slot,name:setupName(),pts:pts.map(q=>[Math.round(q.r),+q.hp.toFixed(1),+q.tq.toFixed(1)]),ph:[Math.round(ph.r),Math.round(ph.hp)],pt:[Math.round(pt.r),Math.round(pt.tq)],vis:true});
+  saveRuns();runList();say('Run saved: '+fmt(ph.hp)+' hp at '+fmt(ph.r)+' rpm, '+fmt(pt.tq)+' lb-ft at '+fmt(pt.r)+' rpm.',5)}
+function runList(){const L=$('#runLeg');L.innerHTML='';RUNS.forEach(r=>{const sp=document.createElement('span');if(!r.vis)sp.className='off';
+    const b=document.createElement('button');b.innerHTML='<i style="background:'+slotCol(r.slot)+'"></i>'+r.name+' — '+fmt(r.ph[1])+' hp';b.title=r.vis?'Hide this run':'Show this run';b.setAttribute('aria-pressed',r.vis);b.onclick=()=>{r.vis=!r.vis;saveRuns();runList()};
+    const x=document.createElement('button');x.className='x';x.textContent='×';x.setAttribute('aria-label','Delete run '+r.name);x.onclick=()=>{RUNS=RUNS.filter(q=>q!==r);saveRuns();runList()};sp.append(b,x);L.appendChild(sp)});
+  $('#runTbl').innerHTML=RUNS.map(r=>'<tr><td><i style="display:inline-block;width:12px;height:3px;background:'+slotCol(r.slot)+';margin-right:5px;vertical-align:middle"></i>'+r.name+'</td><td>'+fmt(r.ph[1])+' hp @ '+fmt(r.ph[0])+' rpm</td><td>'+fmt(r.pt[1])+' lb-ft @ '+fmt(r.pt[0])+' rpm</td></tr>').join('')||'<tr><td colspan="3">No runs yet.</td></tr>'}
+$('#pullB').onclick=startPull;
+$('#clrB').onclick=()=>{if(!RUNS.length)return;if(clrArm>0){RUNS=[];saveRuns();runList();clrArm=0;$('#clrB').textContent='Clear runs';return}clrArm=3;$('#clrB').textContent='Tap again to clear'};
+const niceMax=v=>{const m=Math.pow(10,Math.floor(Math.log10(Math.max(v,1)))),f=v/m;return(f<=1?1:f<=2?2:f<=2.5?2.5:f<=5?5:10)*m};
+function chartSeries(){const S=RUNS.filter(r=>r.vis).map(r=>({col:slotCol(r.slot),pts:r.pts,ph:r.ph,pt:r.pt,live:false}));
+  if(pull){const pts=Object.values(pull.bins).sort((a,b)=>a.r-b.r).map(q=>[q.r,q.hp,q.tq]);S.push({col:slotCol(pull.slot),pts,live:true})}return S}
+function drawChart(cv,idx,unit,S,xMax){const dpr=Math.min(2,devicePixelRatio||1),W=cv.clientWidth,H=cv.clientHeight;if(!W)return null;if(cv.width!==Math.round(W*dpr)){cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr)}
+  const x=cv.getContext('2d'),cs=getComputedStyle(document.documentElement),c=n=>cs.getPropertyValue(n).trim();x.setTransform(dpr,0,0,dpr,0,0);x.clearRect(0,0,W,H);
+  const L=52,Rm=14,T=22,B=26,pw=W-L-Rm,phh=H-T-B;let yM=10;S.forEach(s=>s.pts.forEach(p=>yM=Math.max(yM,p[idx])));if(running)yM=Math.max(yM,idx===1?hpNow:tqNow);yM=niceMax(yM*1.08);
+  const X=r=>L+pw*r/xMax,Y=v=>T+phh*(1-v/yM);
+  x.font='600 13px Barlow,sans-serif';x.fillStyle=c('--ink');x.textAlign='left';x.textBaseline='alphabetic';x.fillText(unit==='hp'?'Power (hp)':'Torque (lb-ft)',L,15);
+  x.font='12px Barlow,sans-serif';x.fillStyle=c('--mute');x.strokeStyle=c('--line');x.lineWidth=1;x.textAlign='right';x.textBaseline='middle';
+  for(let i=0;i<=4;i++){const v=yM*i/4,y=Y(v);x.globalAlpha=.6;x.beginPath();x.moveTo(L,y);x.lineTo(L+pw,y);x.stroke();x.globalAlpha=1;x.fillText(fmt(v),L-6,y)}
+  x.textAlign='center';x.textBaseline='top';const st=niceMax(xMax/6);for(let r=0;r<=xMax+1;r+=st)x.fillText(r>=1000?(r/1000)+'k':r,X(r),T+phh+6);
+  x.textAlign='right';x.fillText('rpm',L+pw,T+phh+6);
+  x.lineJoin='round';x.lineCap='round';
+  S.forEach(s=>{if(s.pts.length<2)return;x.strokeStyle=s.col;x.lineWidth=s.live?2.5:2;x.setLineDash(s.live?[6,4]:[]);x.beginPath();s.pts.forEach((p,i)=>i?x.lineTo(X(p[0]),Y(p[idx])):x.moveTo(X(p[0]),Y(p[idx])));x.stroke();x.setLineDash([])});
+  const vis=S.filter(s=>!s.live),placed=[];vis.slice().sort((a,b)=>(idx===1?b.ph[1]-a.ph[1]:b.pt[1]-a.pt[1])).forEach(s=>{const pk=idx===1?s.ph:s.pt,px=X(pk[0]),py=Y(pk[1]);x.fillStyle=c('--panel');x.beginPath();x.arc(px,py,6,0,6.2832);x.fill();x.fillStyle=s.col;x.beginPath();x.arc(px,py,4.5,0,6.2832);x.fill();
+    if(vis.length<=4){x.font='600 12px Barlow,sans-serif';const t=fmt(pk[1])+' @ '+fmt(pk[0]),tw=x.measureText(t).width,rt=px>L+pw*.7,lx=rt?px-8-tw:px+8;let ly=py-4;
+      for(let g=0;g<8&&placed.some(q=>lx<q[0]+q[2]&&lx+tw>q[0]&&ly>q[1]-15&&ly-15<q[1]);g++)ly-=15;placed.push([lx,ly,tw]);
+      if(Math.abs(ly-(py-4))>1){x.strokeStyle=c('--mute');x.lineWidth=1;x.beginPath();x.moveTo(px,py-5);x.lineTo(rt?lx+tw:lx,ly-6);x.stroke()}
+      x.fillStyle=c('--ink');x.textAlign='left';x.textBaseline='bottom';x.fillText(t,lx,ly)}});
+  if(running){const v=idx===1?hpNow:tqNow,px=X(Math.min(rpm,xMax)),py=Y(Math.max(0,v));x.strokeStyle=c('--ink');x.lineWidth=2;x.beginPath();x.arc(px,py,5,0,6.2832);x.stroke()}
+  if(hovR!=null){x.strokeStyle=c('--mute');x.lineWidth=1;x.beginPath();x.moveTo(X(hovR),T);x.lineTo(X(hovR),T+phh);x.stroke()}
+  return{L,pw,xMax}}
+let CG=null;function charts(){const S=chartSeries();let xm=cur.red*1.05;S.forEach(s=>s.pts.forEach(p=>xm=Math.max(xm,p[0]*1.03)));xm=Math.ceil(xm/500)*500;
+  CG=drawChart($('#cPow'),1,'hp',S,xm);drawChart($('#cTq'),2,'lb-ft',S,xm);$('#pullB').textContent=pull?'Stop pull (X)':'Dyno pull (X)';$('#pullB').classList.toggle('on',!!pull);
+  if(clrArm>0){clrArm-=.1;if(clrArm<=0)$('#clrB').textContent='Clear runs'}}
+function hover(e){if(!CG)return;const cv=e.currentTarget,r=cv.getBoundingClientRect(),px=e.clientX-r.left;const rr=(px-CG.L)/CG.pw*CG.xMax;if(rr<0||rr>CG.xMax){unhover();return}hovR=rr;
+  const S=chartSeries(),rows=S.map(s=>{if(!s.pts.length)return'';let b=s.pts[0];s.pts.forEach(p=>{if(Math.abs(p[0]-rr)<Math.abs(b[0]-rr))b=p});if(Math.abs(b[0]-rr)>CG.xMax/25)return'';
+    return'<div><i style="background:'+s.col+'"></i>'+fmt(b[1])+' hp · '+fmt(b[2])+' lb-ft'+(s.live?' (live)':'')+'</div>'}).filter(Boolean);
+  const tip=$('#ctip');if(!rows.length){tip.style.display='none';return}tip.innerHTML='<b>'+fmt(rr)+' rpm</b>'+rows.join('');tip.style.display='block';
+  const box=$('#cTq').parentNode.getBoundingClientRect(),tx=e.clientX-box.left;tip.style.left=Math.min(box.width-tip.offsetWidth-4,Math.max(4,tx+12))+'px';tip.style.top=(e.clientY-box.top-tip.offsetHeight-12)+'px'}
+function unhover(){hovR=null;$('#ctip').style.display='none'}
+['cPow','cTq'].forEach(id=>{const c=$('#'+id);c.addEventListener('pointermove',hover);c.addEventListener('pointerdown',hover);c.addEventListener('pointerleave',unhover)});
+runList();
+let gt=0;function gauges(dt){gt-=dt;if(gt>0)return;gt=.1;GAU.forEach((g,i)=>drawGauge(gcv[i],g));charts();
   $('#sae').textContent='Barometer 29.92 inHg. SAE J1349 correction factor '+CF.toFixed(3)+': corrected power '+Math.round(Math.max(0,hpNow)*CF).toLocaleString()+' hp, corrected drum power '+Math.round(whp*CF).toLocaleString()+' hp.'}
 
 /* ---------- ui ---------- */
@@ -794,7 +871,7 @@ $('#glow').onclick=()=>{glowT=6;say('Glow plugs heating…',2)};
 $('#sup').onclick=()=>tx!=='m'?shiftTo(1):shiftTo(gear+1);$('#sdn').onclick=()=>tx!=='m'?shiftTo(-1):shiftTo(gear-1);
 document.querySelectorAll('[data-tx]').forEach(b=>b.onclick=()=>{tx=b.dataset.tx;document.querySelectorAll('[data-tx]').forEach(x=>x.classList.toggle('sel',x===b));gear=0;cvtD=tx==='cvt';atD=tx==='at';atG=0;cvtR=2.5;setK(...GP[0]);if(tx!=='m')say((tx==='cvt'?'CVT':'10-speed automatic')+' in Drive. Push the throttle lever to go; S or Neutral to stop.',4);$('#shifter').style.display=tx!=='m'?'none':'';
   $('#sup').textContent=tx!=='m'?'Drive (S)':'Shift up (S)';$('#sdn').textContent=tx!=='m'?'Neutral (Shift+S)':'Shift down (Shift+S)'});
-const stg=$('#stage'),PANEL=['#list','#readRow','#strainBox','#infoBox','#keys','.ctl','#gH','#gauges','#sae'].map(q=>$(q)),HOMES=PANEL.map(el=>[el.parentNode,el.nextSibling]);
+const stg=$('#stage'),PANEL=['#list','#readRow','#strainBox','#infoBox','#keys','.ctl','#chartSec','#gH','#gauges','#sae'].map(q=>$(q)),HOMES=PANEL.map(el=>[el.parentNode,el.nextSibling]);
 function fsToggle(){const on=!stg.classList.contains('fs');stg.classList.toggle('fs',on);
   if(on)PANEL.forEach(el=>$('#fsPanel').appendChild(el));else for(let i=PANEL.length-1;i>=0;i--)HOMES[i][0].insertBefore(PANEL[i],HOMES[i][1]);$('#fsb').textContent=on?'Exit full screen':'Full screen';
   try{if(on&&stg.requestFullscreen)stg.requestFullscreen().catch(()=>{});else if(!on&&document.fullscreenElement)document.exitFullscreen()}catch(_){}}
@@ -816,6 +893,7 @@ addEventListener('keydown',e=>{const tag=e.target.tagName,k=e.code;if(e.ctrlKey|
     case 'KeyE':sbtn.click();break;
     case 'KeyL':setPedal(0);break;
     case 'KeyC':{const o=['stock','c1','c2','c4','sc'];setInd(o[(o.indexOf(ind)+1)%o.length]);break}
+    case 'KeyX':startPull();break;
     case 'KeyB':document.querySelector('[data-ld="'+(ld==='drum'?'hydro':'drum')+'"]').click();break;
     case 'KeyT':document.querySelector('[data-tx="'+({m:'cvt',cvt:'at',at:'m'})[tx]+'"]').click();break;
     case 'KeyD':if(tx!=='m')shiftTo(1);break;

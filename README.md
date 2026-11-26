@@ -12,6 +12,10 @@ Works on desktop and phone. No install needed. Turn your sound on. Tap **Full sc
 
 ## Screenshots
 
+**Dyno chart: three pulls on the V8 (stock, supercharged, 2-barrel carb)**
+
+![Dyno chart](screenshots/21-dyno-chart.png)
+
 | Whole engine on the dyno | Turbo close-up |
 |---|---|
 | ![Whole engine](screenshots/01-whole-engine.png) | ![Turbo](screenshots/02-turbo-closeup.png) |
@@ -73,6 +77,8 @@ Works on desktop and phone. No install needed. Turn your sound on. Tap **Full sc
 
 ## What it does
 
+- **Dyno chart:** press **Dyno pull** (or **X**) with the engine running in gear against the drum. It goes to full throttle, sweeps to redline, and draws **power** and **torque** against rpm live, then saves the run with its peak numbers. Saved runs stay on the chart, each in its own color, so you can compare setups like stock vs. supercharged vs. carbs, or a hot cell vs. a cold one. Touch or hover the chart to read every run at any rpm. Tap a run to hide or show it, × to delete, and there's a table view. Runs are remembered in your browser. For the governed Briggs, close the pump load valve during the pull to sweep the speed down.
+
 - **Ignition key:** turn the key to ON (the OIL and BATT lights come on, and on the diesel the glow plugs heat with a WAIT light), then hold it on START to crank. It springs back to ON when you let go. Tap OFF to shut down. **Auto start** (E) is still there.
 - **Throttle lever:** a dyno-cell throttle lever that stays where you set it, from IDLE to FULL. Drag it in any direction (up or right for more, down or left for less), tap to jump to a spot, or use ↑/↓. **Idle** (L) snaps it back.
 - **Full 3D cutaway:** pistons, rods, crank, cams, valves, spark or glow plugs, flywheel, starter and gearbox
@@ -113,6 +119,7 @@ Drag to orbit, pinch or scroll to zoom. Everything also has an on-screen button.
 | D | Drive (CVT or automatic) |
 | B | Switch the dyno load: inertia drum or hydraulic pump |
 | C | Cycle induction: stock / 1-, 2-, 4-barrel carb / supercharger |
+| X | Start / stop a dyno pull |
 | − / = | Hydraulic pump load valve −/+ 10% |
 | N | Hold for NOS |
 | R | Refill the NOS bottle |
